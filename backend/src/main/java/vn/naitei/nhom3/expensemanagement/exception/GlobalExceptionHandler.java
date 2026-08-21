@@ -60,6 +60,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "Đã có lỗi xảy ra, vui lòng thử lại sau"));
     }
 
+    // Xử lý IllegalArgumentException để trả về lỗi 409 Conflict
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(HttpStatus.CONFLICT, ex.getMessage()));
+    }
+
     // Ghi đè các exception mặc định của Spring MVC (từ ResponseEntityExceptionHandler)
     // để trả JSON theo đúng chuẩn ApiResponse thay vì cấu trúc mặc định của Spring.
     @Override

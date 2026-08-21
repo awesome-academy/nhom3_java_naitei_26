@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinTrack Pro — UI/UX Design System & Component Gallery</title>
+  <meta name="description" content="Complete Design Gallery for Expense Management System. Explore 34 screens, 3 layout templates, and 10 modular components built for Next.js, Tailwind CSS and Spring Boot REST API.">
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #004ac6;
+      --primary-container: #2563eb;
+      --primary-light: #eff4ff;
+      --primary-border: #dbe4fe;
+      --surface: #ffffff;
+      --surface-subtle: #f8fafc;
+      --surface-hover: #f1f5f9;
+      --bg: #faf8ff;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-main: #131b2e;
+      --text-muted: #515f74;
+      --text-subtle: #808b9f;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --admin-badge-bg: #fdf2f8;
+      --admin-badge-text: #9d174d;
+      --user-badge-bg: #eff6ff;
+      --user-badge-text: #1d4ed8;
+      --layout-badge-bg: #f0fdf4;
+      --layout-badge-text: #15803d;
+      --comp-badge-bg: #f5f3ff;
+      --comp-badge-text: #6d28d9;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.12);
+      --shadow-modal: 0 24px 48px -12px rgba(15, 23, 42, 0.25);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+    }
+
+    .top-nav-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 10px rgba(0, 74, 198, 0.25);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+    }
+
+    .nav-stats {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .stat-pill strong { color: var(--text-main); font-weight: 700; }
+
+    .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      border: 1px solid transparent;
+      line-height: 1;
+    }
+
+    .btn-primary { background: var(--primary); color: #ffffff; }
+    .btn-primary:hover { background: #003ea8; box-shadow: 0 4px 12px rgba(0, 74, 198, 0.25); }
+
+    .btn-outline { background: var(--surface); color: var(--text-main); border-color: var(--border); }
+    .btn-outline:hover { background: var(--surface-subtle); border-color: var(--border-strong); }
+
+    .btn-sm { font-size: 0.8rem; padding: 0.375rem 0.75rem; }
+
+    /* Main Container */
+    .main-wrapper {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2.25rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+    }
+
+    .badge-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .badge-purple { background: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+    .badge-green { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .badge-amber { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+
+    .hero-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 960px;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .highlight-card { display: flex; align-items: flex-start; gap: 0.75rem; }
+
+    .highlight-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .highlight-title { font-size: 0.875rem; font-weight: 700; color: var(--text-main); }
+    .highlight-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+    /* Controls Panel */
+    .controls-panel {
+      position: sticky;
+      top: 61px;
+      z-index: 40;
+      background: var(--bg);
+      padding: 1rem 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 0.875rem 1rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.875rem;
+    }
+
+    .search-box { position: relative; flex: 1; min-width: 240px; }
+
+    .search-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      font-size: 20px;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.6rem 1rem 0.6rem 2.5rem;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .search-input:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 74, 198, 0.12);
+    }
+
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      background: var(--surface-subtle);
+      padding: 3px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      gap: 2px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 0.45rem 0.75rem;
+      border-radius: calc(var(--radius-md) - 3px);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .tab-btn:hover { color: var(--text-main); }
+    .tab-btn.active { background: #ffffff; color: var(--primary); box-shadow: var(--shadow-sm); }
+
+    .tab-count {
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 9999px;
+      background: var(--border);
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .tab-btn.active .tab-count { background: var(--primary-light); color: var(--primary); }
+
+    /* Sections */
+    .section-block { margin-bottom: 3.5rem; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .section-title-group { display: flex; align-items: center; gap: 0.75rem; }
+
+    .section-icon-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .user-section-badge { background: #eff6ff; color: #1d4ed8; }
+    .admin-section-badge { background: #fdf2f8; color: #9d174d; }
+    .layout-section-badge { background: #f0fdf4; color: #15803d; }
+    .comp-section-badge { background: #f5f3ff; color: #6d28d9; }
+
+    .section-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); }
+    .section-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+    /* Cards Grid */
+    .screens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .screen-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.22s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-strong);
+    }
+
+    .card-preview {
+      position: relative;
+      height: 200px;
+      background: #f1f5f9;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .card-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.3s ease;
+    }
+
+    .screen-card:hover .card-preview img {
+      transform: scale(1.04);
+    }
+
+    .card-preview-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .screen-card:hover .card-preview-overlay { opacity: 1; }
+
+    .card-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+
+    .card-meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+
+    .screen-id-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .user-id-badge { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .admin-id-badge { background: #fdf2f8; color: #9d174d; border: 1px solid #fbcfe8; }
+    .layout-id-badge { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .comp-id-badge { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+
+    .category-tag { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+
+    .card-title { font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem; }
+    .card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; flex: 1; }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Modal Device Viewer */
+    .viewer-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .viewer-modal.open { display: flex; }
+
+    .viewer-container {
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-modal);
+      width: 100%;
+      max-width: 1440px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .viewer-header {
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-subtle);
+      gap: 1rem;
+    }
+
+    .viewer-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #ffffff;
+      padding: 3px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .device-btn {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 0.35rem 0.65rem;
+      border-radius: calc(var(--radius-md) - 3px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .device-btn.active { background: var(--primary); color: #ffffff; }
+
+    .viewer-body {
+      flex: 1;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 1rem;
+    }
+
+    .viewer-frame-wrap {
+      background: #ffffff;
+      height: 100%;
+      width: 100%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: width 0.25s ease;
+    }
+
+    .viewer-iframe { width: 100%; height: 100%; border: none; }
+
+    /* Footer */
+    .footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 1.5rem;
+      margin-top: auto;
+    }
+
+    .footer-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <a href="./index.html" class="brand-group">
+        <div class="brand-logo">
+          <span class="material-symbols-outlined">account_balance_wallet</span>
+        </div>
+        <div>
+          <div class="brand-title">
+            FinTrack Pro
+            <span class="brand-tag">Design Gallery</span>
+          </div>
+        </div>
+      </a>
+
+      <div class="nav-stats">
+        <div class="stat-pill">
+          <span class="material-symbols-outlined" style="font-size: 16px; color: var(--primary);">grid_view</span>
+          <span>Total: <strong>47</strong> assets</span>
+        </div>
+        <div class="stat-pill">
+          <span class="material-symbols-outlined" style="font-size: 16px; color: #1d4ed8;">person</span>
+          <span>User: <strong>15</strong></span>
+        </div>
+        <div class="stat-pill">
+          <span class="material-symbols-outlined" style="font-size: 16px; color: #9d174d;">admin_panel_settings</span>
+          <span>Admin: <strong>19</strong></span>
+        </div>
+        <div class="stat-pill">
+          <span class="material-symbols-outlined" style="font-size: 16px; color: #15803d;">view_quilt</span>
+          <span>Layouts: <strong>3</strong></span>
+        </div>
+        <div class="stat-pill">
+          <span class="material-symbols-outlined" style="font-size: 16px; color: #6d28d9;">widgets</span>
+          <span>Components: <strong>10</strong></span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="#user-section" class="btn btn-outline btn-sm">User</a>
+        <a href="#admin-section" class="btn btn-outline btn-sm">Admin</a>
+        <a href="#layout-section" class="btn btn-outline btn-sm">Layouts</a>
+        <a href="#comp-section" class="btn btn-primary btn-sm">Components</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-wrapper">
+
+    <!-- Hero Introduction -->
+    <section class="hero-section">
+      <div class="hero-badge-row">
+        <span class="badge badge-blue">
+          <span class="material-symbols-outlined" style="font-size: 14px;">palette</span>
+          Modern Financial SaaS Design System
+        </span>
+        <span class="badge badge-purple">
+          <span class="material-symbols-outlined" style="font-size: 14px;">devices</span>
+          Responsive 1440px / 768px / 390px
+        </span>
+        <span class="badge badge-green">
+          <span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+          47 UI Assets Ready
+        </span>
+      </div>
+
+      <h1 class="hero-title">Expense Management UI/UX Design Gallery</h1>
+      <p class="hero-desc">
+        Complete enterprise UI/UX design architecture for FinTrack Pro. Built strictly with Tailwind CSS tokens, Material Symbols, and clear layout/component specifications ready for instant frontend development in Next.js + TypeScript and Java Spring Boot REST APIs.
+      </p>
+
+      <div class="hero-highlights">
+        <div class="highlight-card">
+          <div class="highlight-icon">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div>
+            <div class="highlight-title">User Experience (15 Screens)</div>
+            <div class="highlight-text">Dashboard with Category Pie Chart, Expense & Income CRUD, Categories & Delete Modal, Budgets & Delete Modal, and Reports.</div>
+          </div>
+        </div>
+
+        <div class="highlight-card">
+          <div class="highlight-icon" style="background: var(--admin-badge-bg); color: var(--admin-badge-text);">
+            <span class="material-symbols-outlined">admin_panel_settings</span>
+          </div>
+          <div>
+            <div class="highlight-title">Admin Management (19 Screens)</div>
+            <div class="highlight-text">User CRUD + Delete Modal, Global Categories + Delete Modal, Budget Templates + Delete Modal, System Expenses/Incomes + Delete Modals, Activity Logs + Purge Modal, and CSV Tools.</div>
+          </div>
+        </div>
+
+        <div class="highlight-card">
+          <div class="highlight-icon" style="background: var(--layout-badge-bg); color: var(--layout-badge-text);">
+            <span class="material-symbols-outlined">view_quilt</span>
+          </div>
+          <div>
+            <div class="highlight-title">Layout Templates (3 Layouts)</div>
+            <div class="highlight-text">User Workspace, Admin Management Console, and Centered Authentication Layouts.</div>
+          </div>
+        </div>
+
+        <div class="highlight-card">
+          <div class="highlight-icon" style="background: var(--comp-badge-bg); color: var(--comp-badge-text);">
+            <span class="material-symbols-outlined">widgets</span>
+          </div>
+          <div>
+            <div class="highlight-title">Component Library (10 Packs)</div>
+            <div class="highlight-text">Buttons, Searchbars, DataTables, Forms, Modals, StatCards, SVG PieCharts, and Feedback.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Filter Controls -->
+    <div class="controls-panel">
+      <div class="controls-card">
+        <!-- Search Input -->
+        <div class="search-box">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Search by ID, name, or keyword (e.g. U09, Delete, Budget)..." autocomplete="off">
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+          <button class="tab-btn active" data-filter="all" onclick="filterRole('all', this)">
+            <span>All Assets</span>
+            <span class="tab-count" id="count-all">47</span>
+          </button>
+          <button class="tab-btn" data-filter="user" onclick="filterRole('user', this)">
+            <span class="material-symbols-outlined" style="font-size: 16px;">person</span>
+            <span>User Screens</span>
+            <span class="tab-count">15</span>
+          </button>
+          <button class="tab-btn" data-filter="admin" onclick="filterRole('admin', this)">
+            <span class="material-symbols-outlined" style="font-size: 16px;">admin_panel_settings</span>
+            <span>Admin Screens</span>
+            <span class="tab-count">19</span>
+          </button>
+          <button class="tab-btn" data-filter="layouts" onclick="filterRole('layouts', this)">
+            <span class="material-symbols-outlined" style="font-size: 16px;">view_quilt</span>
+            <span>Layouts</span>
+            <span class="tab-count">3</span>
+          </button>
+          <button class="tab-btn" data-filter="components" onclick="filterRole('components', this)">
+            <span class="material-symbols-outlined" style="font-size: 16px;">widgets</span>
+            <span>Components</span>
+            <span class="tab-count">10</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. USER SCREENS SECTION -->
+    <section class="section-block" id="user-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-icon-badge user-section-badge">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div>
+            <h2 class="section-title">User Experience Screens</h2>
+            <div class="section-subtitle">15 complete screens for personal financial tracking and analytics</div>
+          </div>
+        </div>
+        <span class="badge badge-blue">15 Screens</span>
+      </div>
+
+      <div class="screens-grid" id="user-grid">
+
+        <!-- U01: User Login -->
+        <article class="screen-card" data-role="user" data-id="U01" data-title="User Login">
+          <div class="card-preview" onclick="openViewer('./design/u01_user_login/code.html', 'U01 — User Login', 'FinTrack Pro Sign In')">
+            <img src="./design/u01_user_login/screen.png" alt="U01 User Login Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U01</span>
+              <span class="category-tag">Authentication</span>
+            </div>
+            <h3 class="card-title">User Login</h3>
+            <p class="card-desc">Clean sign-in interface without forgot password, support links, or remember me options.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u01_user_login/code.html', 'U01 — User Login', 'FinTrack Pro Sign In')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u01_user_login/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U02: User Dashboard -->
+        <article class="screen-card" data-role="user" data-id="U02" data-title="User Dashboard">
+          <div class="card-preview" onclick="openViewer('./design/u02_user_dashboard/code.html', 'U02 — User Dashboard', 'Personal Dashboard')">
+            <img src="./design/u02_user_dashboard/screen.png" alt="U02 User Dashboard Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U02</span>
+              <span class="category-tag">Dashboard</span>
+            </div>
+            <h3 class="card-title">User Dashboard</h3>
+            <p class="card-desc">Features current month spending, interactive category spending pie chart (monetary hover & side %), and KPI metrics.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u02_user_dashboard/code.html', 'U02 — User Dashboard', 'Personal Dashboard')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u02_user_dashboard/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U03: Expense List -->
+        <article class="screen-card" data-role="user" data-id="U03" data-title="Expense List">
+          <div class="card-preview" onclick="openViewer('./design/u03_expense_list/code.html', 'U03 — Expense List', 'Expense Management')">
+            <img src="./design/u03_expense_list/screen.png" alt="U03 Expense List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U03</span>
+              <span class="category-tag">Expenses</span>
+            </div>
+            <h3 class="card-title">Expense Management List</h3>
+            <p class="card-desc">Data table with multi-filter toolbar, search, sorting, pagination, and quick action menus.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u03_expense_list/code.html', 'U03 — Expense List', 'Expense Management')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u03_expense_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U04: Expense Detail -->
+        <article class="screen-card" data-role="user" data-id="U04" data-title="Expense Detail">
+          <div class="card-preview" onclick="openViewer('./design/u04_expense_detail/code.html', 'U04 — Expense Detail', 'Transaction Detail')">
+            <img src="./design/u04_expense_detail/screen.png" alt="U04 Expense Detail Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U04</span>
+              <span class="category-tag">Expenses</span>
+            </div>
+            <h3 class="card-title">Expense Detail</h3>
+            <p class="card-desc">Detailed view of transaction record with receipt file downloads, category tags, and edit actions.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u04_expense_detail/code.html', 'U04 — Expense Detail', 'Transaction Detail')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u04_expense_detail/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U04_DEL: Expense Delete Confirmation -->
+        <article class="screen-card" data-role="user" data-id="U04_DEL" data-title="Delete Expense Modal">
+          <div class="card-preview" onclick="openViewer('./design/u04_delete_confirmation/code.html', 'U04_DEL — Delete Confirmation', 'Delete Expense')">
+            <img src="./design/u04_delete_confirmation/screen.png" alt="U04 Delete Expense Modal Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U04_DEL</span>
+              <span class="category-tag">Expenses</span>
+            </div>
+            <h3 class="card-title">Delete Expense Confirmation</h3>
+            <p class="card-desc">Modal dialog with danger warnings, cancel trigger, and permanent delete confirmation.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u04_delete_confirmation/code.html', 'U04_DEL — Delete Confirmation', 'Delete Expense')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u04_delete_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U05: Create Expense -->
+        <article class="screen-card" data-role="user" data-id="U05" data-title="Create Expense">
+          <div class="card-preview" onclick="openViewer('./design/u05_create_expense/code.html', 'U05 — Add Expense', 'Create Transaction')">
+            <img src="./design/u05_create_expense/screen.png" alt="U05 Create Expense Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U05</span>
+              <span class="category-tag">Expenses</span>
+            </div>
+            <h3 class="card-title">Add New Expense</h3>
+            <p class="card-desc">Expense creation form with currency input, date picker, category dropdown, and receipt upload.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u05_create_expense/code.html', 'U05 — Add Expense', 'Create Transaction')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u05_create_expense/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U06: Edit Expense -->
+        <article class="screen-card" data-role="user" data-id="U06" data-title="Edit Expense">
+          <div class="card-preview" onclick="openViewer('./design/u06_edit_expense/code.html', 'U06 — Edit Expense', 'Edit Transaction')">
+            <img src="./design/u06_edit_expense/screen.png" alt="U06 Edit Expense Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U06</span>
+              <span class="category-tag">Expenses</span>
+            </div>
+            <h3 class="card-title">Edit Expense</h3>
+            <p class="card-desc">Pre-filled expense editing interface with file replacement and transaction update handlers.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u06_edit_expense/code.html', 'U06 — Edit Expense', 'Edit Transaction')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u06_edit_expense/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U07: Income List -->
+        <article class="screen-card" data-role="user" data-id="U07" data-title="Income List">
+          <div class="card-preview" onclick="openViewer('./design/u07_income_list/code.html', 'U07 — Income List', 'Incomes')">
+            <img src="./design/u07_income_list/screen.png" alt="U07 Income List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U07</span>
+              <span class="category-tag">Incomes</span>
+            </div>
+            <h3 class="card-title">Income Management</h3>
+            <p class="card-desc">Track and filter incoming revenue, salaries, investments, and client contract earnings.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u07_income_list/code.html', 'U07 — Income List', 'Incomes')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u07_income_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U07_DEL: Delete Income Confirmation -->
+        <article class="screen-card" data-role="user" data-id="U07_DEL" data-title="Delete Income Modal">
+          <div class="card-preview" onclick="openViewer('./design/u07_delete_income_confirmation/code.html', 'U07_DEL — Delete Confirmation', 'Delete Income')">
+            <img src="./design/u07_delete_income_confirmation/screen.png" alt="U07 Delete Income Confirmation Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U07_DEL</span>
+              <span class="category-tag">Incomes</span>
+            </div>
+            <h3 class="card-title">Delete Income Confirmation</h3>
+            <p class="card-desc">Dedicated confirmation modal with danger notice for deleting an income record.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u07_delete_income_confirmation/code.html', 'U07_DEL — Delete Confirmation', 'Delete Income')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u07_delete_income_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U08: Create/Edit Income -->
+        <article class="screen-card" data-role="user" data-id="U08" data-title="Create / Edit Income">
+          <div class="card-preview" onclick="openViewer('./design/u08_create_edit_income/code.html', 'U08 — Income Form', 'Add Income')">
+            <img src="./design/u08_create_edit_income/screen.png" alt="U08 Create/Edit Income Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U08</span>
+              <span class="category-tag">Incomes</span>
+            </div>
+            <h3 class="card-title">Create / Edit Income</h3>
+            <p class="card-desc">Form to record incoming earnings with salary, freelance, or dividend type classifications.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u08_create_edit_income/code.html', 'U08 — Income Form', 'Add Income')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u08_create_edit_income/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U09: Category List -->
+        <article class="screen-card" data-role="user" data-id="U09" data-title="Category List">
+          <div class="card-preview" onclick="openViewer('./design/u09_category_list/code.html', 'U09 — Categories', 'Categories')">
+            <img src="./design/u09_category_list/screen.png" alt="U09 Category List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U09</span>
+              <span class="category-tag">Categories</span>
+            </div>
+            <h3 class="card-title">Category Management</h3>
+            <p class="card-desc">Visual card grid displaying personal custom categories with icon indicators and action menus.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u09_category_list/code.html', 'U09 — Categories', 'Categories')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u09_category_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U09_DEL: Delete Category Confirmation -->
+        <article class="screen-card" data-role="user" data-id="U09_DEL" data-title="Delete Category Modal">
+          <div class="card-preview" onclick="openViewer('./design/u09_delete_category_confirmation/code.html', 'U09_DEL — Delete Category', 'Delete Category Confirmation')">
+            <img src="./design/u09_delete_category_confirmation/screen.png" alt="U09 Delete Category Confirmation Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U09_DEL</span>
+              <span class="category-tag">Categories</span>
+            </div>
+            <h3 class="card-title">Delete Category Confirmation</h3>
+            <p class="card-desc">Confirmation dialog warning about transaction reassignment upon category deletion.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u09_delete_category_confirmation/code.html', 'U09_DEL — Delete Category', 'Delete Category Confirmation')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u09_delete_category_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U10: Create / Edit Category -->
+        <article class="screen-card" data-role="user" data-id="U10" data-title="Create / Edit Category">
+          <div class="card-preview" onclick="openViewer('./design/u10_create_edit_category/code.html', 'U10 — Category Form', 'Category Form')">
+            <img src="./design/u10_create_edit_category/screen.png" alt="U10 Create/Edit Category Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U10</span>
+              <span class="category-tag">Categories</span>
+            </div>
+            <h3 class="card-title">Create / Edit Category</h3>
+            <p class="card-desc">Interactive icon picker, category name input, and descriptive scope configuration.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u10_create_edit_category/code.html', 'U10 — Category Form', 'Category Form')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u10_create_edit_category/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U11: Budget List -->
+        <article class="screen-card" data-role="user" data-id="U11" data-title="Budget List">
+          <div class="card-preview" onclick="openViewer('./design/u11_budget_list/code.html', 'U11 — Budget List', 'Budgets')">
+            <img src="./design/u11_budget_list/screen.png" alt="U11 Budget List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U11</span>
+              <span class="category-tag">Budgets</span>
+            </div>
+            <h3 class="card-title">Monthly Budget Tracking</h3>
+            <p class="card-desc">Budget progress cards with dynamic threshold warnings and limit remaining amounts.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u11_budget_list/code.html', 'U11 — Budget List', 'Budgets')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u11_budget_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U11_DEL: Delete Budget Confirmation -->
+        <article class="screen-card" data-role="user" data-id="U11_DEL" data-title="Delete Budget Modal">
+          <div class="card-preview" onclick="openViewer('./design/u11_delete_budget_confirmation/code.html', 'U11_DEL — Delete Budget', 'Delete Budget Confirmation')">
+            <img src="./design/u11_delete_budget_confirmation/screen.png" alt="U11 Delete Budget Confirmation Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U11_DEL</span>
+              <span class="category-tag">Budgets</span>
+            </div>
+            <h3 class="card-title">Delete Budget Confirmation</h3>
+            <p class="card-desc">Modal dialog to remove monthly category spending limits and threshold tracking.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u11_delete_budget_confirmation/code.html', 'U11_DEL — Delete Budget', 'Delete Budget Confirmation')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u11_delete_budget_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- U13: Reports & Analytics -->
+        <article class="screen-card" data-role="user" data-id="U13" data-title="Reports & Analytics">
+          <div class="card-preview" onclick="openViewer('./design/u13_reports_analytics/code.html', 'U13 — Reports', 'Reports & Analytics')">
+            <img src="./design/u13_reports_analytics/screen.png" alt="U13 Reports and Analytics Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge user-id-badge">U13</span>
+              <span class="category-tag">Reports</span>
+            </div>
+            <h3 class="card-title">Reports & Analytics</h3>
+            <p class="card-desc">Month, Quarter, and Year financial analytics, income vs expense trends, and category distribution.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/u13_reports_analytics/code.html', 'U13 — Reports', 'Reports & Analytics')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/u13_reports_analytics/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 2. ADMIN SCREENS SECTION -->
+    <section class="section-block" id="admin-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-icon-badge admin-section-badge">
+            <span class="material-symbols-outlined">admin_panel_settings</span>
+          </div>
+          <div>
+            <h2 class="section-title">Admin Management Screens</h2>
+            <div class="section-subtitle">19 full screens for system administration, auditing, and bulk data operations</div>
+          </div>
+        </div>
+        <span class="badge badge-purple">19 Screens</span>
+      </div>
+
+      <div class="screens-grid" id="admin-grid">
+
+        <!-- A01: Admin Login -->
+        <article class="screen-card" data-role="admin" data-id="A01" data-title="Admin Login">
+          <div class="card-preview" onclick="openViewer('./design/a01_admin_login/code.html', 'A01 — Admin Login', 'Administration Portal')">
+            <img src="./design/a01_admin_login/screen.png" alt="A01 Admin Login Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A01</span>
+              <span class="category-tag">Authentication</span>
+            </div>
+            <h3 class="card-title">Admin Sign In</h3>
+            <p class="card-desc">Dedicated dark-themed administrator authentication portal with audit logging.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a01_admin_login/code.html', 'A01 — Admin Login', 'Administration Portal')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a01_admin_login/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A03: User Management List -->
+        <article class="screen-card" data-role="admin" data-id="A03" data-title="User Management">
+          <div class="card-preview" onclick="openViewer('./design/a03_admin_user_list/code.html', 'A03 — User List', 'User Management')">
+            <img src="./design/a03_admin_user_list/screen.png" alt="A03 User List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A03</span>
+              <span class="category-tag">User Management</span>
+            </div>
+            <h3 class="card-title">User Accounts List</h3>
+            <p class="card-desc">Manage system users, filter by active/suspended status, inspect roles, and trigger delete confirmations.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a03_admin_user_list/code.html', 'A03 — User List', 'User Management')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a03_admin_user_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A04: User Detail -->
+        <article class="screen-card" data-role="admin" data-id="A04" data-title="User Detail">
+          <div class="card-preview" onclick="openViewer('./design/a04_admin_user_detail/code.html', 'A04 — User Detail', 'User Profile Detail')">
+            <img src="./design/a04_admin_user_detail/screen.png" alt="A04 User Detail Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A04</span>
+              <span class="category-tag">User Management</span>
+            </div>
+            <h3 class="card-title">User Account Detail</h3>
+            <p class="card-desc">Detailed user metadata, registration timestamps, cumulative spending and income metrics.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a04_admin_user_detail/code.html', 'A04 — User Detail', 'User Profile Detail')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a04_admin_user_detail/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A05_DEL: Delete User Confirmation -->
+        <article class="screen-card" data-role="admin" data-id="A05_DEL" data-title="Delete User Confirmation">
+          <div class="card-preview" onclick="openViewer('./design/a05_delete_user_confirmation/code.html', 'A05_DEL — Delete User Modal', 'Delete User Confirmation')">
+            <img src="./design/a05_delete_user_confirmation/screen.png" alt="A05 Delete User Modal Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A05_DEL</span>
+              <span class="category-tag">User Management</span>
+            </div>
+            <h3 class="card-title">Delete User Confirmation</h3>
+            <p class="card-desc">Dedicated notification and modal interface for permanent user account deletion.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a05_delete_user_confirmation/code.html', 'A05_DEL — Delete User Modal', 'Delete User Confirmation')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a05_delete_user_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A06: Global Categories -->
+        <article class="screen-card" data-role="admin" data-id="A06" data-title="Global Categories">
+          <div class="card-preview" onclick="openViewer('./design/a06_admin_category_list/code.html', 'A06 — Global Categories', 'Category Management')">
+            <img src="./design/a06_admin_category_list/screen.png" alt="A06 Global Categories List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A06</span>
+              <span class="category-tag">Categories</span>
+            </div>
+            <h3 class="card-title">Global Categories (CRUD)</h3>
+            <p class="card-desc">System-wide category list with Expense & Income classification tags and usage records.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a06_admin_category_list/code.html', 'A06 — Global Categories', 'Category Management')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a06_admin_category_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A06_DEL: Delete Global Category Confirmation -->
+        <article class="screen-card" data-role="admin" data-id="A06_DEL" data-title="Delete Category Modal">
+          <div class="card-preview" onclick="openViewer('./design/a06_delete_category_confirmation/code.html', 'A06_DEL — Delete Category', 'Delete Global Category Confirmation')">
+            <img src="./design/a06_delete_category_confirmation/screen.png" alt="A06 Delete Global Category Confirmation Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A06_DEL</span>
+              <span class="category-tag">Categories</span>
+            </div>
+            <h3 class="card-title">Delete Global Category Modal</h3>
+            <p class="card-desc">Administrative confirmation warning about system-wide user transaction reassignment.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a06_delete_category_confirmation/code.html', 'A06_DEL — Delete Category', 'Delete Global Category Confirmation')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a06_delete_category_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A07: Create/Edit Category -->
+        <article class="screen-card" data-role="admin" data-id="A07" data-title="Create / Edit Category">
+          <div class="card-preview" onclick="openViewer('./design/a07_create_edit_category/code.html', 'A07 — Category Form', 'Category Form')">
+            <img src="./design/a07_create_edit_category/screen.png" alt="A07 Create/Edit Category Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A07</span>
+              <span class="category-tag">Categories</span>
+            </div>
+            <h3 class="card-title">Create / Edit Category Form</h3>
+            <p class="card-desc">Form to define category name, description, Expense/Income radio selector, and system icons.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a07_create_edit_category/code.html', 'A07 — Category Form', 'Category Form')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a07_create_edit_category/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A08: Budget Templates -->
+        <article class="screen-card" data-role="admin" data-id="A08" data-title="Budget Templates">
+          <div class="card-preview" onclick="openViewer('./design/a08_budget_template_list/code.html', 'A08 — Budget Templates', 'Budget Templates')">
+            <img src="./design/a08_budget_template_list/screen.png" alt="A08 Budget Templates List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A08</span>
+              <span class="category-tag">Budget Templates</span>
+            </div>
+            <h3 class="card-title">Budget Template Management</h3>
+            <p class="card-desc">List of preconfigured budget packages with default allocated amounts and category summaries.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a08_budget_template_list/code.html', 'A08 — Budget Templates', 'Budget Templates')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a08_budget_template_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A08_DEL: Delete Budget Template Confirmation -->
+        <article class="screen-card" data-role="admin" data-id="A08_DEL" data-title="Delete Budget Template Modal">
+          <div class="card-preview" onclick="openViewer('./design/a08_delete_budget_template_confirmation/code.html', 'A08_DEL — Delete Template', 'Delete Budget Template Confirmation')">
+            <img src="./design/a08_delete_budget_template_confirmation/screen.png" alt="A08 Delete Budget Template Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A08_DEL</span>
+              <span class="category-tag">Budget Templates</span>
+            </div>
+            <h3 class="card-title">Delete Budget Template Modal</h3>
+            <p class="card-desc">Confirmation dialog to permanently delete a system budget template.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a08_delete_budget_template_confirmation/code.html', 'A08_DEL — Delete Template', 'Delete Budget Template Confirmation')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a08_delete_budget_template_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A09: Create/Edit Budget Template -->
+        <article class="screen-card" data-role="admin" data-id="A09" data-title="Create / Edit Budget Template">
+          <div class="card-preview" onclick="openViewer('./design/a09_create_edit_budget_template/code.html', 'A09 — Template Form', 'Template Form')">
+            <img src="./design/a09_create_edit_budget_template/screen.png" alt="A09 Create/Edit Budget Template Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A09</span>
+              <span class="category-tag">Budget Templates</span>
+            </div>
+            <h3 class="card-title">Budget Template Form</h3>
+            <p class="card-desc">Dynamic repeatable category & amount rows, total budget calculation, and save triggers.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a09_create_edit_budget_template/code.html', 'A09 — Template Form', 'Template Form')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a09_create_edit_budget_template/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A10: System Expenses -->
+        <article class="screen-card" data-role="admin" data-id="A10" data-title="System Expenses">
+          <div class="card-preview" onclick="openViewer('./design/a10_system_expense_list/code.html', 'A10 — System Expenses', 'System Expenses')">
+            <img src="./design/a10_system_expense_list/screen.png" alt="A10 System Expenses List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A10</span>
+              <span class="category-tag">Expenses</span>
+            </div>
+            <h3 class="card-title">System-Wide Expenses</h3>
+            <p class="card-desc">Audit master list of all user expenses across the platform with user, category, and date filters.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a10_system_expense_list/code.html', 'A10 — System Expenses', 'System Expenses')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a10_system_expense_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A10_DEL: Delete System Expense Confirmation -->
+        <article class="screen-card" data-role="admin" data-id="A10_DEL" data-title="Delete System Expense Modal">
+          <div class="card-preview" onclick="openViewer('./design/a10_delete_system_expense_confirmation/code.html', 'A10_DEL — Delete Expense', 'Delete System Expense Confirmation')">
+            <img src="./design/a10_delete_system_expense_confirmation/screen.png" alt="A10 Delete System Expense Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A10_DEL</span>
+              <span class="category-tag">Expenses</span>
+            </div>
+            <h3 class="card-title">Delete System Expense Modal</h3>
+            <p class="card-desc">Administrative confirmation dialog for deleting an expense record from user ledger.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a10_delete_system_expense_confirmation/code.html', 'A10_DEL — Delete Expense', 'Delete System Expense Confirmation')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a10_delete_system_expense_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A11: System Expense Detail / Edit -->
+        <article class="screen-card" data-role="admin" data-id="A11" data-title="System Expense Detail / Edit">
+          <div class="card-preview" onclick="openViewer('./design/a11_system_expense_detail/code.html', 'A11 — Expense Detail/Edit', 'Expense Detail')">
+            <img src="./design/a11_system_expense_detail/screen.png" alt="A11 System Expense Detail Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A11</span>
+              <span class="category-tag">Expenses</span>
+            </div>
+            <h3 class="card-title">System Expense Detail / Edit</h3>
+            <p class="card-desc">View expense details with user ownership badge, receipt attachment preview, and modification controls.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a11_system_expense_detail/code.html', 'A11 — Expense Detail/Edit', 'Expense Detail')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a11_system_expense_detail/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A12: System Incomes -->
+        <article class="screen-card" data-role="admin" data-id="A12" data-title="System Incomes">
+          <div class="card-preview" onclick="openViewer('./design/a12_system_income_list/code.html', 'A12 — System Incomes', 'System Incomes')">
+            <img src="./design/a12_system_income_list/screen.png" alt="A12 System Incomes List Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A12</span>
+              <span class="category-tag">Incomes</span>
+            </div>
+            <h3 class="card-title">System-Wide Incomes</h3>
+            <p class="card-desc">Audit master list of all user income records across the platform with user and date filters.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a12_system_income_list/code.html', 'A12 — System Incomes', 'System Incomes')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a12_system_income_list/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A12_DEL: Delete System Income Confirmation -->
+        <article class="screen-card" data-role="admin" data-id="A12_DEL" data-title="Delete System Income Modal">
+          <div class="card-preview" onclick="openViewer('./design/a12_delete_system_income_confirmation/code.html', 'A12_DEL — Delete Income', 'Delete System Income Confirmation')">
+            <img src="./design/a12_delete_system_income_confirmation/screen.png" alt="A12 Delete System Income Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A12_DEL</span>
+              <span class="category-tag">Incomes</span>
+            </div>
+            <h3 class="card-title">Delete System Income Modal</h3>
+            <p class="card-desc">Administrative confirmation dialog for deleting an income record from user balance.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a12_delete_system_income_confirmation/code.html', 'A12_DEL — Delete Income', 'Delete System Income Confirmation')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a12_delete_system_income_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A13: System Income Edit -->
+        <article class="screen-card" data-role="admin" data-id="A13" data-title="System Income Edit">
+          <div class="card-preview" onclick="openViewer('./design/a13_system_income_edit/code.html', 'A13 — Income Edit', 'Edit Income')">
+            <img src="./design/a13_system_income_edit/screen.png" alt="A13 System Income Edit Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A13</span>
+              <span class="category-tag">Incomes</span>
+            </div>
+            <h3 class="card-title">System Income Edit</h3>
+            <p class="card-desc">Form to edit system income records with owner user context and delete confirmation triggers.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a13_system_income_edit/code.html', 'A13 — Income Edit', 'Edit Income')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a13_system_income_edit/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A14: Activity Logs -->
+        <article class="screen-card" data-role="admin" data-id="A14" data-title="Activity Logs">
+          <div class="card-preview" onclick="openViewer('./design/a14_activity_logs/code.html', 'A14 — Activity Logs', 'Activity Logs')">
+            <img src="./design/a14_activity_logs/screen.png" alt="A14 Activity Logs Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A14</span>
+              <span class="category-tag">Audit Logs</span>
+            </div>
+            <h3 class="card-title">System Activity Logs</h3>
+            <p class="card-desc">Automated audit logging of logins, logouts, and CRUD events across Expenses, Incomes, Budgets, and Users.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a14_activity_logs/code.html', 'A14 — Activity Logs', 'Activity Logs')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a14_activity_logs/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A14_DEL: Clear Activity Logs Confirmation -->
+        <article class="screen-card" data-role="admin" data-id="A14_DEL" data-title="Clear Logs Modal">
+          <div class="card-preview" onclick="openViewer('./design/a14_clear_activity_logs_confirmation/code.html', 'A14_DEL — Clear Logs', 'Clear Activity Logs Confirmation')">
+            <img src="./design/a14_clear_activity_logs_confirmation/screen.png" alt="A14 Clear Activity Logs Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A14_DEL</span>
+              <span class="category-tag">Audit Logs</span>
+            </div>
+            <h3 class="card-title">Clear Activity Logs Modal</h3>
+            <p class="card-desc">Confirmation dialog to purge historical system audit activity logs older than 90 days.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a14_clear_activity_logs_confirmation/code.html', 'A14_DEL — Clear Logs', 'Clear Activity Logs Confirmation')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a14_clear_activity_logs_confirmation/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A15: CSV Import -->
+        <article class="screen-card" data-role="admin" data-id="A15" data-title="CSV Import">
+          <div class="card-preview" onclick="openViewer('./design/a15_admin_import_data/code.html', 'A15 — Bulk CSV Import', 'Import Data')">
+            <img src="./design/a15_admin_import_data/screen.png" alt="A15 CSV Import Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A15</span>
+              <span class="category-tag">Data Tools</span>
+            </div>
+            <h3 class="card-title">Bulk CSV Import</h3>
+            <p class="card-desc">Batch import tool supporting CSV datasets for Users, Expenses, Incomes, Categories, and Budgets.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a15_admin_import_data/code.html', 'A15 — Bulk CSV Import', 'Import Data')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a15_admin_import_data/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- A16: CSV Export -->
+        <article class="screen-card" data-role="admin" data-id="A16" data-title="CSV Export">
+          <div class="card-preview" onclick="openViewer('./design/a16_admin_export_data/code.html', 'A16 — Bulk CSV Export', 'Export Data')">
+            <img src="./design/a16_admin_export_data/screen.png" alt="A16 CSV Export Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge admin-id-badge">A16</span>
+              <span class="category-tag">Data Tools</span>
+            </div>
+            <h3 class="card-title">Bulk CSV Export</h3>
+            <p class="card-desc">Generate standard CSV exports for User overview, Expenses (category/amount/date/note), Incomes, Categories, and Budgets.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./design/a16_admin_export_data/code.html', 'A16 — Bulk CSV Export', 'Export Data')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./design/a16_admin_export_data/code.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 3. LAYOUT TEMPLATES SECTION -->
+    <section class="section-block" id="layout-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-icon-badge layout-section-badge">
+            <span class="material-symbols-outlined">view_quilt</span>
+          </div>
+          <div>
+            <h2 class="section-title">Layout Architecture Templates</h2>
+            <div class="section-subtitle">3 responsive master page layout shells for User, Admin, and Authentication views</div>
+          </div>
+        </div>
+        <span class="badge badge-green">3 Layouts</span>
+      </div>
+
+      <div class="screens-grid" id="layout-grid">
+
+        <!-- L01: User Layout -->
+        <article class="screen-card" data-role="layouts" data-id="LAY-USER" data-title="User Workspace Layout">
+          <div class="card-preview" onclick="openViewer('./layouts/UserLayout.html', 'UserLayout', 'User Workspace Layout Shell')">
+            <img src="./layouts/UserLayout.png" alt="User Layout Shell Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge layout-id-badge">LAY-USER</span>
+              <span class="category-tag">Layout Shell</span>
+            </div>
+            <h3 class="card-title">User Workspace Layout</h3>
+            <p class="card-desc">Left vertical sidebar with user profile, navigation links, and direct main canvas without top navbar.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./layouts/UserLayout.html', 'UserLayout', 'User Workspace Layout Shell')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./layouts/UserLayout.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- L02: Admin Layout -->
+        <article class="screen-card" data-role="layouts" data-id="LAY-ADMIN" data-title="Admin Management Layout">
+          <div class="card-preview" onclick="openViewer('./layouts/AdminLayout.html', 'AdminLayout', 'Admin Management Layout Shell')">
+            <img src="./layouts/AdminLayout.png" alt="Admin Layout Shell Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge layout-id-badge">LAY-ADMIN</span>
+              <span class="category-tag">Layout Shell</span>
+            </div>
+            <h3 class="card-title">Admin Management Layout</h3>
+            <p class="card-desc">Administrative left sidebar with pink ADMIN indicator badge, dark accents, and management links.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./layouts/AdminLayout.html', 'AdminLayout', 'Admin Management Layout Shell')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./layouts/AdminLayout.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- L03: Auth Layout -->
+        <article class="screen-card" data-role="layouts" data-id="LAY-AUTH" data-title="Authentication Layout">
+          <div class="card-preview" onclick="openViewer('./layouts/AuthLayout.html', 'AuthLayout', 'Centered Authentication Layout')">
+            <img src="./layouts/AuthLayout.png" alt="Authentication Layout Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge layout-id-badge">LAY-AUTH</span>
+              <span class="category-tag">Layout Shell</span>
+            </div>
+            <h3 class="card-title">Authentication Layout</h3>
+            <p class="card-desc">Centered, responsive card container with gradient background for sign-in and recovery flows.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./layouts/AuthLayout.html', 'AuthLayout', 'Centered Authentication Layout')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./layouts/AuthLayout.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 4. COMPONENT LIBRARY SECTION -->
+    <section class="section-block" id="comp-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-icon-badge comp-section-badge">
+            <span class="material-symbols-outlined">widgets</span>
+          </div>
+          <div>
+            <h2 class="section-title">Modular Component Library</h2>
+            <div class="section-subtitle">10 reusable UI component kits with design tokens and interaction states</div>
+          </div>
+        </div>
+        <span class="badge badge-purple">10 Components</span>
+      </div>
+
+      <div class="screens-grid" id="comp-grid">
+
+        <!-- C01: Buttons -->
+        <article class="screen-card" data-role="components" data-id="CMP-BTN" data-title="Buttons Component">
+          <div class="card-preview" onclick="openViewer('./components/button/Buttons.html', 'Buttons', 'Button Component Library')">
+            <img src="./components/button/screen.png" alt="Buttons Component Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-BTN</span>
+              <span class="category-tag">Button</span>
+            </div>
+            <h3 class="card-title">Buttons & Icon Buttons</h3>
+            <p class="card-desc">Primary, Secondary, Outline, Danger, Icon-only, and animated Loading button states.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/button/Buttons.html', 'Buttons', 'Button Component Library')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/button/Buttons.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C02: SearchBar -->
+        <article class="screen-card" data-role="components" data-id="CMP-SRCH" data-title="Search & Filter Bar">
+          <div class="card-preview" onclick="openViewer('./components/search/SearchBar.html', 'SearchBar', 'Search & Filter Toolbar')">
+            <img src="./components/search/screen.png" alt="SearchBar Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-SRCH</span>
+              <span class="category-tag">Search & Filter</span>
+            </div>
+            <h3 class="card-title">Search & Filter Toolbar</h3>
+            <p class="card-desc">Search input with keyboard shortcut badge (⌘K), dropdown filters, and reset trigger.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/search/SearchBar.html', 'SearchBar', 'Search & Filter Toolbar')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/search/SearchBar.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C03: DataTable -->
+        <article class="screen-card" data-role="components" data-id="CMP-TBL" data-title="Data Table">
+          <div class="card-preview" onclick="openViewer('./components/table/DataTable.html', 'DataTable', 'Data Table Component')">
+            <img src="./components/table/screen.png" alt="DataTable Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-TBL</span>
+              <span class="category-tag">Table</span>
+            </div>
+            <h3 class="card-title">Data Table & Rows</h3>
+            <p class="card-desc">Responsive table with status badge pills, monospace currency amounts, action buttons, and pagination.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/table/DataTable.html', 'DataTable', 'Data Table Component')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/table/DataTable.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C04: FormControls -->
+        <article class="screen-card" data-role="components" data-id="CMP-FRM" data-title="Form Controls">
+          <div class="card-preview" onclick="openViewer('./components/form/FormControls.html', 'FormControls', 'Form Input Controls')">
+            <img src="./components/form/screen.png" alt="FormControls Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-FRM</span>
+              <span class="category-tag">Forms</span>
+            </div>
+            <h3 class="card-title">Form Input Controls</h3>
+            <p class="card-desc">Text inputs, currency inputs with USD prefix, select dropdowns, textareas, and file dropzones.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/form/FormControls.html', 'FormControls', 'Form Input Controls')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/form/FormControls.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C05: DeleteConfirmModal -->
+        <article class="screen-card" data-role="components" data-id="CMP-MODAL" data-title="Delete Confirm Modal">
+          <div class="card-preview" onclick="openViewer('./components/modal/DeleteConfirmModal.html', 'DeleteConfirmModal', 'Delete Confirmation Dialog')">
+            <img src="./components/modal/screen.png" alt="DeleteConfirmModal Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-MODAL</span>
+              <span class="category-tag">Modal</span>
+            </div>
+            <h3 class="card-title">Delete Confirmation Dialog</h3>
+            <p class="card-desc">Accessible modal with danger icon, contextual warning notice, and Cancel/Delete triggers.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/modal/DeleteConfirmModal.html', 'DeleteConfirmModal', 'Delete Confirmation Dialog')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/modal/DeleteConfirmModal.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C06: StatCard -->
+        <article class="screen-card" data-role="components" data-id="CMP-CARD" data-title="Stat Cards">
+          <div class="card-preview" onclick="openViewer('./components/card/StatCard.html', 'StatCard', 'KPI Stat Cards')">
+            <img src="./components/card/screen.png" alt="StatCard Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-CARD</span>
+              <span class="category-tag">Cards</span>
+            </div>
+            <h3 class="card-title">KPI Metric Stat Cards</h3>
+            <p class="card-desc">Financial metric cards with monospace amounts, trend badges (+12.5%), and contextual icons.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/card/StatCard.html', 'StatCard', 'KPI Stat Cards')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/card/StatCard.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C07: PieChart -->
+        <article class="screen-card" data-role="components" data-id="CMP-CHART" data-title="Interactive Pie Chart">
+          <div class="card-preview" onclick="openViewer('./components/chart/PieChart.html', 'PieChart', 'Interactive Pie Chart')">
+            <img src="./components/chart/screen.png" alt="PieChart Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-CHART</span>
+              <span class="category-tag">Chart</span>
+            </div>
+            <h3 class="card-title">Category Spending Pie Chart</h3>
+            <p class="card-desc">Interactive SVG chart with monetary hover display and side percentage breakdown legend.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/chart/PieChart.html', 'PieChart', 'Interactive Pie Chart')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/chart/PieChart.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C08: Feedback -->
+        <article class="screen-card" data-role="components" data-id="CMP-FEED" data-title="Toasts & Alerts">
+          <div class="card-preview" onclick="openViewer('./components/feedback/ToastAndAlerts.html', 'ToastAndAlerts', 'Feedback Notifications')">
+            <img src="./components/feedback/screen.png" alt="ToastAndAlerts Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-FEED</span>
+              <span class="category-tag">Feedback</span>
+            </div>
+            <h3 class="card-title">Toasts & Alert Banners</h3>
+            <p class="card-desc">Success, Warning, and Error toast notifications with icons and close actions.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/feedback/ToastAndAlerts.html', 'ToastAndAlerts', 'Feedback Notifications')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/feedback/ToastAndAlerts.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C09: Navigation -->
+        <article class="screen-card" data-role="components" data-id="CMP-NAV" data-title="Breadcrumbs & Pagination">
+          <div class="card-preview" onclick="openViewer('./components/navigation/BreadcrumbAndPagination.html', 'BreadcrumbAndPagination', 'Navigation Elements')">
+            <img src="./components/navigation/screen.png" alt="BreadcrumbAndPagination Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-NAV</span>
+              <span class="category-tag">Navigation</span>
+            </div>
+            <h3 class="card-title">Breadcrumbs & Pagination</h3>
+            <p class="card-desc">Hierarchical breadcrumbs with back links and responsive numbered page pagination.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/navigation/BreadcrumbAndPagination.html', 'BreadcrumbAndPagination', 'Navigation Elements')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/navigation/BreadcrumbAndPagination.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- C10: Footer -->
+        <article class="screen-card" data-role="components" data-id="CMP-FTR" data-title="Standard Footer">
+          <div class="card-preview" onclick="openViewer('./components/footer/Footer.html', 'Footer', 'Standard Footer')">
+            <img src="./components/footer/screen.png" alt="Footer Preview" loading="lazy">
+            <div class="card-preview-overlay">
+              <span class="btn btn-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Live Preview</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="screen-id-badge comp-id-badge">CMP-FTR</span>
+              <span class="category-tag">Footer</span>
+            </div>
+            <h3 class="card-title">Standard Application Footer</h3>
+            <p class="card-desc">Standardized bottom metadata footer with copyright, links, and system status indicators.</p>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="openViewer('./components/footer/Footer.html', 'Footer', 'Standard Footer')">
+                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Preview
+              </button>
+              <a href="./components/footer/Footer.html" target="_blank" class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span></a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Device Viewer Modal -->
+  <div class="viewer-modal" id="viewer-modal">
+    <div class="viewer-container">
+      <div class="viewer-header">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="screen-id-badge user-id-badge" id="modal-screen-id">U01</span>
+          <h3 class="text-sm font-bold text-on-background truncate" id="modal-screen-title">User Login</h3>
+        </div>
+
+        <div class="viewer-controls">
+          <button class="device-btn active" onclick="setDevice('100%', this)">
+            <span class="material-symbols-outlined" style="font-size: 16px;">desktop_windows</span>
+            <span>Desktop</span>
+          </button>
+          <button class="device-btn" onclick="setDevice('768px', this)">
+            <span class="material-symbols-outlined" style="font-size: 16px;">tablet_mac</span>
+            <span>Tablet</span>
+          </button>
+          <button class="device-btn" onclick="setDevice('390px', this)">
+            <span class="material-symbols-outlined" style="font-size: 16px;">smartphone</span>
+            <span>Mobile</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a id="modal-open-link" href="#" target="_blank" class="btn btn-outline btn-sm" title="Open in new tab">
+            <span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span>
+          </a>
+          <button class="btn btn-outline btn-sm" onclick="closeViewer()" title="Close viewer">
+            <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="viewer-body">
+        <div class="viewer-frame-wrap" id="viewer-frame-wrap">
+          <iframe id="viewer-iframe" class="viewer-iframe" src="about:blank"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <h4 class="font-bold text-sm text-on-background">FinTrack Pro — Expense Management System</h4>
+        <p class="text-xs text-secondary mt-0.5">Designed for Next.js + Tailwind CSS & Java Spring Boot REST API Architecture.</p>
+      </div>
+      <div class="text-xs text-secondary">
+        © 2026 FinTrack Pro. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function openViewer(url, id, title) {
+      document.getElementById('modal-screen-id').textContent = id.split(' ')[0];
+      document.getElementById('modal-screen-title').textContent = title || id;
+      document.getElementById('modal-open-link').href = url;
+      document.getElementById('viewer-iframe').src = url;
+      document.getElementById('viewer-modal').classList.add('open');
+    }
+
+    function closeViewer() {
+      document.getElementById('viewer-modal').classList.remove('open');
+      document.getElementById('viewer-iframe').src = 'about:blank';
+    }
+
+    function setDevice(width, btn) {
+      document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('viewer-frame-wrap').style.width = width;
+    }
+
+    function filterRole(role, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const userSection = document.getElementById('user-section');
+      const adminSection = document.getElementById('admin-section');
+      const layoutSection = document.getElementById('layout-section');
+      const compSection = document.getElementById('comp-section');
+
+      if (role === 'all') {
+        userSection.style.display = 'block';
+        adminSection.style.display = 'block';
+        layoutSection.style.display = 'block';
+        compSection.style.display = 'block';
+      } else if (role === 'user') {
+        userSection.style.display = 'block';
+        adminSection.style.display = 'none';
+        layoutSection.style.display = 'none';
+        compSection.style.display = 'none';
+      } else if (role === 'admin') {
+        userSection.style.display = 'none';
+        adminSection.style.display = 'block';
+        layoutSection.style.display = 'none';
+        compSection.style.display = 'none';
+      } else if (role === 'layouts') {
+        userSection.style.display = 'none';
+        adminSection.style.display = 'none';
+        layoutSection.style.display = 'block';
+        compSection.style.display = 'none';
+      } else if (role === 'components') {
+        userSection.style.display = 'none';
+        adminSection.style.display = 'none';
+        layoutSection.style.display = 'none';
+        compSection.style.display = 'block';
+      }
+    }
+
+    // Search filter
+    document.getElementById('search-input').addEventListener('input', function(e) {
+      const q = e.target.value.toLowerCase().trim();
+      document.querySelectorAll('.screen-card').forEach(card => {
+        const id = (card.getAttribute('data-id') || '').toLowerCase();
+        const title = (card.getAttribute('data-title') || '').toLowerCase();
+        const desc = card.querySelector('.card-desc').textContent.toLowerCase();
+        if (!q || id.includes(q) || title.includes(q) || desc.includes(q)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

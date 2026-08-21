@@ -4,32 +4,69 @@
  */
 
 export interface Expense {
-  id: string;
+  id: number;
+  title: string;
   amount: number;
-  description: string;
-  categoryId: string;
-  categoryName?: string;
-  date: string; // ISO date string
-  createdAt: string;
-  updatedAt: string;
+  date: string;
+  note?: string | null;
+  categoryId: number;
+  categoryName: string;
+  createdAt?: string;
+  updatedAt?: string | null;
+  attachments?: ExpenseAttachment[];
+}
+
+export interface ExpenseAttachment {
+  id: number;
+  fileName: string;
+  fileUrl: string;
 }
 
 export interface CreateExpenseDto {
+  title: string;
   amount: number;
-  description: string;
-  categoryId: string;
+  categoryId: number;
   date: string;
+  note?: string;
 }
 
-export interface UpdateExpenseDto extends Partial<CreateExpenseDto> {}
+export type UpdateExpenseDto = CreateExpenseDto;
+
+export interface ExpenseMutationInput {
+  data: CreateExpenseDto;
+  files: File[];
+}
 
 export interface ExpenseFilter {
-  categoryId?: string;
-  startDate?: string;
-  endDate?: string;
+  categoryId?: number;
+  fromDate?: string;
+  toDate?: string;
   minAmount?: number;
   maxAmount?: number;
-  keyword?: string;
+  search?: string;
   page?: number;
   size?: number;
+  sort?: string;
+}
+
+export interface ExpensePageResponse {
+  items: Expense[];
+  page: number;
+  size: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export interface ExpenseCategoryOption {
+  id: number;
+  name: string;
+}
+
+export interface ExpenseFilterValues {
+  search: string;
+  categoryId: string;
+  fromDate: string;
+  toDate: string;
+  minAmount: string;
+  maxAmount: string;
 }

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>User Management - FinTrack Pro Administration</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          },
+          spacing: {
+            "sidebar-width": "260px",
+            "gutter": "24px"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="flex min-h-screen bg-bg-subtle text-on-background">
+
+  <!-- Admin Sidebar (No top horizontal navbar) -->
+  <aside class="hidden md:flex flex-col bg-surface w-sidebar-width h-screen sticky top-0 left-0 border-r border-border py-6 z-40">
+    <div class="px-6 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-900 to-primary text-white flex items-center justify-center font-bold text-xl shadow-md">
+          <span class="material-symbols-outlined text-[24px]">admin_panel_settings</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-base font-bold text-on-background leading-tight">FinTrack</h1>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-pink-100 text-pink-800 border border-pink-200">ADMIN</span>
+          </div>
+          <p class="text-xs text-on-surface-variant">System Administration</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Navigation Menu -->
+    <nav class="flex-1 px-4 flex flex-col gap-1 text-sm font-medium overflow-y-auto">
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-primary bg-primary-light font-semibold border-l-4 border-primary transition-all" href="../a03_admin_user_list/code.html">
+        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">group</span>
+        User Management
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a06_admin_category_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">category</span>
+        Global Categories
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a08_budget_template_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">bookmark_manager</span>
+        Budget Templates
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a10_system_expense_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+        System Expenses
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a12_system_income_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">account_balance</span>
+        System Incomes
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a14_activity_logs/code.html">
+        <span class="material-symbols-outlined text-[20px]">history</span>
+        Activity Logs
+      </a>
+
+      <div class="my-2 border-t border-border"></div>
+
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a15_admin_import_data/code.html">
+        <span class="material-symbols-outlined text-[20px]">file_upload</span>
+        Import CSV Data
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a16_admin_export_data/code.html">
+        <span class="material-symbols-outlined text-[20px]">file_download</span>
+        Export CSV Data
+      </a>
+    </nav>
+
+    <div class="mt-auto pt-4 border-t border-border px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-full bg-slate-800 text-white font-bold flex items-center justify-center text-sm">
+            AD
+          </div>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-on-background truncate">Super Admin</p>
+            <p class="text-xs text-on-surface-variant truncate">admin@fintrack.pro</p>
+          </div>
+        </div>
+        <a href="../a01_admin_login/code.html" title="Sign Out" class="p-1.5 text-on-surface-variant hover:text-danger hover:bg-red-50 rounded-lg transition-colors">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Canvas -->
+  <main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+    <div class="p-6 md:p-8 max-w-7xl mx-auto w-full flex-1">
+      
+      <!-- Page Header -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold text-on-background tracking-tight">User Account Management</h1>
+          <p class="text-sm text-secondary mt-1">Manage, activate, assign roles, and audit user accounts across the platform</p>
+        </div>
+        <a href="../a05_create_edit_user/code.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-container shadow-sm transition-all active:scale-[0.98]">
+          <span class="material-symbols-outlined text-[18px]">person_add</span>
+          <span>Create New User</span>
+        </a>
+      </div>
+
+      <!-- Filter Toolbar -->
+      <div class="bg-surface border border-border rounded-2xl p-4 mb-6 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <div class="relative flex-1 min-w-[260px]">
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+          <input 
+            type="text" 
+            placeholder="Search by user name, email, or role..." 
+            class="w-full pl-10 pr-4 py-2 bg-bg-subtle border border-border rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+          >
+        </div>
+
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <select class="px-3.5 py-2 bg-bg-subtle border border-border rounded-xl text-xs font-semibold text-secondary focus:bg-white focus:ring-2 focus:ring-primary/20">
+            <option value="">All Statuses</option>
+            <option value="active">Active Accounts</option>
+            <option value="inactive">Inactive / Suspended</option>
+          </select>
+
+          <select class="px-3.5 py-2 bg-bg-subtle border border-border rounded-xl text-xs font-semibold text-secondary focus:bg-white focus:ring-2 focus:ring-primary/20">
+            <option value="">All Roles</option>
+            <option value="user">Standard User</option>
+            <option value="manager">Financial Manager</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- User Data Table -->
+      <div class="bg-surface border border-border rounded-2xl overflow-hidden shadow-xs">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50/80 border-b border-border text-xs uppercase tracking-wider text-secondary font-semibold">
+              <tr>
+                <th scope="col" class="py-3.5 px-6">User / Member</th>
+                <th scope="col" class="py-3.5 px-4">Role</th>
+                <th scope="col" class="py-3.5 px-4 text-center">Status</th>
+                <th scope="col" class="py-3.5 px-4">Joined Date</th>
+                <th scope="col" class="py-3.5 px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              
+              <!-- User 1 -->
+              <tr class="hover:bg-slate-50/60 transition-colors group cursor-pointer" onclick="window.location.href='../a04_admin_user_detail/code.html'">
+                <td class="py-4 px-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 text-primary font-bold flex items-center justify-center text-sm border border-blue-200">
+                      JS
+                    </div>
+                    <div>
+                      <p class="font-semibold text-on-background group-hover:text-primary transition-colors">John Smith</p>
+                      <p class="text-xs text-secondary">john.smith@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-primary border border-blue-200">
+                    Standard User
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    Active
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-secondary text-xs font-medium">
+                  Jan 15, 2026
+                </td>
+                <td class="py-4 px-6 text-right" onclick="event.stopPropagation()">
+                  <div class="inline-flex items-center gap-1">
+                    <a href="../a04_admin_user_detail/code.html" class="p-1.5 text-secondary hover:text-primary hover:bg-blue-50 rounded-lg transition-colors" title="View Detail">
+                      <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    </a>
+                    <a href="../a05_create_edit_user/code.html" class="p-1.5 text-secondary hover:text-primary hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </a>
+                    <a href="../a05_delete_user_confirmation/code.html" class="p-1.5 text-secondary hover:text-danger hover:bg-red-50 rounded-lg transition-colors" title="Delete User">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- User 2 -->
+              <tr class="hover:bg-slate-50/60 transition-colors group cursor-pointer" onclick="window.location.href='../a04_admin_user_detail/code.html'">
+                <td class="py-4 px-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-sm border border-purple-200">
+                      EM
+                    </div>
+                    <div>
+                      <p class="font-semibold text-on-background group-hover:text-primary transition-colors">Emma Watson</p>
+                      <p class="text-xs text-secondary">emma.watson@enterprise.org</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                    Financial Manager
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    Active
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-secondary text-xs font-medium">
+                  Feb 20, 2026
+                </td>
+                <td class="py-4 px-6 text-right" onclick="event.stopPropagation()">
+                  <div class="inline-flex items-center gap-1">
+                    <a href="../a04_admin_user_detail/code.html" class="p-1.5 text-secondary hover:text-primary hover:bg-blue-50 rounded-lg transition-colors" title="View Detail">
+                      <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    </a>
+                    <a href="../a05_create_edit_user/code.html" class="p-1.5 text-secondary hover:text-primary hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </a>
+                    <a href="../a05_delete_user_confirmation/code.html" class="p-1.5 text-secondary hover:text-danger hover:bg-red-50 rounded-lg transition-colors" title="Delete User">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- User 3 -->
+              <tr class="hover:bg-slate-50/60 transition-colors group cursor-pointer" onclick="window.location.href='../a04_admin_user_detail/code.html'">
+                <td class="py-4 px-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-sm border border-slate-300">
+                      RD
+                    </div>
+                    <div>
+                      <p class="font-semibold text-on-background group-hover:text-primary transition-colors">Robert Davis</p>
+                      <p class="text-xs text-secondary">robert.davis@corp.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+                    Standard User
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                    Suspended
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-secondary text-xs font-medium">
+                  Mar 10, 2026
+                </td>
+                <td class="py-4 px-6 text-right" onclick="event.stopPropagation()">
+                  <div class="inline-flex items-center gap-1">
+                    <a href="../a04_admin_user_detail/code.html" class="p-1.5 text-secondary hover:text-primary hover:bg-blue-50 rounded-lg transition-colors" title="View Detail">
+                      <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    </a>
+                    <a href="../a05_create_edit_user/code.html" class="p-1.5 text-secondary hover:text-primary hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </a>
+                    <a href="../a05_delete_user_confirmation/code.html" class="p-1.5 text-secondary hover:text-danger hover:bg-red-50 rounded-lg transition-colors" title="Delete User">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-t border-border bg-slate-50/40 text-xs text-secondary font-medium">
+          <span>Showing <strong>1 to 3</strong> of <strong>86</strong> registered users</span>
+          <div class="flex items-center gap-1.5">
+            <button class="px-3 py-1.5 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 disabled:opacity-40" disabled>Previous</button>
+            <button class="w-8 h-8 rounded-lg border border-primary bg-primary text-white font-semibold flex items-center justify-center">1</button>
+            <button class="w-8 h-8 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 flex items-center justify-center">2</button>
+            <button class="w-8 h-8 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 flex items-center justify-center">3</button>
+            <button class="px-3 py-1.5 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50">Next</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

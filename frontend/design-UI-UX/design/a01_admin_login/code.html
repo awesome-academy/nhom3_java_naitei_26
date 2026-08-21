@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>FinTrack Pro - Admin Portal Login</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "secondary": "#515f74",
+            "danger": "#DC2626",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white antialiased min-h-screen flex items-center justify-center p-4">
+  <main class="w-full max-w-[420px]">
+    
+    <!-- Admin Header -->
+    <div class="text-center mb-8">
+      <div class="inline-flex justify-center items-center gap-2.5 mb-4">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-primary text-white flex items-center justify-center font-bold text-2xl shadow-xl border border-white/10">
+          <span class="material-symbols-outlined text-[28px]">admin_panel_settings</span>
+        </div>
+        <div class="text-left">
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-bold text-white tracking-tight">FinTrack Pro</h1>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 border border-pink-500/30">ADMIN</span>
+          </div>
+          <p class="text-xs text-slate-400">System Management Console</p>
+        </div>
+      </div>
+      <h2 class="text-xl font-bold text-white mb-1">Administrative Sign In</h2>
+      <p class="text-xs text-slate-400">Restricted area. Authorized system administrators only.</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-surface text-on-background border border-border rounded-2xl shadow-2xl p-8">
+      <form action="../a03_admin_user_list/code.html" class="space-y-5" method="GET">
+        <!-- Email Field -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-secondary mb-1.5" for="email">
+            Admin Email Address
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <span class="material-symbols-outlined text-[20px]">shield_person</span>
+            </div>
+            <input 
+              class="block w-full pl-10 pr-4 py-2.5 border border-border rounded-xl bg-bg-subtle text-on-background text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary placeholder:text-slate-400 transition-colors" 
+              id="email" 
+              name="email" 
+              placeholder="admin@fintrack.pro" 
+              value="admin@fintrack.pro" 
+              required 
+              type="email"
+            >
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-secondary mb-1.5" for="password">
+            Master Password
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <span class="material-symbols-outlined text-[20px]">lock</span>
+            </div>
+            <input 
+              class="block w-full pl-10 pr-4 py-2.5 border border-border rounded-xl bg-bg-subtle text-on-background text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary placeholder:text-slate-400 transition-colors" 
+              id="password" 
+              name="password" 
+              placeholder="••••••••" 
+              value="adminSecure2026!" 
+              required 
+              type="password"
+            >
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-2">
+          <button 
+            class="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl shadow-md text-sm font-semibold text-white bg-indigo-900 hover:bg-indigo-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition-all active:scale-[0.98]" 
+            type="submit"
+          >
+            <span>Authorize & Sign In</span>
+            <span class="material-symbols-outlined text-[18px]">key</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footnote -->
+    <div class="mt-8 text-center">
+      <p class="text-xs text-slate-500">© 2026 FinTrack Pro Administration. All actions are logged and audited.</p>
+    </div>
+  </main>
+
+  <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span> <span>Verifying Admin Credentials...</span>';
+      btn.classList.add('opacity-80', 'cursor-not-allowed');
+      
+      setTimeout(() => {
+        window.location.href = '../a03_admin_user_list/code.html';
+      }, 600);
+    });
+  </script>
+</body>
+</html>
