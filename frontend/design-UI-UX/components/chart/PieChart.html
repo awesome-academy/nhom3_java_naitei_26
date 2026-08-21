@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Pie Chart Component — FinTrack Pro</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="p-6 md:p-8 bg-bg-subtle min-h-screen">
+  <div class="max-w-4xl mx-auto space-y-6">
+    
+    <!-- Component Header -->
+    <div class="border-b border-border pb-4">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 text-[11px] font-mono font-bold">CMP-CHART</span>
+        <span class="text-xs font-semibold text-secondary">Component Library</span>
+      </div>
+      <h1 class="text-2xl font-bold text-on-background">Category Spending Pie Chart</h1>
+      <p class="text-xs text-secondary mt-1">Interactive SVG donut / pie chart with monetary amount hover center and side percentage distribution legend</p>
+    </div>
+
+    <!-- Chart Showcase Card -->
+    <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs">
+      
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+        
+        <!-- Interactive Donut SVG with Dynamic Center Focus -->
+        <div class="relative w-64 h-64 flex-shrink-0 flex items-center justify-center">
+          <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+            <!-- Background track -->
+            <circle cx="50" cy="50" r="38" fill="transparent" stroke="#f1f5f9" stroke-width="14"></circle>
+            
+            <!-- Slice 1: Housing (35%) -->
+            <circle 
+              cx="50" cy="50" r="38" fill="transparent" 
+              stroke="#2563eb" stroke-width="14" 
+              stroke-dasharray="83.5 155.5" stroke-dashoffset="0"
+              class="hover:stroke-[17] transition-all cursor-pointer"
+              onmouseenter="setCenter('Housing & Utilities', '$980.00', '35%')"
+            ></circle>
+
+            <!-- Slice 2: Food & Dining (28%) -->
+            <circle 
+              cx="50" cy="50" r="38" fill="transparent" 
+              stroke="#f59e0b" stroke-width="14" 
+              stroke-dasharray="66.8 172.2" stroke-dashoffset="-83.5"
+              class="hover:stroke-[17] transition-all cursor-pointer"
+              onmouseenter="setCenter('Food & Dining', '$784.00', '28%')"
+            ></circle>
+
+            <!-- Slice 3: Transportation (18%) -->
+            <circle 
+              cx="50" cy="50" r="38" fill="transparent" 
+              stroke="#10b981" stroke-width="14" 
+              stroke-dasharray="42.9 196.1" stroke-dashoffset="-150.3"
+              class="hover:stroke-[17] transition-all cursor-pointer"
+              onmouseenter="setCenter('Transportation', '$504.00', '18%')"
+            ></circle>
+
+            <!-- Slice 4: Entertainment (12%) -->
+            <circle 
+              cx="50" cy="50" r="38" fill="transparent" 
+              stroke="#8b5cf6" stroke-width="14" 
+              stroke-dasharray="28.6 210.4" stroke-dashoffset="-193.2"
+              class="hover:stroke-[17] transition-all cursor-pointer"
+              onmouseenter="setCenter('Entertainment', '$336.00', '12%')"
+            ></circle>
+
+            <!-- Slice 5: Others (7%) -->
+            <circle 
+              cx="50" cy="50" r="38" fill="transparent" 
+              stroke="#94a3b8" stroke-width="14" 
+              stroke-dasharray="16.7 222.3" stroke-dashoffset="-221.8"
+              class="hover:stroke-[17] transition-all cursor-pointer"
+              onmouseenter="setCenter('Others', '$196.00', '7%')"
+            ></circle>
+          </svg>
+
+          <!-- Center Hover Text Slot -->
+          <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center px-4">
+            <span class="text-[11px] font-semibold text-secondary truncate max-w-[120px]" id="chart-cat">Total Spending</span>
+            <span class="text-lg font-bold font-mono text-on-background mt-0.5" id="chart-amount">$2,800.00</span>
+            <span class="text-[10px] font-bold text-primary bg-primary-light px-2 py-0.5 rounded-full mt-1" id="chart-pct">100%</span>
+          </div>
+        </div>
+
+        <!-- Legend with Side Percentage & Monetary Value -->
+        <div class="flex-1 w-full space-y-3">
+          
+          <div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-bg-subtle cursor-pointer transition-colors" onmouseenter="setCenter('Housing & Utilities', '$980.00', '35%')">
+            <div class="flex items-center gap-3">
+              <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+              <span class="text-sm font-semibold text-on-background">Housing & Utilities</span>
+            </div>
+            <div class="text-right">
+              <span class="font-mono font-bold text-sm text-on-background">$980.00</span>
+              <span class="ml-2 text-xs font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">35%</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-bg-subtle cursor-pointer transition-colors" onmouseenter="setCenter('Food & Dining', '$784.00', '28%')">
+            <div class="flex items-center gap-3">
+              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+              <span class="text-sm font-semibold text-on-background">Food & Dining</span>
+            </div>
+            <div class="text-right">
+              <span class="font-mono font-bold text-sm text-on-background">$784.00</span>
+              <span class="ml-2 text-xs font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">28%</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-bg-subtle cursor-pointer transition-colors" onmouseenter="setCenter('Transportation', '$504.00', '18%')">
+            <div class="flex items-center gap-3">
+              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+              <span class="text-sm font-semibold text-on-background">Transportation</span>
+            </div>
+            <div class="text-right">
+              <span class="font-mono font-bold text-sm text-on-background">$504.00</span>
+              <span class="ml-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">18%</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-bg-subtle cursor-pointer transition-colors" onmouseenter="setCenter('Entertainment', '$336.00', '12%')">
+            <div class="flex items-center gap-3">
+              <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+              <span class="text-sm font-semibold text-on-background">Entertainment</span>
+            </div>
+            <div class="text-right">
+              <span class="font-mono font-bold text-sm text-on-background">$336.00</span>
+              <span class="ml-2 text-xs font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">12%</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function setCenter(cat, amount, pct) {
+      document.getElementById('chart-cat').textContent = cat;
+      document.getElementById('chart-amount').textContent = amount;
+      document.getElementById('chart-pct').textContent = pct;
+    }
+  </script>
+</body>
+</html>

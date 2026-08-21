@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Delete Confirmation Modal Component — FinTrack Pro</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="p-6 md:p-8 bg-bg-subtle min-h-screen">
+  <div class="max-w-4xl mx-auto space-y-6">
+    
+    <!-- Component Header -->
+    <div class="border-b border-border pb-4">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 text-[11px] font-mono font-bold">CMP-MODAL</span>
+        <span class="text-xs font-semibold text-secondary">Component Library</span>
+      </div>
+      <h1 class="text-2xl font-bold text-on-background">Delete Confirmation Dialogs</h1>
+      <p class="text-xs text-secondary mt-1">Modal confirmation dialog with warning context, item summary, and permanent deletion trigger</p>
+    </div>
+
+    <!-- Modal Component Preview (Embedded Demonstration) -->
+    <div class="bg-slate-900/60 p-6 md:p-12 rounded-2xl flex items-center justify-center">
+      
+      <!-- Modal Box -->
+      <div class="bg-surface rounded-2xl max-w-md w-full p-6 shadow-2xl border border-border space-y-4">
+        
+        <!-- Header with Warning Icon -->
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-red-50 text-danger flex items-center justify-center flex-shrink-0 border border-red-100">
+            <span class="material-symbols-outlined text-[26px]">delete_forever</span>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-on-background">Confirm Item Deletion</h3>
+            <p class="text-xs text-secondary mt-1 leading-relaxed">
+              Are you sure you want to permanently delete this transaction record? This action cannot be undone.
+            </p>
+          </div>
+        </div>
+
+        <!-- Target Item Summary Card -->
+        <div class="bg-bg-subtle border border-border rounded-xl p-3.5 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-secondary font-medium">Item Name:</span>
+            <strong class="text-on-background">Supermarket Grocery</strong>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-secondary font-medium">Amount:</span>
+            <span class="font-mono font-bold text-danger">-$145.50</span>
+          </div>
+        </div>
+
+        <!-- Action Triggers -->
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <button type="button" class="px-4 py-2 text-xs font-semibold rounded-xl border border-border bg-white text-secondary hover:bg-slate-50 transition-colors">
+            Cancel
+          </button>
+          <button type="button" class="px-4 py-2 text-xs font-semibold rounded-xl bg-danger text-white hover:bg-red-700 transition-colors shadow-sm inline-flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">delete</span>
+            Permanently Delete
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</body>
+</html>

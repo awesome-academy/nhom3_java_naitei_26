@@ -25,7 +25,7 @@ const protectedPaths = [
 ];
 
 // Các route chỉ dành cho khách (chưa login)
-const authPaths = ["/login"];
+const authPaths = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -41,11 +41,13 @@ export function middleware(request: NextRequest) {
 
   // Chưa login mà vào route protected → redirect /login
   // TODO: Bỏ comment dòng dưới khi muốn bật auth check
-  // if (isProtected && !token) {
-  //   const loginUrl = new URL("/login", request.url);
-  //   loginUrl.searchParams.set("redirect", pathname);
-  //   return NextResponse.redirect(loginUrl);
-  // }
+  
+  // Nếu auth check lỗi hãy cmt cụm if dưới đây để dev dễ hơn
+  if (isProtected && !token) {
+     const loginUrl = new URL("/login", request.url);
+     loginUrl.searchParams.set("redirect", pathname);
+     return NextResponse.redirect(loginUrl);
+  }
 
   // Đã login mà vào /login → redirect /dashboard
   if (isAuthPage && token) {

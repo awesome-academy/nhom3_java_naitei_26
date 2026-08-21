@@ -1,0 +1,376 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Export Data - FinTrack Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Courier+Prime:wght@400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#dae2fd",
+                        "surface-bright": "#faf8ff",
+                        "secondary-fixed": "#d5e3fc",
+                        "surface-container": "#eaedff",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#131b2e",
+                        "on-error": "#ffffff",
+                        "secondary": "#515f74",
+                        "success": "#16A34A",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "primary": "#004ac6",
+                        "on-tertiary-fixed": "#191c1e",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-primary": "#ffffff",
+                        "warning": "#D97706",
+                        "inverse-surface": "#283044",
+                        "surface-container-low": "#f2f3ff",
+                        "border": "#E2E8F0",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-surface-variant": "#434655",
+                        "surface": "#FFFFFF",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#dae2fd",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "surface-container-high": "#e2e7ff",
+                        "tertiary-fixed": "#e0e3e5",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "outline": "#737686",
+                        "primary-container": "#2563eb",
+                        "on-background": "#131b2e",
+                        "surface-tint": "#0053db",
+                        "background": "#faf8ff",
+                        "tertiary-container": "#6b6e70",
+                        "surface-dim": "#d2d9f4",
+                        "on-tertiary-container": "#eff1f3",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-container": "#d5e3fc",
+                        "tertiary": "#525657",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "danger": "#DC2626",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#57657a",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c3c6d7",
+                        "inverse-primary": "#b4c5ff",
+                        "on-primary-container": "#eeefff",
+                        "bg-subtle": "#F8FAFC",
+                        "primary-fixed-dim": "#b4c5ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sidebar-width": "256px",
+                        "topbar-height": "64px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "mono-md": ["Courier Prime"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "mono-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for data density */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c3c6d7; }
+        
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .loading-spin { animation: spin 1s linear infinite; }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex text-on-surface font-body-md">
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen sticky top-0 left-0 border-r border-border bg-surface flex flex-col py-lg z-40 hidden md:flex shrink-0">
+<div class="px-gutter mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined icon-fill text-on-primary-container" style="font-size: 20px;">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FinTrack Pro</h1>
+<p class="font-label-sm text-label-sm text-secondary">Enterprise Finance</p>
+</div>
+</div>
+<div class="px-gutter mb-lg">
+<button class="w-full flex items-center justify-center gap-sm py-sm bg-primary-container text-on-primary-container font-label-md text-label-md rounded-lg hover:bg-primary transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                New Transaction
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto px-md flex flex-col gap-xs font-body-md text-body-md font-label-md text-label-md">
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary hover:bg-bg-subtle transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary hover:bg-bg-subtle transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+                Expenses
+            </a>
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary hover:bg-bg-subtle transition-colors" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+                Incomes
+            </a>
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary hover:bg-bg-subtle transition-colors" href="#">
+<span class="material-symbols-outlined">category</span>
+                Categories
+            </a>
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary hover:bg-bg-subtle transition-colors" href="#">
+<span class="material-symbols-outlined">savings</span>
+                Budgets
+            </a>
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary hover:bg-bg-subtle transition-colors" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+                Reports
+            </a>
+<!-- Active -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary bg-secondary-container/30 border-l-2 border-primary active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined icon-fill">import_export</span>
+                Import/Export
+            </a>
+</nav><div class="mt-auto px-md pt-lg border-t border-border">
+    <div class="flex items-center justify-between p-sm rounded-lg hover:bg-bg-subtle transition-colors cursor-pointer group">
+        <div class="flex items-center gap-sm min-w-0">
+            <div class="w-8 h-8 rounded-full bg-surface-container-highest border border-border overflow-hidden shrink-0">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLI-g8QVOQDxUWrd-Z7lCnTHaw7JZqi65xk8iwpbumIh4yxzipzx2TNHeZAkScxgj8wNKvsfqn-AxXI60zBii1eoRjKXtdmThYC9QNbs-JRJa638Y5NcQ65410L8VMHLy3gKVMdBr5FXeEEJDqmtPzwOlCGKXYW1bYN_Jql9QBz6F2yXx50FOkb7xgbaJ3RLKOjsSJmJMYdCfAcNmeuy1eZsgswA0QCOHUrRuW5qTAZHSK4U3JtdRUfw" alt="Admin Avatar" class="w-full h-full object-cover">
+            </div>
+            <div class="min-w-0">
+                <p class="font-label-md text-label-md text-on-surface truncate">Admin User</p>
+                <p class="font-label-sm text-label-sm text-secondary truncate">admin@fintrack.pro</p>
+            </div>
+        </div>
+        <button class="text-secondary group-hover:text-danger transition-colors">
+            <span class="material-symbols-outlined" style="font-size: 20px;">logout</span>
+        </button>
+    </div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar -->
+<header class="h-topbar-height sticky top-0 z-30 w-full border-b border-border bg-surface flex justify-between items-center px-gutter shrink-0">
+<!-- Left: Breadcrumb/Nav Context -->
+<div class="flex items-center gap-sm font-body-md text-body-md">
+<a class="text-on-surface-variant hover:text-primary transition-all cursor-pointer active:opacity-80" href="#">Import/Export</a>
+<span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
+<span class="text-primary font-bold">Export</span>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center gap-lg">
+<button class="text-secondary hover:text-primary transition-colors font-label-md text-label-md hidden md:block">Support</button>
+<div class="flex items-center gap-sm text-secondary">
+<button class="p-xs hover:bg-bg-subtle rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs hover:bg-bg-subtle rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-border overflow-hidden shrink-0 cursor-pointer">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A small, professional headshot photo of a person in business attire against a neutral light gray background, used as a user avatar profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLI-g8QVOQDxUWrd-Z7lCnTHaw7JZqi65xk8iwpbumIh4yxzipzx2TNHeZAkScxgj8wNKvsfqn-AxXI60zBii1eoRjKXtdmThYC9QNbs-JRJa638Y5NcQ65410L8VMHLy3gKVMdBr5FXeEEJDqmtPzwOlCGKXYW1bYN_Jql9QBz6F2yXx50FOkb7xgbaJ3RLKOjsSJmJMYdCfAcNmeuy1eZsgswA0QCOHUrRuW5qTAZHSK4U3JtdRUfw">
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-xl flex-1 overflow-y-auto">
+<div class="max-w-3xl mx-auto">
+<div class="mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Export Data</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Configure your export parameters to generate a comprehensive data file.</p>
+</div>
+<!-- Success Banner (Hidden by default) -->
+<div class="hidden mb-lg bg-surface border border-success/30 rounded-lg p-md flex items-start gap-md shadow-[0px_4px_12px_rgba(15,23,42,0.04)] relative overflow-hidden" id="success-banner">
+<div class="absolute top-0 left-0 w-1 h-full bg-success"></div>
+<div class="w-8 h-8 rounded-full bg-success/10 flex items-center justify-center shrink-0 mt-xs text-success">
+<span class="material-symbols-outlined icon-fill" style="font-size: 20px;">check_circle</span>
+</div>
+<div class="flex-1">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Export Complete</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Your CSV file has been generated successfully and is ready for download.</p>
+<div class="flex gap-md">
+<button class="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-lg hover:bg-primary-fixed-variant transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+                                Download CSV
+                            </button>
+<button class="border border-border text-secondary font-label-md text-label-md px-md py-sm rounded-lg hover:bg-bg-subtle transition-colors" id="btn-dismiss-success">
+                                Dismiss
+                            </button>
+</div>
+</div>
+</div>
+<!-- Configuration Card -->
+<div class="bg-surface border border-border rounded-xl shadow-[0px_4px_12px_rgba(15,23,42,0.02)]">
+<div class="p-xl border-b border-border">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md">Data Selection</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-md"><!-- Option 1 -->
+<label class="flex items-start gap-md p-md rounded-xl border border-border bg-surface hover:border-primary/50 hover:shadow-sm transition-all cursor-pointer group">
+    <div class="mt-xs">
+        <input type="checkbox" checked="" class="w-4 h-4 text-primary bg-surface border-outline rounded focus:ring-primary focus:ring-offset-0">
+    </div>
+    <div>
+        <span class="block font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Expenses</span>
+        <span class="block font-body-md text-body-md text-on-surface-variant mt-xs">All outbound transaction records (VND).</span>
+    </div>
+</label>
+<!-- Option 2 -->
+<label class="flex items-start gap-md p-md rounded-xl border border-border bg-surface hover:border-primary/50 hover:shadow-sm transition-all cursor-pointer group">
+    <div class="mt-xs">
+        <input type="checkbox" checked="" class="w-4 h-4 text-primary bg-surface border-outline rounded focus:ring-primary focus:ring-offset-0">
+    </div>
+    <div>
+        <span class="block font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Incomes</span>
+        <span class="block font-body-md text-body-md text-on-surface-variant mt-xs">All inbound revenue records (VND).</span>
+    </div>
+</label>
+<!-- Option 3 -->
+<label class="flex items-start gap-md p-md rounded-xl border border-border bg-surface hover:border-primary/50 hover:shadow-sm transition-all cursor-pointer group">
+    <div class="mt-xs">
+        <input type="checkbox" class="w-4 h-4 text-primary bg-surface border-outline rounded focus:ring-primary focus:ring-offset-0">
+    </div>
+    <div>
+        <span class="block font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Categories</span>
+        <span class="block font-body-md text-body-md text-on-surface-variant mt-xs">Master list of expense/income categories.</span>
+    </div>
+</label>
+<!-- Option 4 -->
+<label class="flex items-start gap-md p-md rounded-xl border border-border bg-surface hover:border-primary/50 hover:shadow-sm transition-all cursor-pointer group">
+    <div class="mt-xs">
+        <input type="checkbox" class="w-4 h-4 text-primary bg-surface border-outline rounded focus:ring-primary focus:ring-offset-0">
+    </div>
+    <div>
+        <span class="block font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Budgets</span>
+        <span class="block font-body-md text-body-md text-on-surface-variant mt-xs">Configured thresholds and tracking data.</span>
+    </div>
+</label></div>
+</div>
+<div class="p-xl border-b border-border bg-bg-subtle/30">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md">Date Range</h3>
+<div class="flex flex-col sm:flex-row gap-lg">
+<div class="flex-1">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Start Date</label>
+<div class="relative">
+<input class="w-full bg-surface border border-border text-on-surface rounded-lg px-md py-sm font-mono-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" type="date" value="2023-01-01">
+</div>
+</div>
+<div class="flex-1">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs">End Date</label>
+<div class="relative">
+<input class="w-full bg-surface border border-border text-on-surface rounded-lg px-md py-sm font-mono-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" type="date" value="2023-12-31">
+</div>
+</div>
+</div>
+</div>
+<div class="p-xl bg-surface rounded-b-xl flex items-center justify-between">
+<div class="flex items-center gap-md">
+<label class="font-label-md text-label-md text-on-surface-variant">Format:</label>
+<select class="bg-surface border border-border text-on-surface rounded-lg px-md py-sm pr-xl font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none">
+<option value="csv">CSV (Standard)</option>
+<option value="xlsx">Excel (.xlsx)</option>
+<option value="json">JSON</option>
+</select>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-md text-label-md px-xl py-md rounded-lg hover:bg-primary hover:text-on-primary transition-colors flex items-center gap-sm shadow-sm" id="btn-export">
+<span class="material-symbols-outlined" id="btn-export-icon" style="font-size: 20px;">file_download</span>
+<span id="btn-export-text">Export Financial Data (CSV)</span>
+</button>
+</div>
+</div>
+<p class="mt-lg text-center font-label-sm text-label-sm text-outline">
+                    Exports containing over 10,000 rows may take a few moments to generate.
+                </p>
+</div>
+</div>
+</main>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnExport = document.getElementById('btn-export');
+            const btnExportText = document.getElementById('btn-export-text');
+            const btnExportIcon = document.getElementById('btn-export-icon');
+            const successBanner = document.getElementById('success-banner');
+            const btnDismiss = document.getElementById('btn-dismiss-success');
+
+            btnExport.addEventListener('click', () => {
+                // Set loading state
+                btnExport.disabled = true;
+                btnExport.classList.add('opacity-80', 'cursor-not-allowed');
+                btnExportText.textContent = 'Generating...';
+                btnExportIcon.textContent = 'autorenew';
+                btnExportIcon.classList.add('loading-spin');
+                successBanner.classList.add('hidden');
+
+                // Simulate API call/processing
+                setTimeout(() => {
+                    // Reset button
+                    btnExport.disabled = false;
+                    btnExport.classList.remove('opacity-80', 'cursor-not-allowed');
+                    btnExportText.textContent = 'Export to CSV';
+                    btnExportIcon.textContent = 'file_download';
+                    btnExportIcon.classList.remove('loading-spin');
+                    
+                    // Show success
+                    successBanner.classList.remove('hidden');
+                    
+                    // Scroll to top to see banner
+                    successBanner.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 1500);
+            });
+
+            btnDismiss.addEventListener('click', () => {
+                successBanner.classList.add('hidden');
+            });
+        });
+    </script>
+
+
+</body></html>
