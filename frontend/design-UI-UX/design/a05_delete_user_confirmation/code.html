@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Delete User Confirmation - FinTrack Pro Administration</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "secondary": "#515f74",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "on-background": "#131b2e"
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="flex min-h-screen bg-[#F8FAFC] text-on-background relative overflow-hidden">
+
+  <!-- Dimmed Context Background -->
+  <div class="flex-1 flex flex-col p-8 opacity-40 pointer-events-none filter blur-xs">
+    <h1 class="text-3xl font-bold">User Account Management</h1>
+    <div class="mt-4 bg-surface p-6 rounded-2xl border border-border">
+      <p>Target User: John Smith (john.smith@example.com) — Standard User</p>
+    </div>
+  </div>
+
+  <!-- Delete Modal Overlay -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div class="w-full max-w-md bg-surface rounded-2xl border border-border shadow-2xl p-6 relative animate-in fade-in zoom-in duration-150">
+      
+      <!-- Icon Header -->
+      <div class="flex items-start gap-4 mb-4">
+        <div class="w-12 h-12 rounded-2xl bg-red-50 text-danger flex items-center justify-center flex-shrink-0 border border-red-100">
+          <span class="material-symbols-outlined text-[28px]">person_remove</span>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-on-background">Delete User Account</h3>
+          <p class="text-sm text-secondary mt-1 leading-relaxed">
+            Are you sure you want to permanently delete the user account for <strong class="text-on-background font-semibold">John Smith</strong> (<span class="font-mono text-xs">john.smith@example.com</span>)?
+          </p>
+        </div>
+      </div>
+
+      <!-- Warning Notice Box -->
+      <div class="p-3.5 bg-red-50/80 border border-red-200 rounded-xl mb-6 flex items-start gap-2.5 text-xs text-red-900 leading-relaxed">
+        <span class="material-symbols-outlined text-[18px] text-danger flex-shrink-0 mt-0.5">warning</span>
+        <span>All transactions, budgets, income logs, and categories linked to this user will be removed or archived according to system retention policy.</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-3">
+        <a href="../a03_admin_user_list/code.html" class="px-4 py-2.5 rounded-xl border border-border bg-white text-secondary text-sm font-semibold hover:bg-slate-50 transition-colors">
+          Cancel
+        </a>
+        <a href="../a03_admin_user_list/code.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-danger text-white text-sm font-semibold hover:bg-red-700 transition-colors shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">delete_forever</span>
+          <span>Delete User</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

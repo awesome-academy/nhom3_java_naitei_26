@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Button Component — FinTrack Pro</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="p-6 md:p-8 bg-bg-subtle min-h-screen">
+  <div class="max-w-4xl mx-auto space-y-6">
+    
+    <!-- Component Header -->
+    <div class="border-b border-border pb-4">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 text-[11px] font-mono font-bold">CMP-BTN</span>
+        <span class="text-xs font-semibold text-secondary">Component Library</span>
+      </div>
+      <h1 class="text-2xl font-bold text-on-background">Buttons & Action Controls</h1>
+      <p class="text-xs text-secondary mt-1">Reusable button variants, sizes, icon combinations, and loading state indicators</p>
+    </div>
+
+    <!-- 1. Button Variants -->
+    <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs space-y-4">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-secondary">1. Button Style Variants</h2>
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Primary -->
+        <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-container active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+          <span>Primary Button</span>
+        </button>
+
+        <!-- Secondary / Outline -->
+        <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border text-on-background text-sm font-semibold hover:bg-bg-subtle hover:border-slate-300 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-slate-200">
+          <span class="material-symbols-outlined text-[18px]">tune</span>
+          <span>Outline Button</span>
+        </button>
+
+        <!-- Danger -->
+        <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-danger text-white text-sm font-semibold hover:bg-red-700 active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-red-200">
+          <span class="material-symbols-outlined text-[18px]">delete</span>
+          <span>Danger Button</span>
+        </button>
+
+        <!-- Ghost -->
+        <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-secondary hover:text-primary hover:bg-primary-light active:scale-[0.98] transition-all text-sm font-semibold">
+          <span class="material-symbols-outlined text-[18px]">visibility</span>
+          <span>Ghost Button</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Sizes & States -->
+    <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs space-y-4">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-secondary">2. Sizes & Interaction States</h2>
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Small -->
+        <button type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container">
+          <span class="material-symbols-outlined text-[14px]">add</span>
+          <span>Small (xs)</span>
+        </button>
+
+        <!-- Medium -->
+        <button type="button" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-container">
+          <span>Medium (sm)</span>
+        </button>
+
+        <!-- Large -->
+        <button type="button" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-base font-semibold hover:bg-primary-container">
+          <span>Large (md)</span>
+        </button>
+
+        <!-- Loading State -->
+        <button type="button" disabled class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary/70 text-white text-sm font-semibold cursor-not-allowed">
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Saving Record...</span>
+        </button>
+
+        <!-- Disabled -->
+        <button type="button" disabled class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-200 text-slate-400 text-sm font-semibold cursor-not-allowed">
+          <span>Disabled State</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. Icon Only Buttons -->
+    <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs space-y-4">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-secondary">3. Icon Action Buttons</h2>
+      <div class="flex items-center gap-3">
+        <button type="button" class="p-2.5 rounded-xl border border-border bg-white text-secondary hover:text-primary hover:bg-blue-50 transition-colors" title="View Detail">
+          <span class="material-symbols-outlined text-[20px]">visibility</span>
+        </button>
+        <button type="button" class="p-2.5 rounded-xl border border-border bg-white text-secondary hover:text-primary hover:bg-blue-50 transition-colors" title="Edit">
+          <span class="material-symbols-outlined text-[20px]">edit</span>
+        </button>
+        <button type="button" class="p-2.5 rounded-xl border border-red-200 bg-red-50 text-danger hover:bg-red-100 transition-colors" title="Delete">
+          <span class="material-symbols-outlined text-[20px]">delete</span>
+        </button>
+        <button type="button" class="p-2.5 rounded-xl border border-border bg-white text-secondary hover:bg-slate-50 transition-colors" title="More Options">
+          <span class="material-symbols-outlined text-[20px]">more_vert</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

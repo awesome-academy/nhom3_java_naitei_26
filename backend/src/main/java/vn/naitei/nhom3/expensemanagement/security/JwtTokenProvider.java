@@ -18,12 +18,15 @@ public class JwtTokenProvider {
 
     private final SecretKey key;
     private final long expirationMs;
+    private final long refreshExpirationMs;
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration-ms}") long expirationMs) {
+            @Value("${jwt.expiration-ms}") long expirationMs,
+            @Value("${jwt.refresh-expiration-ms}") long refreshExpirationMs) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.expirationMs = expirationMs;
+        this.refreshExpirationMs = refreshExpirationMs;
     }
 
     public String generateToken(UserPrincipal principal) {
@@ -35,6 +38,21 @@ public class JwtTokenProvider {
                 .subject(principal.getUsername())
                 .claim("userId", principal.getId())
                 .claim("role", role)
+                .claim("type", "ACCESS")
+                .issuedAt(now)
+                .expiration(expiry)
+                .signWith(key)
+                .compact();
+    }
+
+    public String generateRefreshToken(UserPrincipal principal) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + refreshExpirationMs);
+
+        return Jwts.builder()
+                .subject(principal.getUsername())
+                .claim("userId", principal.getId())
+                .claim("type", "REFRESH")
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key)
@@ -56,5 +74,12 @@ public class JwtTokenProvider {
                 .parseSignedClaims(token)
                 .getPayload();
         return claims.getSubject();
+    }
+
+    public String getTokenType(String token) {
+        Claims claims = Jwts.parser().verifyWith(key).build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("type", String.class);
     }
 }

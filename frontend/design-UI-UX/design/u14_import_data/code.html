@@ -1,0 +1,312 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Import Data - FinTrack Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#dae2fd",
+                    "surface-bright": "#faf8ff",
+                    "secondary-fixed": "#d5e3fc",
+                    "surface-container": "#eaedff",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#131b2e",
+                    "on-error": "#ffffff",
+                    "secondary": "#515f74",
+                    "success": "#16A34A",
+                    "inverse-on-surface": "#eef0ff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "primary": "#004ac6",
+                    "on-tertiary-fixed": "#191c1e",
+                    "secondary-fixed-dim": "#b9c7df",
+                    "on-primary": "#ffffff",
+                    "warning": "#D97706",
+                    "inverse-surface": "#283044",
+                    "surface-container-low": "#f2f3ff",
+                    "border": "#E2E8F0",
+                    "primary-fixed": "#dbe1ff",
+                    "on-secondary-fixed-variant": "#3a485b",
+                    "on-surface-variant": "#434655",
+                    "surface": "#FFFFFF",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-variant": "#dae2fd",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "surface-container-high": "#e2e7ff",
+                    "tertiary-fixed": "#e0e3e5",
+                    "on-secondary-fixed": "#0d1c2e",
+                    "outline": "#737686",
+                    "primary-container": "#2563eb",
+                    "on-background": "#131b2e",
+                    "surface-tint": "#0053db",
+                    "background": "#faf8ff",
+                    "tertiary-container": "#6b6e70",
+                    "surface-dim": "#d2d9f4",
+                    "on-tertiary-container": "#eff1f3",
+                    "on-primary-fixed": "#00174b",
+                    "secondary-container": "#d5e3fc",
+                    "tertiary": "#525657",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "danger": "#DC2626",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#57657a",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#c3c6d7",
+                    "inverse-primary": "#b4c5ff",
+                    "on-primary-container": "#eeefff",
+                    "bg-subtle": "#F8FAFC",
+                    "primary-fixed-dim": "#b4c5ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "base": "4px",
+                    "xs": "4px",
+                    "xl": "32px",
+                    "sidebar-width": "256px",
+                    "topbar-height": "64px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "mono-md": ["Courier Prime"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "mono-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-bg-subtle text-on-surface font-body-md antialiased min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen sticky top-0 left-0 border-r border-border dark:border-outline-variant bg-surface dark:bg-on-background flex flex-col h-full py-lg hidden md:flex">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold font-headline-md">
+                    F
+                </div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">FinTrack Pro</h1>
+<p class="font-label-sm text-label-sm text-secondary">Enterprise Finance</p>
+</div>
+</div>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-primary-container hover:bg-primary-container/90 text-on-primary py-sm px-md rounded-lg font-label-md text-label-md transition-colors flex items-center justify-center gap-sm active:scale-[0.98] duration-150">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Transaction
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto px-sm font-body-md text-body-md font-label-md text-label-md space-y-1">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-bg-subtle dark:hover:bg-on-secondary-fixed-variant transition-colors active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-bg-subtle dark:hover:bg-on-secondary-fixed-variant transition-colors active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="payments">payments</span>
+                Expenses
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-bg-subtle dark:hover:bg-on-secondary-fixed-variant transition-colors active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+                Incomes
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-bg-subtle dark:hover:bg-on-secondary-fixed-variant transition-colors active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="category">category</span>
+                Categories
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-bg-subtle dark:hover:bg-on-secondary-fixed-variant transition-colors active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="savings">savings</span>
+                Budgets
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-bg-subtle dark:hover:bg-on-secondary-fixed-variant transition-colors active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="query_stats">query_stats</span>
+                Reports
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary dark:text-primary-fixed-dim bg-secondary-container/30 dark:bg-secondary-fixed-dim/10 border-l-2 border-primary active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="import_export">import_export</span>
+                Import/Export
+            </a>
+</nav>
+<div class="mt-auto px-md pt-lg border-t border-border"><div class="flex items-center justify-between mb-md"><div class="flex items-center gap-sm"><div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold font-label-md">AU</div><div><p class="font-label-md text-label-md text-on-surface">Admin User</p><p class="font-label-sm text-label-sm text-secondary">Administrator</p></div></div><button class="p-sm text-secondary hover:text-danger hover:bg-error-container rounded transition-colors"><span class="material-symbols-outlined text-[20px]">logout</span></button></div></div></aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar -->
+<header class="h-topbar-height sticky top-0 z-50 w-full border-b border-border dark:border-outline-variant bg-surface dark:bg-on-background flex justify-between items-center px-gutter w-full font-title-lg text-title-lg font-body-md text-body-md">
+<div class="flex items-center gap-md">
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="pl-xl pr-md py-sm border border-border rounded-lg bg-bg-subtle text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 text-on-surface placeholder-on-surface-variant" placeholder="Search..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-md">
+<nav class="hidden md:flex items-center gap-lg mr-lg">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all cursor-pointer active:opacity-80" href="#">Dashboard</a>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-sm rounded-full hover:bg-bg-subtle cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-sm rounded-full hover:bg-bg-subtle cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="h-8 w-px bg-border mx-sm"></div>
+<div class="flex items-center gap-md">
+<span class="text-body-md font-body-md text-secondary hidden sm:block cursor-pointer hover:text-primary transition-colors">Support</span>
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold font-label-md cursor-pointer border border-primary/20">
+                        JD
+                    </div>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="flex-1 p-gutter overflow-y-auto">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-sm text-body-md font-body-md text-secondary mb-lg">
+<a class="hover:text-primary transition-colors" href="#">Import/Export</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface font-medium">Import</span>
+</div>
+<div class="mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Import Data</h2>
+<p class="font-body-md text-body-md text-secondary mt-base">Securely import your financial records via CSV.</p>
+</div>
+<!-- Main Import Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl max-w-5xl">
+<!-- Left Column: Configuration -->
+<div class="lg:col-span-4 space-y-lg">
+<!-- Entity Selector -->
+<div class="bg-surface border border-border rounded-xl p-md">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md">1. Select Target Entity</h3>
+<div class="space-y-sm">
+<label class="flex items-center p-md border border-primary bg-primary-fixed/20 rounded-lg cursor-pointer transition-colors">
+<input checked="" class="text-primary focus:ring-primary h-4 w-4 border-outline" name="entity" type="radio">
+<span class="ml-sm font-label-md text-label-md text-on-surface flex-1">Expenses</span>
+<span class="material-symbols-outlined text-primary text-[20px]">payments</span>
+</label>
+<label class="flex items-center p-md border border-border hover:border-outline-variant hover:bg-bg-subtle rounded-lg cursor-pointer transition-colors">
+<input class="text-primary focus:ring-primary h-4 w-4 border-outline" name="entity" type="radio">
+<span class="ml-sm font-label-md text-label-md text-on-surface flex-1">Incomes</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">account_balance_wallet</span>
+</label>
+<label class="flex items-center p-md border border-border hover:border-outline-variant hover:bg-bg-subtle rounded-lg cursor-pointer transition-colors">
+<input class="text-primary focus:ring-primary h-4 w-4 border-outline" name="entity" type="radio">
+<span class="ml-sm font-label-md text-label-md text-on-surface flex-1">Categories</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">category</span>
+</label>
+<label class="flex items-center p-md border border-border hover:border-outline-variant hover:bg-bg-subtle rounded-lg cursor-pointer transition-colors">
+<input class="text-primary focus:ring-primary h-4 w-4 border-outline" name="entity" type="radio">
+<span class="ml-sm font-label-md text-label-md text-on-surface flex-1">Budgets</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">savings</span>
+</label>
+</div>
+</div>
+<!-- Import Settings -->
+<div class="bg-surface border border-border rounded-xl p-md">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md">Options</h3>
+<div class="space-y-md">
+<label class="flex items-start gap-sm cursor-pointer group">
+<input checked="" class="mt-1 text-primary focus:ring-primary h-4 w-4 border-outline rounded" type="checkbox">
+<div>
+<span class="block font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Skip duplicates</span>
+<span class="block font-label-sm text-label-sm text-secondary">Ignore rows that match existing records based on Date, Amount, and Payee.</span>
+</div>
+</label>
+<label class="flex items-start gap-sm cursor-pointer group">
+<input class="mt-1 text-primary focus:ring-primary h-4 w-4 border-outline rounded" type="checkbox">
+<div>
+<span class="block font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">First row is header</span>
+<span class="block font-label-sm text-label-sm text-secondary">Exclude the first row from data import.</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Right Column: Drag & Drop / Status -->
+<div class="lg:col-span-8 flex flex-col gap-lg">
+<h3 class="font-title-lg text-title-lg text-on-surface">2. Upload File</h3>
+<!-- Drag & Drop Zone -->
+<div class="border-2 border-dashed border-primary/30 rounded-xl bg-surface p-xl flex flex-col items-center justify-center text-center transition-all hover:bg-bg-subtle hover:border-primary cursor-pointer h-64"><div class="w-16 h-16 rounded-full bg-primary-fixed/20 flex items-center justify-center mb-md"><span class="material-symbols-outlined text-primary text-[32px]">cloud_upload</span></div><h4 class="font-title-lg text-title-lg text-on-surface mb-sm">Drag and drop your CSV file here</h4><p class="font-body-md text-body-md text-secondary mb-md">or click to browse from your computer</p><button class="px-md py-sm rounded-lg border border-primary text-primary font-label-md text-label-md hover:bg-primary-fixed/10 transition-colors mb-md">Browse Files</button><p class="font-label-sm text-label-sm text-outline">Max file size: 10MB. Allowed formats: .csv</p></div>
+<!-- Selected File State (Simulated) -->
+<div class="bg-surface border border-border rounded-xl p-md flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">csv</span>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface">q4_2023_transactions.csv</h5>
+<div class="flex items-center gap-sm mt-xs">
+<span class="font-label-sm text-label-sm text-secondary">245 KB</span>
+<span class="w-1 h-1 rounded-full bg-border"></span>
+<span class="font-label-sm text-label-sm text-success flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                        Ready to map
+                                    </span>
+</div>
+</div>
+</div>
+<button class="p-sm text-secondary hover:text-danger hover:bg-error-container rounded transition-colors" title="Remove file">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<!-- Action Bar -->
+<div class="flex justify-end gap-md mt-auto pt-lg border-t border-border">
+<button class="px-md py-sm rounded-lg border border-border text-on-surface-variant font-label-md text-label-md hover:bg-bg-subtle transition-colors">
+                            Cancel
+                        </button>
+<button class="px-md py-sm rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary-container/90 transition-colors shadow-[0_4px_12px_rgba(15,23,42,0.08)] flex items-center gap-sm">
+                            Continue to Mapping
+                            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+</body></html>

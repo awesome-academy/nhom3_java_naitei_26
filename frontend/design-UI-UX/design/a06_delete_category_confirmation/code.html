@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Delete Global Category Confirmation - Admin Portal</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "admin-badge-bg": "#fdf2f8",
+            "admin-badge-text": "#9d174d",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          },
+          spacing: {
+            "sidebar-width": "260px",
+            "gutter": "24px"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="flex min-h-screen bg-bg-subtle text-on-background relative overflow-hidden">
+
+  <!-- Background Dimmed Admin Categories Page -->
+  <div class="flex-1 flex flex-col p-8 opacity-40 pointer-events-none filter blur-xs">
+    <h1 class="text-3xl font-bold">Global System Categories</h1>
+    <div class="mt-4 bg-surface p-6 rounded-2xl border border-border">
+      <p>Global Category: Food & Dining — 1,420 user transactions linked</p>
+    </div>
+  </div>
+
+  <!-- Delete Modal Overlay -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div class="w-full max-w-md bg-surface rounded-2xl border border-border shadow-2xl p-6 relative animate-in fade-in zoom-in duration-150">
+      
+      <!-- Icon Header -->
+      <div class="flex items-start gap-4 mb-4">
+        <div class="w-12 h-12 rounded-2xl bg-red-50 text-danger flex items-center justify-center flex-shrink-0 border border-red-100">
+          <span class="material-symbols-outlined text-[28px]">delete_forever</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5 mb-1">
+            <h3 class="text-lg font-bold text-on-background">Delete Global Category</h3>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded bg-pink-100 text-pink-800 border border-pink-200">ADMIN</span>
+          </div>
+          <p class="text-sm text-secondary leading-relaxed">
+            Are you sure you want to delete system category <strong class="text-on-background font-semibold">"Food & Dining"</strong>?
+          </p>
+        </div>
+      </div>
+
+      <!-- Warning Notice Box -->
+      <div class="p-3.5 bg-red-50/80 border border-red-200 rounded-xl mb-6 flex items-start gap-2.5 text-xs text-red-900 leading-relaxed">
+        <span class="material-symbols-outlined text-[18px] text-danger flex-shrink-0 mt-0.5">warning</span>
+        <span>This is a global system category with <strong>1,420 linked user transactions</strong>. Deletion will flag all linked transactions across all user accounts as "Uncategorized".</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-3">
+        <a href="../a06_admin_category_list/code.html" class="px-4 py-2.5 rounded-xl border border-border bg-white text-secondary text-sm font-semibold hover:bg-slate-50 transition-colors">
+          Cancel
+        </a>
+        <a href="../a06_admin_category_list/code.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-danger text-white text-sm font-semibold hover:bg-red-700 transition-colors shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">delete</span>
+          <span>Delete Global Category</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

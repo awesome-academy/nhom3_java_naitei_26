@@ -16,4 +16,10 @@ public class BudgetTemplate extends SoftDeletableEntity {
 
     @Column(nullable = false, length = 100)
     private String name;
+
+    @Column(nullable = false)
+    private Integer month;
+
+    @Column(name = "warning_percentage", nullable = false)
+    private Integer warningPercentage;
 }

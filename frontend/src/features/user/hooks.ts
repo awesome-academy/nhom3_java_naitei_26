@@ -11,6 +11,14 @@ export function useUsers(filter?: Record<string, unknown>) {
   });
 }
 
+export function useUser(id: string) {
+  return useQuery({
+    queryKey: [QUERY_KEY, id],
+    queryFn: () => userApi.getById(id).then((res) => res.data),
+    enabled: Boolean(id),
+  });
+}
+
 export function useCreateUser() {
   const queryClient = useQueryClient();
   return useMutation({

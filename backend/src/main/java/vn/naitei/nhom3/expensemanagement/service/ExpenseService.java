@@ -1,18 +1,26 @@
 package vn.naitei.nhom3.expensemanagement.service;
 
-import vn.naitei.nhom3.expensemanagement.entity.Expense;
+import org.springframework.web.multipart.MultipartFile;
+import vn.naitei.nhom3.expensemanagement.dto.expense.ExpenseFilterRequest;
+import vn.naitei.nhom3.expensemanagement.dto.expense.ExpensePageResponse;
+import vn.naitei.nhom3.expensemanagement.dto.expense.ExpenseRequest;
+import vn.naitei.nhom3.expensemanagement.dto.expense.ExpenseResponse;
 
 import java.util.List;
 
 public interface ExpenseService {
 
-    List<Expense> getAllByUser(Long userId);
+    ExpensePageResponse getAllByUser(Long userId, ExpenseFilterRequest filter);
 
-    Expense getById(Long id);
+    ExpenseResponse getById(Long userId, Long id);
 
-    Expense create(Long userId, Long categoryId, Expense expense);
+    ExpenseResponse create(Long userId, ExpenseRequest request);
 
-    Expense update(Long id, Long categoryId, Expense updated);
+    ExpenseResponse create(Long userId, ExpenseRequest request, List<MultipartFile> files);
 
-    void delete(Long id);
+    ExpenseResponse update(Long userId, Long id, ExpenseRequest request);
+
+    ExpenseResponse update(Long userId, Long id, ExpenseRequest request, List<MultipartFile> files);
+
+    void delete(Long userId, Long id);
 }

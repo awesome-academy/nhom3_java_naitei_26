@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Budget Templates - FinTrack Pro Administration</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          },
+          spacing: {
+            "sidebar-width": "260px",
+            "gutter": "24px"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="flex min-h-screen bg-bg-subtle text-on-background">
+
+  <!-- Admin Sidebar -->
+  <aside class="hidden md:flex flex-col bg-surface w-sidebar-width h-screen sticky top-0 left-0 border-r border-border py-6 z-40">
+    <div class="px-6 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-900 to-primary text-white flex items-center justify-center font-bold text-xl shadow-md">
+          <span class="material-symbols-outlined text-[24px]">admin_panel_settings</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-base font-bold text-on-background leading-tight">FinTrack</h1>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-pink-100 text-pink-800 border border-pink-200">ADMIN</span>
+          </div>
+          <p class="text-xs text-on-surface-variant">System Administration</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-4 flex flex-col gap-1 text-sm font-medium overflow-y-auto">
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a03_admin_user_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">group</span>
+        User Management
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a06_admin_category_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">category</span>
+        Global Categories
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-primary bg-primary-light font-semibold border-l-4 border-primary transition-all" href="../a08_budget_template_list/code.html">
+        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bookmark_manager</span>
+        Budget Templates
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a10_system_expense_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+        System Expenses
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a12_system_income_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">account_balance</span>
+        System Incomes
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a14_activity_logs/code.html">
+        <span class="material-symbols-outlined text-[20px]">history</span>
+        Activity Logs
+      </a>
+
+      <div class="my-2 border-t border-border"></div>
+
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a15_admin_import_data/code.html">
+        <span class="material-symbols-outlined text-[20px]">file_upload</span>
+        Import CSV Data
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a16_admin_export_data/code.html">
+        <span class="material-symbols-outlined text-[20px]">file_download</span>
+        Export CSV Data
+      </a>
+    </nav>
+
+    <div class="mt-auto pt-4 border-t border-border px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-full bg-slate-800 text-white font-bold flex items-center justify-center text-sm">
+            AD
+          </div>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-on-background truncate">Super Admin</p>
+            <p class="text-xs text-on-surface-variant truncate">admin@fintrack.pro</p>
+          </div>
+        </div>
+        <a href="../a01_admin_login/code.html" title="Sign Out" class="p-1.5 text-on-surface-variant hover:text-danger hover:bg-red-50 rounded-lg transition-colors">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Canvas -->
+  <main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+    <div class="p-6 md:p-8 max-w-7xl mx-auto w-full flex-1">
+      
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold text-on-background tracking-tight">System Budget Templates</h1>
+          <p class="text-sm text-secondary mt-1">Preconfigured monthly budget allocations for users to quickly apply to their personal accounts</p>
+        </div>
+        <a href="../a09_create_edit_budget_template/code.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-container shadow-sm transition-all active:scale-[0.98]">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+          <span>Create Budget Template</span>
+        </a>
+      </div>
+
+      <!-- Templates List Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Template 1 -->
+        <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-2.5 py-1 bg-blue-50 text-primary text-xs font-bold rounded-lg uppercase tracking-wider">
+                Monthly Standard
+              </span>
+              <span class="text-xs text-secondary font-medium">Month: Any</span>
+            </div>
+            <h3 class="text-lg font-bold text-on-background">Standard Living Budget</h3>
+            <p class="text-xs text-secondary mt-1">Balanced monthly budget plan suitable for young professionals.</p>
+
+            <!-- Categories Summary -->
+            <div class="mt-4 space-y-2 text-xs border-t border-border pt-4">
+              <div class="flex justify-between">
+                <span class="text-secondary">Food & Dining:</span>
+                <span class="font-mono font-semibold text-on-background">$600.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-secondary">Housing & Utilities:</span>
+                <span class="font-mono font-semibold text-on-background">$800.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-secondary">Transportation:</span>
+                <span class="font-mono font-semibold text-on-background">$300.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-secondary">Shopping & Leisure:</span>
+                <span class="font-mono font-semibold text-on-background">$200.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-border flex items-center justify-between">
+            <div>
+              <span class="text-[11px] text-slate-400 block">Total Budget</span>
+              <span class="text-sm font-bold font-mono text-primary">$1,900.00</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <a href="../a09_create_edit_budget_template/code.html" class="p-1.5 text-secondary hover:text-primary hover:bg-blue-50 rounded-lg transition-colors">
+                <span class="material-symbols-outlined text-[18px]">edit</span>
+              </a>
+              <a href="../a08_delete_budget_template_confirmation/code.html" class="p-1.5 text-secondary hover:text-danger hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                <span class="material-symbols-outlined text-[18px]">delete</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template 2 -->
+        <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg uppercase tracking-wider">
+                Frugal Saver
+              </span>
+              <span class="text-xs text-secondary font-medium">Month: Any</span>
+            </div>
+            <h3 class="text-lg font-bold text-on-background">Strict Savings Plan</h3>
+            <p class="text-xs text-secondary mt-1">High savings allocation with minimal discretionary spending.</p>
+
+            <div class="mt-4 space-y-2 text-xs border-t border-border pt-4">
+              <div class="flex justify-between">
+                <span class="text-secondary">Food & Dining:</span>
+                <span class="font-mono font-semibold text-on-background">$400.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-secondary">Housing & Utilities:</span>
+                <span class="font-mono font-semibold text-on-background">$650.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-secondary">Transportation:</span>
+                <span class="font-mono font-semibold text-on-background">$150.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-border flex items-center justify-between">
+            <div>
+              <span class="text-[11px] text-slate-400 block">Total Budget</span>
+              <span class="text-sm font-bold font-mono text-primary">$1,200.00</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <a href="../a09_create_edit_budget_template/code.html" class="p-1.5 text-secondary hover:text-primary hover:bg-blue-50 rounded-lg transition-colors">
+                <span class="material-symbols-outlined text-[18px]">edit</span>
+              </a>
+              <a href="../a08_delete_budget_template_confirmation/code.html" class="p-1.5 text-secondary hover:text-danger hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                <span class="material-symbols-outlined text-[18px]">delete</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

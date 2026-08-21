@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Expenses - FinTrack Pro</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          },
+          spacing: {
+            "sidebar-width": "256px",
+            "gutter": "24px"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="flex min-h-screen bg-bg-subtle text-on-background">
+
+  <!-- Left Vertical Sidebar (No top horizontal navbar in user area) -->
+  <aside class="hidden md:flex flex-col bg-surface w-sidebar-width h-screen sticky top-0 left-0 border-r border-border py-6 z-40">
+    <div class="px-6 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center font-bold text-xl shadow-md">
+          <span class="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-primary leading-tight">FinTrack Pro</h1>
+          <p class="text-xs text-on-surface-variant">Personal Finance</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick CTA -->
+    <div class="px-4 mb-4">
+      <a href="../u05_create_expense/code.html" class="w-full bg-primary text-white text-sm font-semibold py-2.5 px-4 rounded-xl hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-sm">
+        <span class="material-symbols-outlined text-[18px]">add</span>
+        Add Expense
+      </a>
+    </div>
+
+    <!-- Navigation Menu (User Scope) -->
+    <nav class="flex-1 px-4 flex flex-col gap-1 text-sm font-medium">
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../u02_user_dashboard/code.html">
+        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+        Dashboard
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-primary bg-primary-light font-semibold border-l-4 border-primary transition-all" href="../u03_expense_list/code.html">
+        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">payments</span>
+        Expenses
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../u07_income_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+        Incomes
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../u09_category_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">category</span>
+        Categories
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../u11_budget_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">savings</span>
+        Budgets
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../u13_reports_analytics/code.html">
+        <span class="material-symbols-outlined text-[20px]">query_stats</span>
+        Reports
+      </a>
+    </nav>
+
+    <!-- User Profile & Logout -->
+    <div class="mt-auto pt-4 border-t border-border px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-full bg-primary-light text-primary font-bold flex items-center justify-center text-sm border border-border">
+            JS
+          </div>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-on-background truncate">John Smith</p>
+            <p class="text-xs text-on-surface-variant truncate">john.smith@example.com</p>
+          </div>
+        </div>
+        <a href="../u01_user_login/code.html" title="Sign Out" class="p-1.5 text-on-surface-variant hover:text-danger hover:bg-red-50 rounded-lg transition-colors">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Canvas (No top horizontal navbar) -->
+  <main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+    <!-- Mobile Header -->
+    <div class="md:hidden flex items-center justify-between p-4 bg-surface border-b border-border">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
+          <span class="material-symbols-outlined text-[18px]">payments</span>
+        </div>
+        <span class="font-bold text-primary">Expenses</span>
+      </div>
+      <a href="../u05_create_expense/code.html" class="p-1.5 text-primary hover:text-primary-container">
+        <span class="material-symbols-outlined">add</span>
+      </a>
+    </div>
+
+    <!-- Page Canvas -->
+    <div class="p-6 md:p-8 max-w-7xl mx-auto w-full flex-1">
+      
+      <!-- Page Header -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold text-on-background tracking-tight">Expense Management</h1>
+          <p class="text-sm text-secondary mt-1">Track, filter, and manage your daily personal expenditures</p>
+        </div>
+        <a href="../u05_create_expense/code.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-container shadow-sm transition-all active:scale-[0.98]">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+          <span>Add New Expense</span>
+        </a>
+      </div>
+
+      <!-- Filter Toolbar Bar -->
+      <div class="bg-surface border border-border rounded-2xl p-4 mb-6 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <!-- Search Input -->
+        <div class="relative flex-1 min-w-[260px]">
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+          <input 
+            type="text" 
+            placeholder="Search by expense title, note, or amount..." 
+            class="w-full pl-10 pr-4 py-2 bg-bg-subtle border border-border rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+          >
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <!-- Category Select -->
+          <select class="px-3.5 py-2 bg-bg-subtle border border-border rounded-xl text-xs font-semibold text-secondary focus:bg-white focus:ring-2 focus:ring-primary/20">
+            <option value="">All Categories</option>
+            <option value="food">Food & Dining</option>
+            <option value="housing">Housing & Utilities</option>
+            <option value="transport">Transportation</option>
+            <option value="shopping">Shopping & Leisure</option>
+          </select>
+
+          <!-- Date Range Select -->
+          <select class="px-3.5 py-2 bg-bg-subtle border border-border rounded-xl text-xs font-semibold text-secondary focus:bg-white focus:ring-2 focus:ring-primary/20">
+            <option value="this_month">This Month (Oct 2026)</option>
+            <option value="last_month">Last Month (Sep 2026)</option>
+            <option value="last_90">Last 90 Days</option>
+            <option value="all">All Time</option>
+          </select>
+
+          <!-- Amount Filter -->
+          <select class="px-3.5 py-2 bg-bg-subtle border border-border rounded-xl text-xs font-semibold text-secondary focus:bg-white focus:ring-2 focus:ring-primary/20">
+            <option value="">Any Amount</option>
+            <option value="under_50">< $50.00</option>
+            <option value="50_200">$50.00 - $200.00</option>
+            <option value="over_200">> $200.00</option>
+          </select>
+
+          <button class="px-3 py-2 text-xs font-semibold text-secondary hover:text-danger hover:bg-red-50 rounded-xl transition-colors">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Expense Data Table -->
+      <div class="bg-surface border border-border rounded-2xl overflow-hidden shadow-xs">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50/80 border-b border-border text-xs uppercase tracking-wider text-secondary font-semibold">
+              <tr>
+                <th scope="col" class="py-3.5 px-6">Expense Name</th>
+                <th scope="col" class="py-3.5 px-4">Category</th>
+                <th scope="col" class="py-3.5 px-4 text-right">Amount</th>
+                <th scope="col" class="py-3.5 px-4">Date</th>
+                <th scope="col" class="py-3.5 px-4 text-center">Receipt</th>
+                <th scope="col" class="py-3.5 px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              
+              <!-- Item 1 -->
+              <tr class="hover:bg-slate-50/60 transition-colors group cursor-pointer" onclick="window.location.href='../u04_expense_detail/code.html'">
+                <td class="py-4 px-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-blue-50 text-primary flex items-center justify-center font-bold">
+                      <span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-on-background group-hover:text-primary transition-colors">Supermarket Grocery</p>
+                      <p class="text-xs text-secondary truncate max-w-xs">Fresh organic produce and dairy</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-primary">
+                    Food & Dining
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-right font-mono font-bold text-danger">
+                  -$145.50
+                </td>
+                <td class="py-4 px-4 text-secondary text-xs font-medium">
+                  Oct 24, 2026
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-secondary">
+                    <span class="material-symbols-outlined text-[14px]">receipt</span>
+                    receipt.pdf
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right" onclick="event.stopPropagation()">
+                  <div class="inline-flex items-center gap-1">
+                    <a href="../u04_expense_detail/code.html" class="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-blue-50 transition-colors" title="View Detail">
+                      <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    </a>
+                    <a href="../u06_edit_expense/code.html" class="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-blue-50 transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </a>
+                    <a href="../u04_delete_confirmation/code.html" class="p-1.5 rounded-lg text-secondary hover:text-danger hover:bg-red-50 transition-colors" title="Delete">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Item 2 -->
+              <tr class="hover:bg-slate-50/60 transition-colors group cursor-pointer" onclick="window.location.href='../u04_expense_detail/code.html'">
+                <td class="py-4 px-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                      <span class="material-symbols-outlined text-[20px]">bolt</span>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-on-background group-hover:text-primary transition-colors">Electricity Bill</p>
+                      <p class="text-xs text-secondary truncate max-w-xs">Monthly power utility payment</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                    Housing & Utilities
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-right font-mono font-bold text-danger">
+                  -$85.00
+                </td>
+                <td class="py-4 px-4 text-secondary text-xs font-medium">
+                  Oct 22, 2026
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-secondary">
+                    <span class="material-symbols-outlined text-[14px]">receipt</span>
+                    invoice.jpg
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right" onclick="event.stopPropagation()">
+                  <div class="inline-flex items-center gap-1">
+                    <a href="../u04_expense_detail/code.html" class="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-blue-50 transition-colors" title="View Detail">
+                      <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    </a>
+                    <a href="../u06_edit_expense/code.html" class="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-blue-50 transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </a>
+                    <a href="../u04_delete_confirmation/code.html" class="p-1.5 rounded-lg text-secondary hover:text-danger hover:bg-red-50 transition-colors" title="Delete">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Item 3 -->
+              <tr class="hover:bg-slate-50/60 transition-colors group cursor-pointer" onclick="window.location.href='../u04_expense_detail/code.html'">
+                <td class="py-4 px-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                      <span class="material-symbols-outlined text-[20px]">local_taxi</span>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-on-background group-hover:text-primary transition-colors">Grab Ride to Airport</p>
+                      <p class="text-xs text-secondary truncate max-w-xs">Business travel transport</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+                    Transportation
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-right font-mono font-bold text-danger">
+                  -$32.00
+                </td>
+                <td class="py-4 px-4 text-secondary text-xs font-medium">
+                  Oct 18, 2026
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <span class="text-xs text-slate-400">—</span>
+                </td>
+                <td class="py-4 px-6 text-right" onclick="event.stopPropagation()">
+                  <div class="inline-flex items-center gap-1">
+                    <a href="../u04_expense_detail/code.html" class="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-blue-50 transition-colors" title="View Detail">
+                      <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    </a>
+                    <a href="../u06_edit_expense/code.html" class="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-blue-50 transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </a>
+                    <a href="../u04_delete_confirmation/code.html" class="p-1.5 rounded-lg text-secondary hover:text-danger hover:bg-red-50 transition-colors" title="Delete">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-t border-border bg-slate-50/40 text-xs text-secondary font-medium">
+          <span>Showing <strong>1 to 3</strong> of <strong>32</strong> expenses</span>
+          <div class="flex items-center gap-1.5">
+            <button class="px-3 py-1.5 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 disabled:opacity-40" disabled>
+              Previous
+            </button>
+            <button class="w-8 h-8 rounded-lg border border-primary bg-primary text-white font-semibold flex items-center justify-center">1</button>
+            <button class="w-8 h-8 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 flex items-center justify-center">2</button>
+            <button class="w-8 h-8 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 flex items-center justify-center">3</button>
+            <button class="px-3 py-1.5 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50">Next</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

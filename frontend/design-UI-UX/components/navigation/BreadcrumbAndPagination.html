@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Navigation Component — FinTrack Pro</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="p-6 md:p-8 bg-bg-subtle min-h-screen">
+  <div class="max-w-4xl mx-auto space-y-6">
+    
+    <!-- Component Header -->
+    <div class="border-b border-border pb-4">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 text-[11px] font-mono font-bold">CMP-NAV</span>
+        <span class="text-xs font-semibold text-secondary">Component Library</span>
+      </div>
+      <h1 class="text-2xl font-bold text-on-background">Breadcrumbs & Pagination Controls</h1>
+      <p class="text-xs text-secondary mt-1">Hierarchical breadcrumb back links and responsive data table pagination numbers</p>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs space-y-3">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-secondary">1. Page Hierarchy Breadcrumb</h2>
+      
+      <nav class="flex items-center gap-2 text-xs font-medium">
+        <a href="../design/u03_expense_list/code.html" class="flex items-center gap-1 text-secondary hover:text-primary transition-colors">
+          <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+          <span>Expenses</span>
+        </a>
+        <span class="text-slate-300">/</span>
+        <span class="text-secondary">Transactions</span>
+        <span class="text-slate-300">/</span>
+        <span class="text-on-background font-semibold">Expense Details (#EXP-9821)</span>
+      </nav>
+    </div>
+
+    <!-- Pagination -->
+    <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs space-y-3">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-secondary">2. Numbered Data Pagination</h2>
+      
+      <div class="flex flex-wrap items-center justify-between gap-3 p-3 bg-bg-subtle border border-border rounded-xl text-xs text-secondary font-medium">
+        <span>Showing <strong>1 to 10</strong> of <strong>148</strong> entries</span>
+        <div class="flex items-center gap-1">
+          <button class="px-2.5 py-1.5 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 disabled:opacity-40" disabled>
+            <span class="material-symbols-outlined text-[14px]">chevron_left</span>
+          </button>
+          <button class="w-8 h-8 rounded-lg border border-primary bg-primary text-white font-semibold flex items-center justify-center">1</button>
+          <button class="w-8 h-8 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 flex items-center justify-center">2</button>
+          <button class="w-8 h-8 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 flex items-center justify-center">3</button>
+          <span class="px-1 text-slate-400">...</span>
+          <button class="w-8 h-8 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50 flex items-center justify-center">15</button>
+          <button class="px-2.5 py-1.5 rounded-lg border border-border bg-white text-secondary hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
