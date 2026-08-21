@@ -1,0 +1,11 @@
+import AdminUserDetailContent from "@/features/user/components/AdminUserDetailContent";
+
+export default async function AdminUserDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return <AdminUserDetailContent userId={id} />;
+}

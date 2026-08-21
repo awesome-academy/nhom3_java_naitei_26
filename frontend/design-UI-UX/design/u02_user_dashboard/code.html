@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>User Dashboard - FinTrack Pro</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          },
+          spacing: {
+            "sidebar-width": "256px",
+            "gutter": "24px"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F8FAFC;
+      color: #131b2e;
+    }
+  </style>
+</head>
+
+<body class="flex min-h-screen bg-bg-subtle text-on-background">
+
+  <!-- Left Vertical Sidebar (Only navigation in User area; No top horizontal bar) -->
+  <aside
+    class="hidden md:flex flex-col bg-surface w-sidebar-width h-screen sticky top-0 left-0 border-r border-border py-6 z-40">
+    <!-- Brand Header -->
+    <div class="px-6 mb-6">
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center font-bold text-xl shadow-md">
+          <span class="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-primary leading-tight">FinTrack Pro</h1>
+          <p class="text-xs text-on-surface-variant">Personal Finance</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick CTA -->
+    <div class="px-4 mb-4">
+      <a href="../u05_create_expense/code.html"
+        class="w-full bg-primary text-white text-sm font-semibold py-2.5 px-4 rounded-xl hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-sm">
+        <span class="material-symbols-outlined text-[18px]">add</span>
+        Add Expense
+      </a>
+    </div>
+
+    <!-- Navigation Menu (User Scope: Dashboard, Expenses, Incomes, Categories, Budgets, Reports) -->
+    <nav class="flex-1 px-4 flex flex-col gap-1 text-sm font-medium">
+      <!-- Dashboard -->
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-primary bg-primary-light font-semibold border-l-4 border-primary transition-all"
+        href="../u02_user_dashboard/code.html">
+        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+        Dashboard
+      </a>
+      <!-- Expenses -->
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all"
+        href="../u03_expense_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">payments</span>
+        Expenses
+      </a>
+      <!-- Incomes -->
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all"
+        href="../u07_income_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+        Incomes
+      </a>
+      <!-- Categories -->
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all"
+        href="../u09_category_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">category</span>
+        Categories
+      </a>
+      <!-- Budgets -->
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all"
+        href="../u11_budget_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">savings</span>
+        Budgets
+      </a>
+      <!-- Reports & Analytics -->
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all"
+        href="../u13_reports_analytics/code.html">
+        <span class="material-symbols-outlined text-[20px]">query_stats</span>
+        Reports
+      </a>
+    </nav>
+
+    <!-- User Profile & Logout -->
+    <div class="mt-auto pt-4 border-t border-border px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3 min-w-0">
+          <div
+            class="w-9 h-9 rounded-full bg-primary-light text-primary font-bold flex items-center justify-center text-sm border border-border">
+            JS
+          </div>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-on-background truncate">John Smith</p>
+            <p class="text-xs text-on-surface-variant truncate">john.smith@example.com</p>
+          </div>
+        </div>
+        <a href="../u01_user_login/code.html" title="Sign Out"
+          class="p-1.5 text-on-surface-variant hover:text-danger hover:bg-red-50 rounded-lg transition-colors">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Canvas (No top horizontal navbar - direct header & content) -->
+  <main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+    <!-- Mobile Header -->
+    <div class="md:hidden flex items-center justify-between p-4 bg-surface border-b border-border">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
+          <span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+        </div>
+        <span class="font-bold text-primary">FinTrack Pro</span>
+      </div>
+      <a href="../u01_user_login/code.html" class="p-1.5 text-secondary hover:text-danger">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+      </a>
+    </div>
+
+    <!-- Page Canvas -->
+    <div class="p-6 md:p-8 max-w-6xl mx-auto w-full flex-1">
+
+      <!-- Page Header with Quick CTA -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold text-on-background tracking-tight">Dashboard</h1>
+          <p class="text-sm text-secondary mt-1">Financial Summary for <strong class="text-on-background">October
+              2026</strong></p>
+        </div>
+        <a href="../u05_create_expense/code.html"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-container shadow-sm transition-all active:scale-[0.98]">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+          <span>Add New Expense</span>
+        </a>
+      </div>
+
+      <!-- Current Month Spending Highlight Banner -->
+      <div
+        class="bg-gradient-to-r from-blue-900 via-indigo-900 to-primary text-white rounded-2xl p-6 mb-8 shadow-md relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-xs font-semibold text-blue-100 mb-2 backdrop-blur-xs">
+              <span class="material-symbols-outlined text-[14px]">calendar_today</span>
+              Current Month Spending
+            </span>
+            <div class="text-3xl md:text-4xl font-bold font-mono tracking-tight">$2,240.00</div>
+            <p class="text-xs text-blue-200 mt-1">Total recorded expenditures for the month of October 2026</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="../u03_expense_list/code.html"
+              class="px-4 py-2 bg-white text-primary text-xs font-bold rounded-xl hover:bg-blue-50 transition-colors shadow-xs">
+              View All Expenses
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Financial Metric KPI Row: Total Income – Total Expense – Remaining Balance -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- 1. Total Income -->
+        <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs hover:shadow-sm transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-semibold uppercase tracking-wider text-secondary">Total Income</span>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+            </div>
+          </div>
+          <div class="text-2xl font-bold font-mono text-on-background">$4,500.00</div>
+          <div class="flex items-center gap-1.5 mt-2 text-xs font-medium text-emerald-600">
+            <span class="material-symbols-outlined text-[14px]">trending_up</span>
+            <span>+12.5% from last month</span>
+          </div>
+        </div>
+
+        <!-- 2. Total Expense -->
+        <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs hover:shadow-sm transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-semibold uppercase tracking-wider text-secondary">Total Expense</span>
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-danger flex items-center justify-center">
+              <span class="material-symbols-outlined text-[20px]">arrow_downward</span>
+            </div>
+          </div>
+          <div class="text-2xl font-bold font-mono text-danger">$2,240.00</div>
+          <div class="flex items-center gap-1.5 mt-2 text-xs font-medium text-rose-600">
+            <span class="material-symbols-outlined text-[14px]">trending_down</span>
+            <span>-4.2% within planned budget</span>
+          </div>
+        </div>
+
+        <!-- 3. Remaining Balance -->
+        <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs hover:shadow-sm transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-semibold uppercase tracking-wider text-secondary">Remaining Balance</span>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-[20px]">account_balance</span>
+            </div>
+          </div>
+          <div class="text-2xl font-bold font-mono text-primary">$2,260.00</div>
+          <div class="flex items-center gap-1.5 mt-2 text-xs font-medium text-secondary">
+            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+            <span>Positive net cash flow (+50.2%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Spending Pie Chart Section -->
+      <!-- Interactive: Hover shows exact monetary amount (NOT %), and % is written beside the chart -->
+      <div class="bg-surface border border-border rounded-2xl p-6 md:p-8 shadow-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 pb-4 border-b border-border">
+          <div>
+            <h2 class="text-lg font-bold text-on-background">Expenses by Category</h2>
+            <p class="text-xs text-secondary mt-0.5">Hover over any slice to view the exact spending amount for that
+              category</p>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 bg-slate-100 text-secondary rounded-lg self-start sm:self-auto">
+            Pie Chart Breakdown
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+
+          <!-- Interactive SVG Donut / Pie Chart (Col 6) -->
+          <div class="md:col-span-6 flex flex-col items-center justify-center">
+            <div class="relative w-64 h-64">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <!-- Background ring -->
+                <circle cx="50" cy="50" r="38" fill="transparent" stroke="#f1f5f9" stroke-width="16" />
+
+                <!-- Segment 1: Food & Dining (40%) -->
+                <circle class="transition-all duration-200 cursor-pointer hover:stroke-[18px] pie-slice" cx="50" cy="50"
+                  r="38" fill="transparent" stroke="#004ac6" stroke-width="16" stroke-dasharray="95.5 238.76"
+                  stroke-dashoffset="0" data-category="Food & Dining" data-amount="$896.00" data-percent="40%" />
+
+                <!-- Segment 2: Housing & Utilities (25%) -->
+                <circle class="transition-all duration-200 cursor-pointer hover:stroke-[18px] pie-slice" cx="50" cy="50"
+                  r="38" fill="transparent" stroke="#2563eb" stroke-width="16" stroke-dasharray="59.69 238.76"
+                  stroke-dashoffset="-95.5" data-category="Housing & Utilities" data-amount="$560.00"
+                  data-percent="25%" />
+
+                <!-- Segment 3: Transportation (20%) -->
+                <circle class="transition-all duration-200 cursor-pointer hover:stroke-[18px] pie-slice" cx="50" cy="50"
+                  r="38" fill="transparent" stroke="#10b981" stroke-width="16" stroke-dasharray="47.75 238.76"
+                  stroke-dashoffset="-155.19" data-category="Transportation" data-amount="$448.00" data-percent="20%" />
+
+                <!-- Segment 4: Shopping & Leisure (15%) -->
+                <circle class="transition-all duration-200 cursor-pointer hover:stroke-[18px] pie-slice" cx="50" cy="50"
+                  r="38" fill="transparent" stroke="#f59e0b" stroke-width="16" stroke-dasharray="35.81 238.76"
+                  stroke-dashoffset="-202.94" data-category="Shopping & Leisure" data-amount="$336.00"
+                  data-percent="15%" />
+              </svg>
+
+              <!-- Center Display Box (Displays EXACT MONETARY AMOUNT on Hover, NOT %) -->
+              <div
+                class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-4">
+                <span id="category-label" class="text-xs font-semibold text-secondary truncate max-w-[130px]">Total
+                  Expenses</span>
+                <span id="category-amount"
+                  class="text-xl font-bold font-mono text-on-background mt-0.5">$2,240.00</span>
+                <span id="category-hint" class="text-[10px] text-primary font-medium mt-0.5">Hover slice for
+                  amount</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Percentage Legend Beside Pie Chart (Col 6) -->
+          <div class="md:col-span-6 flex flex-col gap-3">
+            <div
+              class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-secondary px-2 mb-1">
+              <span>Category</span>
+              <span>Share (%)</span>
+            </div>
+
+            <!-- Category 1: Food & Dining (40%) -->
+            <div
+              class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-border/80 hover:bg-blue-50/50 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-md bg-[#004ac6] flex-shrink-0"></span>
+                <div>
+                  <p class="text-xs font-semibold text-on-background">Food & Dining</p>
+                  <p class="text-[11px] font-mono text-secondary">$896.00</p>
+                </div>
+              </div>
+              <span class="text-xs font-bold font-mono px-2.5 py-1 bg-blue-100 text-primary rounded-lg">40%</span>
+            </div>
+
+            <!-- Category 2: Housing & Utilities (25%) -->
+            <div
+              class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-border/80 hover:bg-blue-50/50 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-md bg-[#2563eb] flex-shrink-0"></span>
+                <div>
+                  <p class="text-xs font-semibold text-on-background">Housing & Utilities</p>
+                  <p class="text-[11px] font-mono text-secondary">$560.00</p>
+                </div>
+              </div>
+              <span class="text-xs font-bold font-mono px-2.5 py-1 bg-indigo-100 text-indigo-700 rounded-lg">25%</span>
+            </div>
+
+            <!-- Category 3: Transportation (20%) -->
+            <div
+              class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-border/80 hover:bg-blue-50/50 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-md bg-[#10b981] flex-shrink-0"></span>
+                <div>
+                  <p class="text-xs font-semibold text-on-background">Transportation</p>
+                  <p class="text-[11px] font-mono text-secondary">$448.00</p>
+                </div>
+              </div>
+              <span
+                class="text-xs font-bold font-mono px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-lg">20%</span>
+            </div>
+
+            <!-- Category 4: Shopping & Leisure (15%) -->
+            <div
+              class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-border/80 hover:bg-blue-50/50 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-md bg-[#f59e0b] flex-shrink-0"></span>
+                <div>
+                  <p class="text-xs font-semibold text-on-background">Shopping & Leisure</p>
+                  <p class="text-[11px] font-mono text-secondary">$336.00</p>
+                </div>
+              </div>
+              <span class="text-xs font-bold font-mono px-2.5 py-1 bg-amber-100 text-amber-800 rounded-lg">15%</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Interactive Pie Chart Hover Script -->
+  <script>
+    const labelEl = document.getElementById('category-label');
+    const amountEl = document.getElementById('category-amount');
+    const hintEl = document.getElementById('category-hint');
+
+    document.querySelectorAll('.pie-slice').forEach(slice => {
+      slice.addEventListener('mouseenter', () => {
+        const cat = slice.getAttribute('data-category');
+        const amt = slice.getAttribute('data-amount');
+        labelEl.textContent = cat;
+        amountEl.textContent = amt;
+        hintEl.textContent = 'Category Spending';
+        hintEl.className = 'text-[10px] text-emerald-600 font-semibold mt-0.5';
+      });
+      slice.addEventListener('mouseleave', () => {
+        labelEl.textContent = 'Total Expenses';
+        amountEl.textContent = '$2,240.00';
+        hintEl.textContent = 'Hover slice for amount';
+        hintEl.className = 'text-[10px] text-primary font-medium mt-0.5';
+      });
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>SearchBar & FilterBar Component — FinTrack Pro</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="p-6 md:p-8 bg-bg-subtle min-h-screen">
+  <div class="max-w-4xl mx-auto space-y-6">
+    
+    <!-- Component Header -->
+    <div class="border-b border-border pb-4">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 text-[11px] font-mono font-bold">CMP-SRCH</span>
+        <span class="text-xs font-semibold text-secondary">Component Library</span>
+      </div>
+      <h1 class="text-2xl font-bold text-on-background">Search & Filter Toolbars</h1>
+      <p class="text-xs text-secondary mt-1">Reusable search inputs with shortcut badges, filter dropdowns, and clear state triggers</p>
+    </div>
+
+    <!-- 1. Standalone Search Bar -->
+    <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs space-y-3">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-secondary">1. Standalone Search Input with ⌘K Badge</h2>
+      <div class="relative max-w-lg">
+        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-[20px]">search</span>
+        <input 
+          type="text" 
+          placeholder="Search by keyword, category, or amount..." 
+          class="w-full pl-10 pr-12 py-2.5 bg-bg-subtle border border-border rounded-xl text-sm text-on-background placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+        >
+        <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono font-semibold text-slate-400 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">⌘K</kbd>
+      </div>
+    </div>
+
+    <!-- 2. Integrated Filter Toolbar -->
+    <div class="bg-surface border border-border rounded-2xl p-6 shadow-xs space-y-3">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-secondary">2. Integrated Filter Toolbar (Table / List Header)</h2>
+      
+      <div class="flex flex-wrap items-center justify-between gap-3 p-3 bg-bg-subtle border border-border rounded-xl">
+        <!-- Search Field -->
+        <div class="relative flex-1 min-w-[240px]">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+          <input 
+            type="text" 
+            placeholder="Search records..." 
+            class="w-full pl-9 pr-3 py-1.5 bg-white border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+          >
+        </div>
+
+        <!-- Filters Group -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- Category Filter -->
+          <select class="px-3 py-1.5 bg-white border border-border rounded-lg text-xs font-semibold text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20">
+            <option value="">All Categories</option>
+            <option value="food">Food & Dining</option>
+            <option value="transport">Transportation</option>
+            <option value="housing">Housing & Utilities</option>
+          </select>
+
+          <!-- Date Range Filter -->
+          <select class="px-3 py-1.5 bg-white border border-border rounded-lg text-xs font-semibold text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20">
+            <option value="current">Current Month</option>
+            <option value="last_month">Last Month</option>
+            <option value="last_90">Last 90 Days</option>
+            <option value="year">This Year</option>
+          </select>
+
+          <!-- Clear Filter -->
+          <button type="button" class="px-2.5 py-1.5 text-xs text-secondary hover:text-danger hover:bg-red-50 rounded-lg transition-colors font-medium">
+            Clear
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</body>
+</html>

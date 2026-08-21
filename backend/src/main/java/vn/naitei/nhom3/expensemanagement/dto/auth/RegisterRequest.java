@@ -4,13 +4,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank(message = "Tên không được để trống")
+    @NotBlank(message = "Họ Tên không được để trống")
     @Size(max = 100, message = "Tên tối đa 100 ký tự")
     private String name;
 
