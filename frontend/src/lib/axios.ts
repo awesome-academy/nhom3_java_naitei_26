@@ -9,7 +9,7 @@ import type { ApiResponse } from "@/types/api";
  * - Lỗi 401 được xử lý thống nhất
  */
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -40,6 +40,9 @@ apiClient.interceptors.request.use(
  * - Unwrap dữ liệu từ format ApiResponse { status, message, data } của Spring Boot
  * - Xử lý lỗi tập trung: 401 → redirect /login, lỗi khác → trả message chuẩn hóa
  *
+ * 
+ * - Thêm xử lý refresh token: khi nhận 401, nếu có refresh token, gọi API refresh để lấy access token mới và retry request.
+ * - Nếu refresh token hết hạn hoặc không hợp lệ, xóa token và redirect về trang login.
  * TODO: Xác nhận format response thực tế với đội backend.
  */
 apiClient.interceptors.response.use(
@@ -51,19 +54,58 @@ apiClient.interceptors.response.use(
       data: apiResponse.data ?? response.data,
     };
   },
-  (error: AxiosError<ApiResponse<unknown>>) => {
+  async (error: AxiosError<ApiResponse<unknown>>) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const isAuthRequest = originalRequest.url?.includes("/auth/");
     const status = error.response?.status;
-    const message =
-      error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại.";
 
-    // 401 Unauthorized → xóa token, redirect về trang login
-    if (status === 401) {
+    // 401 Unauthorized - nếu không phải request auth, thử refresh token
+    if (status === 401 && !isAuthRequest && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       if (typeof window !== "undefined") {
-        localStorage.removeItem("access_token");
-        window.location.href = "/login";
+        const refreshToken = localStorage.getItem("refresh_token");
+
+        if (refreshToken) {
+          try {
+            // Gọi API refresh token
+            const refreshRes = await axios.post(
+              `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
+              { refreshToken }
+            );
+
+            const newAccessToken = refreshRes.data.data?.accessToken || refreshRes.data.data?.token;
+            const newRefreshToken = refreshRes.data.data?.refreshToken;
+
+            if (newAccessToken) {
+              localStorage.setItem("access_token", newAccessToken);
+              if (newRefreshToken) {
+                localStorage.setItem("refresh_token", newRefreshToken);
+              }
+
+              if (originalRequest.headers) {
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+              }
+              return apiClient(originalRequest);
+            }
+          } catch (refreshError) {
+              // Refresh Token hết hạn hoặc không hợp lệ -> Đăng xuất
+              localStorage.removeItem("access_token");
+              localStorage.removeItem("refresh_token");
+              localStorage.removeItem("user");
+              window.location.replace("/login");
+              return Promise.reject(refreshError);
+          }
+        } else {
+          // Không có refresh_token -> Đăng xuất
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("user");
+          window.location.replace("/login");
+        }
       }
     }
 
+    const message = error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại.";
     return Promise.reject({
       status: status || 500,
       message,

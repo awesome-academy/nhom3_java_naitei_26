@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>User Detail - FinTrack Pro Administration</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "border": "#E2E8F0",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "primary-light": "#eff4ff",
+            "secondary": "#515f74",
+            "background": "#faf8ff",
+            "bg-subtle": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "danger": "#DC2626",
+            "success": "#16A34A",
+            "warning": "#D97706",
+            "on-background": "#131b2e",
+            "on-surface-variant": "#434655"
+          },
+          spacing: {
+            "sidebar-width": "260px",
+            "gutter": "24px"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #131b2e; }
+  </style>
+</head>
+<body class="flex min-h-screen bg-bg-subtle text-on-background">
+
+  <!-- Admin Sidebar -->
+  <aside class="hidden md:flex flex-col bg-surface w-sidebar-width h-screen sticky top-0 left-0 border-r border-border py-6 z-40">
+    <div class="px-6 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-900 to-primary text-white flex items-center justify-center font-bold text-xl shadow-md">
+          <span class="material-symbols-outlined text-[24px]">admin_panel_settings</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-base font-bold text-on-background leading-tight">FinTrack</h1>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-pink-100 text-pink-800 border border-pink-200">ADMIN</span>
+          </div>
+          <p class="text-xs text-on-surface-variant">System Administration</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Navigation Menu -->
+    <nav class="flex-1 px-4 flex flex-col gap-1 text-sm font-medium overflow-y-auto">
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-primary bg-primary-light font-semibold border-l-4 border-primary transition-all" href="../a03_admin_user_list/code.html">
+        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">group</span>
+        User Management
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a06_admin_category_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">category</span>
+        Global Categories
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a08_budget_template_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">bookmark_manager</span>
+        Budget Templates
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a10_system_expense_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+        System Expenses
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a12_system_income_list/code.html">
+        <span class="material-symbols-outlined text-[20px]">account_balance</span>
+        System Incomes
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a14_activity_logs/code.html">
+        <span class="material-symbols-outlined text-[20px]">history</span>
+        Activity Logs
+      </a>
+
+      <div class="my-2 border-t border-border"></div>
+
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a15_admin_import_data/code.html">
+        <span class="material-symbols-outlined text-[20px]">file_upload</span>
+        Import CSV Data
+      </a>
+      <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-secondary hover:text-on-background hover:bg-bg-subtle transition-all" href="../a16_admin_export_data/code.html">
+        <span class="material-symbols-outlined text-[20px]">file_download</span>
+        Export CSV Data
+      </a>
+    </nav>
+
+    <div class="mt-auto pt-4 border-t border-border px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-full bg-slate-800 text-white font-bold flex items-center justify-center text-sm">
+            AD
+          </div>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-on-background truncate">Super Admin</p>
+            <p class="text-xs text-on-surface-variant truncate">admin@fintrack.pro</p>
+          </div>
+        </div>
+        <a href="../a01_admin_login/code.html" title="Sign Out" class="p-1.5 text-on-surface-variant hover:text-danger hover:bg-red-50 rounded-lg transition-colors">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Canvas -->
+  <main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+    <div class="p-6 md:p-8 max-w-4xl mx-auto w-full flex-1">
+      
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs font-medium text-secondary mb-6">
+        <a href="../a03_admin_user_list/code.html" class="hover:text-primary transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+          <span>Users</span>
+        </a>
+        <span class="text-slate-300">/</span>
+        <span class="text-on-background font-semibold">User Account #USR-1042</span>
+      </nav>
+
+      <!-- User Profile Card Header -->
+      <div class="bg-surface border border-border rounded-2xl p-6 md:p-8 shadow-xs mb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-border">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 text-primary flex items-center justify-center font-bold text-xl border border-blue-200">
+              JS
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 class="text-xl md:text-2xl font-bold text-on-background">John Smith</h1>
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Active Account
+                </span>
+              </div>
+              <p class="text-xs text-secondary mt-0.5">john.smith@example.com • User ID: USR-1042</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="../a05_create_edit_user/code.html" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-white text-secondary text-sm font-semibold hover:bg-slate-50 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">edit</span>
+              <span>Edit User</span>
+            </a>
+            <a href="../a05_delete_user_confirmation/code.html" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-50 text-danger text-sm font-semibold hover:bg-red-100 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">delete</span>
+              <span>Delete User</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Meta Information -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 py-6 border-b border-border">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-secondary">System Role</span>
+            <div class="mt-1">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-primary border border-blue-200">
+                Standard User
+              </span>
+            </div>
+          </div>
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-secondary">Registration Date</span>
+            <div class="text-sm font-semibold text-on-background mt-1">January 15, 2026</div>
+            <p class="text-[11px] text-slate-400">10:45 AM (UTC+7)</p>
+          </div>
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-secondary">Last Login Time</span>
+            <div class="text-sm font-semibold text-on-background mt-1">Today at 18:22 PM</div>
+            <p class="text-[11px] text-slate-400">IP: 192.168.1.104</p>
+          </div>
+        </div>
+
+        <!-- User Summary Statistics -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
+          <div class="p-4 rounded-xl bg-bg-subtle border border-border">
+            <span class="text-xs font-semibold uppercase tracking-wider text-secondary">Recorded Total Spending</span>
+            <div class="text-2xl font-bold font-mono text-danger mt-1">$2,240.00</div>
+            <p class="text-xs text-secondary mt-0.5">32 total expense transactions</p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-subtle border border-border">
+            <span class="text-xs font-semibold uppercase tracking-wider text-secondary">Recorded Total Income</span>
+            <div class="text-2xl font-bold font-mono text-emerald-600 mt-1">$4,500.00</div>
+            <p class="text-xs text-secondary mt-0.5">2 verified payroll sources</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

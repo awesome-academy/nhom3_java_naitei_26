@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 
+
 /**
  * Font: Inter — clean, modern, dễ đọc cho app quản lý.
  * Dùng Google Fonts qua next/font để tối ưu performance.

@@ -1,11 +1,13 @@
 package vn.naitei.nhom3.expensemanagement.service;
 
+import java.util.List;
+
 import vn.naitei.nhom3.expensemanagement.entity.Category;
 import vn.naitei.nhom3.expensemanagement.entity.enums.CategoryType;
 
-import java.util.List;
-
 public interface CategoryService {
+
+    List<Category> getActiveSystemExpenseCategories();
 
     List<Category> getVisibleToUser(Long userId);
 
