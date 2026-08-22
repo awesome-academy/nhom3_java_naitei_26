@@ -9,7 +9,6 @@ import {
   Calendar,
   Plus,
   ArrowRight,
-  PieChart as PieChartIcon,
   PiggyBank,
   Receipt,
   FileText,
@@ -19,6 +18,7 @@ import Button from "@/components/ui/Button";
 import ExpenseFormModal from "@/features/expense/components/ExpenseFormModal";
 import { useExpenseCategories } from "@/features/expense/hooks";
 import { useDashboardSummary, useCategoryExpense } from "@/features/dashboard/hooks";
+import CategorySpendingChart from "@/components/dashboard/CategorySpendingChart";
 
 function formatCurrency(amount: number | undefined): string {
   if (amount === undefined || amount === null) return "0 ₫";
@@ -31,7 +31,11 @@ function formatCurrency(amount: number | undefined): string {
 export default function DashboardPage() {
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const { data: summary, isLoading: isSummaryLoading, isError: isSummaryError } = useDashboardSummary();
-  const { data: categoryData } = useCategoryExpense();
+  const {
+    data: categoryData,
+    isLoading: isCategoryLoading,
+    isError: isCategoryError,
+  } = useCategoryExpense();
   const { data: categories = [] } = useExpenseCategories();
 
   return (
@@ -149,22 +153,13 @@ export default function DashboardPage() {
 
       {/* Overview Sections Grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Placeholder / Chart area */}
+        {/* Category Spending Donut Chart */}
         <div className="lg:col-span-2">
-          <Card className="p-6">
-            <div className="flex items-center justify-between border-b pb-4">
-              <div className="flex items-center gap-2">
-                <PieChartIcon className="h-5 w-5 text-indigo-600" />
-                <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
-              </div>
-              <Link href="/reports" className="text-xs font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
-                Xem báo cáo chi tiết <ArrowRight className="h-3 w-3" />
-              </Link>
-            </div>
-            <div className="mt-4 flex h-64 items-center justify-center text-sm text-gray-400">
-              Biểu đồ danh mục chi tiêu sẽ được tích hợp trong tính năng biểu đồ.
-            </div>
-          </Card>
+          <CategorySpendingChart
+            data={categoryData}
+            isLoading={isCategoryLoading}
+            isError={isCategoryError}
+          />
         </div>
 
         {/* Quick Links & Shortcuts */}
