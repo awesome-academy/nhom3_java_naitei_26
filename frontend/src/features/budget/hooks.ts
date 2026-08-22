@@ -1,37 +1,57 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { budgetApi } from "./api";
-import type { CreateBudgetDto, UpdateBudgetDto } from "./types";
+import type { BudgetRequest } from "./types";
 
-const QUERY_KEY = "budgets";
-
-export function useBudgets(filter?: Record<string, unknown>) {
+export function useBudgets(year?: number, month?: number) {
   return useQuery({
-    queryKey: [QUERY_KEY, filter],
-    queryFn: () => budgetApi.getAll(filter).then((res) => res.data),
+    queryKey: ["budgets", { year, month }],
+    queryFn: async () => {
+      const res = await budgetApi.getBudgets(year, month);
+      return res.data.data;
+    },
+  });
+}
+
+export function useBudgetAlerts() {
+  return useQuery({
+    queryKey: ["budgets", "alerts"],
+    queryFn: async () => {
+      const res = await budgetApi.getBudgetAlerts();
+      return res.data.data;
+    },
   });
 }
 
 export function useCreateBudget() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: CreateBudgetDto) => budgetApi.create(data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEY] }),
+    mutationFn: (data: BudgetRequest) => budgetApi.createBudget(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+    },
   });
 }
 
 export function useUpdateBudget() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateBudgetDto }) =>
-      budgetApi.update(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEY] }),
+    mutationFn: ({ id, data }: { id: number; data: BudgetRequest }) =>
+      budgetApi.updateBudget(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+    },
   });
 }
 
 export function useDeleteBudget() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => budgetApi.delete(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEY] }),
+    mutationFn: (id: number) => budgetApi.deleteBudget(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+    },
   });
 }
