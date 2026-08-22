@@ -1,22 +1,25 @@
 import apiClient from "@/lib/axios";
-import type { PaginatedResponse } from "@/types/api";
-import type { Budget, CreateBudgetDto, UpdateBudgetDto } from "./types";
-
-const BASE = "/budgets";
+import type { ApiResponse } from "@/types/api";
+import type { Budget, BudgetRequest } from "./types";
 
 export const budgetApi = {
-  getAll: (params?: Record<string, unknown>) =>
-    apiClient.get<PaginatedResponse<Budget>>(BASE, { params }),
+  getBudgets: (year?: number, month?: number) =>
+    apiClient.get<ApiResponse<Budget[]>>("/budgets", {
+      params: { year, month },
+    }),
 
-  getById: (id: string) =>
-    apiClient.get<Budget>(`${BASE}/${id}`),
+  getBudgetById: (id: number) =>
+    apiClient.get<ApiResponse<Budget>>(`/budgets/${id}`),
 
-  create: (data: CreateBudgetDto) =>
-    apiClient.post<Budget>(BASE, data),
+  getBudgetAlerts: () =>
+    apiClient.get<ApiResponse<Budget[]>>("/budgets/alerts"),
 
-  update: (id: string, data: UpdateBudgetDto) =>
-    apiClient.put<Budget>(`${BASE}/${id}`, data),
+  createBudget: (data: BudgetRequest) =>
+    apiClient.post<ApiResponse<Budget>>("/budgets", data),
 
-  delete: (id: string) =>
-    apiClient.delete(`${BASE}/${id}`),
+  updateBudget: (id: number, data: BudgetRequest) =>
+    apiClient.put<ApiResponse<Budget>>(`/budgets/${id}`, data),
+
+  deleteBudget: (id: number) =>
+    apiClient.delete<ApiResponse<null>>(`/budgets/${id}`),
 };
