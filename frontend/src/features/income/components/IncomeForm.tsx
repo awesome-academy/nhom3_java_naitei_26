@@ -4,38 +4,31 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
-import type { IncomeType, CreateIncomeDto, UpdateIncomeDto } from "../types";
+import type { CreateIncomeDto, UpdateIncomeDto } from "../types";
 import { ROUTES } from "@/lib/constants";
 
 interface IncomeFormProps {
   initialData?: Partial<CreateIncomeDto>;
   onSubmit: (data: CreateIncomeDto | UpdateIncomeDto) => void;
   isLoading?: boolean;
+  serverErrors?: Record<string, string>;
+  generalError?: string | null;
 }
 
-const INCOME_TYPE_OPTIONS: { value: IncomeType; label: string }[] = [
-  { value: "Salary", label: "Salary (Monthly Payroll)" },
-  { value: "Freelance", label: "Freelance Contract" },
-  { value: "Investment", label: "Dividends & Investments" },
-  { value: "Rental", label: "Rental Income" },
-  { value: "Bonus", label: "Bonus / Gift" },
-];
-
 /**
- * IncomeForm — Component form tái sử dụng cho cả Create và Edit Income.
- * Dựng chính xác theo UI design reference U08.
+ * IncomeForm — Form tái sử dụng cho cả Create và Edit Income.
+ * Category đã được loại bỏ khỏi Income theo yêu cầu.
  */
 export default function IncomeForm({
   initialData,
   onSubmit,
   isLoading = false,
+  serverErrors = {},
+  generalError = null,
 }: IncomeFormProps) {
   const [source, setSource] = useState(initialData?.source || "");
   const [amount, setAmount] = useState(initialData?.amount?.toString() || "");
-  const [date, setDate] = useState(initialData?.date || "2026-10-05");
-  const [type, setType] = useState<IncomeType>(
-    initialData?.type || "Salary"
-  );
+  const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
   const [note, setNote] = useState(initialData?.note || "");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -44,15 +37,20 @@ export default function IncomeForm({
       source,
       amount: parseFloat(amount) || 0,
       date,
-      type,
       note,
-      description: source, // Legacy field
-      categoryId: `cat-${type.toLowerCase()}`, // Mock ID
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* General Error Banner */}
+      {generalError && (
+        <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2.5 text-sm text-red-900 leading-relaxed">
+          <span className="text-red-600 font-bold">!</span>
+          <span>{generalError}</span>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Income Source Name */}
         <div className="md:col-span-2">
@@ -71,6 +69,9 @@ export default function IncomeForm({
             placeholder="e.g., Tech Corp Salary, Freelance Web Design"
             className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all"
           />
+          {serverErrors.source && (
+            <p className="mt-1 text-xs text-red-600">{serverErrors.source}</p>
+          )}
         </div>
 
         {/* Amount */}
@@ -99,6 +100,9 @@ export default function IncomeForm({
               USD
             </span>
           </div>
+          {serverErrors.amount && (
+            <p className="mt-1 text-xs text-red-600">{serverErrors.amount}</p>
+          )}
         </div>
 
         {/* Date */}
@@ -117,34 +121,9 @@ export default function IncomeForm({
             onChange={(e) => setDate(e.target.value)}
             className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all"
           />
-        </div>
-
-        {/* Income Type */}
-        <div className="md:col-span-2">
-          <label
-            className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5"
-            htmlFor="type"
-          >
-            Income Type <span className="text-red-600">*</span>
-          </label>
-          <select
-            id="type"
-            required
-            value={type}
-            onChange={(e) => setType(e.target.value as IncomeType)}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all appearance-none cursor-pointer pr-8"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%23515f74' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 14px center",
-            }}
-          >
-            {INCOME_TYPE_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          {serverErrors.date && (
+            <p className="mt-1 text-xs text-red-600">{serverErrors.date}</p>
+          )}
         </div>
       </div>
 

@@ -9,19 +9,9 @@ import {
   Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Income, IncomeType } from "../types";
-import { INCOME_TYPE_STYLES } from "../types";
+import type { Income } from "../types";
 
-/**
- * Mapping IncomeType → Lucide icon component.
- * Tách riêng để dễ mở rộng khi thêm type mới.
- */
-const TYPE_ICON_MAP: Record<IncomeType, React.ElementType> = {
-  Salary: Landmark,
-  Freelance: Monitor,
-  Investment: TrendingUp,
-  Bonus: Gift,
-};
+
 
 interface IncomeTableProps {
   incomes: Income[];
@@ -32,12 +22,11 @@ interface IncomeTableProps {
 
 /**
  * IncomeTable — Data table chuyên cho trang Income Management.
- * Render 5 columns theo design U07:
+ * Render 4 columns theo design U07:
  *   1. Income Source (icon + name + description)
- *   2. Type (color-coded badge)
- *   3. Amount (+$X,XXX.XX in emerald monospace)
- *   4. Date (MMM dd, yyyy)
- *   5. Actions (Edit + Delete icon buttons)
+ *   2. Amount (+$X,XXX.XX in emerald monospace)
+ *   3. Date (MMM dd, yyyy)
+ *   4. Actions (Edit + Delete icon buttons)
  */
 export default function IncomeTable({
   incomes,
@@ -101,9 +90,6 @@ export default function IncomeTable({
               <th scope="col" className="py-3.5 px-6">
                 Income Source
               </th>
-              <th scope="col" className="py-3.5 px-4">
-                Type
-              </th>
               <th scope="col" className="py-3.5 px-4 text-right">
                 Amount
               </th>
@@ -117,9 +103,6 @@ export default function IncomeTable({
           </thead>
           <tbody className="divide-y divide-gray-200">
             {incomes.map((income) => {
-              const typeStyle = INCOME_TYPE_STYLES[income.type];
-              const IconComponent = TYPE_ICON_MAP[income.type];
-
               return (
                 <tr
                   key={income.id}
@@ -130,12 +113,10 @@ export default function IncomeTable({
                     <div className="flex items-center gap-3">
                       <div
                         className={cn(
-                          "w-9 h-9 rounded-xl flex items-center justify-center font-bold flex-shrink-0",
-                          typeStyle.iconBg,
-                          typeStyle.iconText
+                          "w-9 h-9 rounded-xl flex items-center justify-center font-bold flex-shrink-0 bg-blue-100 text-blue-600"
                         )}
                       >
-                        <IconComponent className="h-5 w-5" />
+                        <Landmark className="h-5 w-5" />
                       </div>
                       <div className="min-w-0">
                         <p className="font-semibold text-gray-900 truncate">
@@ -148,18 +129,6 @@ export default function IncomeTable({
                     </div>
                   </td>
 
-                  {/* Type Badge */}
-                  <td className="py-4 px-4">
-                    <span
-                      className={cn(
-                        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold",
-                        typeStyle.bg,
-                        typeStyle.text
-                      )}
-                    >
-                      {income.type}
-                    </span>
-                  </td>
 
                   {/* Amount */}
                   <td className="py-4 px-4 text-right font-mono font-bold text-emerald-600 text-base whitespace-nowrap">

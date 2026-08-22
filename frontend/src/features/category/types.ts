@@ -7,10 +7,8 @@ export interface Category {
   icon?: string;
   color?: string;
   type: CategoryType;
+  scope: "COMMON" | "PRIVATE"; // Trả về từ backend thay vì isSystem
   transactionCount?: number;
-  isSystem?: boolean; // Custom vs System categories
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface CreateCategoryDto {

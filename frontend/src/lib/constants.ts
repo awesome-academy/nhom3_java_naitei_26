@@ -30,21 +30,21 @@ export const ROUTES = {
  */
 export const USER_MENU = [
   { label: "Dashboard", href: ROUTES.DASHBOARD, icon: "LayoutDashboard" },
-  { label: "Chi tiêu", href: ROUTES.EXPENSES, icon: "Receipt" },
-  { label: "Thu nhập", href: ROUTES.INCOMES, icon: "Wallet" },
-  { label: "Danh mục", href: ROUTES.CATEGORIES, icon: "Tag" },
-  { label: "Ngân sách", href: ROUTES.BUDGETS, icon: "PiggyBank" },
-  { label: "Báo cáo", href: ROUTES.REPORTS, icon: "BarChart3" },
+  { label: "Expenses", href: ROUTES.EXPENSES, icon: "Receipt" },
+  { label: "Incomes", href: ROUTES.INCOMES, icon: "Wallet" },
+  { label: "Categories", href: ROUTES.CATEGORIES, icon: "Tag" },
+  { label: "Budgets", href: ROUTES.BUDGETS, icon: "PiggyBank" },
+  { label: "Reports", href: ROUTES.REPORTS, icon: "BarChart3" },
 ] as const;
 
 export const ADMIN_MENU = [
   { label: "Dashboard", href: ROUTES.ADMIN_DASHBOARD, icon: "LayoutDashboard" },
-  { label: "Người dùng", href: ROUTES.ADMIN_USERS, icon: "Users" },
-  { label: "Danh mục", href: ROUTES.ADMIN_CATEGORIES, icon: "Tag" },
-  { label: "Mẫu ngân sách", href: ROUTES.ADMIN_BUDGET_TEMPLATES, icon: "FileText" },
-  { label: "Chi tiêu", href: ROUTES.ADMIN_EXPENSES, icon: "Receipt" },
-  { label: "Thu nhập", href: ROUTES.ADMIN_INCOMES, icon: "Wallet" },
-  { label: "Nhật ký hoạt động", href: ROUTES.ADMIN_ACTIVITY_LOGS, icon: "Activity" },
+  { label: "Users", href: ROUTES.ADMIN_USERS, icon: "Users" },
+  { label: "Categories", href: ROUTES.ADMIN_CATEGORIES, icon: "Tag" },
+  { label: "Budget Templates", href: ROUTES.ADMIN_BUDGET_TEMPLATES, icon: "FileText" },
+  { label: "Expenses", href: ROUTES.ADMIN_EXPENSES, icon: "Receipt" },
+  { label: "Incomes", href: ROUTES.ADMIN_INCOMES, icon: "Wallet" },
+  { label: "Activity Logs", href: ROUTES.ADMIN_ACTIVITY_LOGS, icon: "Activity" },
 ] as const;
 
 /**

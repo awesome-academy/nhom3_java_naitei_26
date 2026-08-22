@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IncomeForm } from "@/features/income/components";
+import { useCreateIncome } from "@/features/income/hooks";
 import type { CreateIncomeDto } from "@/features/income/types";
 import { ROUTES } from "@/lib/constants";
 
@@ -16,18 +17,15 @@ export default function AddIncomePage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const createMutation = useCreateIncome();
+
   const handleSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
-      // TODO: Connect to actual mutation when API is ready
-      // const payload: CreateIncomeDto = data;
-      console.log("Submitting new income:", data);
-      
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      
-      // Navigate back after success
+      await createMutation.mutateAsync(data);
       router.push(ROUTES.INCOMES);
+    } catch (error) {
+      console.error("Failed to create income:", error);
     } finally {
       setIsSubmitting(false);
     }

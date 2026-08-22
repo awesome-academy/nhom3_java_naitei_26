@@ -11,6 +11,14 @@ export function useIncomes(filter?: Record<string, unknown>) {
   });
 }
 
+export function useIncome(id: string) {
+  return useQuery({
+    queryKey: [QUERY_KEY, id],
+    queryFn: () => incomeApi.getById(id).then((res) => res.data),
+    enabled: !!id,
+  });
+}
+
 export function useCreateIncome() {
   const queryClient = useQueryClient();
   return useMutation({

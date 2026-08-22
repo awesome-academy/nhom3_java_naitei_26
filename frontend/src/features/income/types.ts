@@ -62,26 +62,18 @@ export const INCOME_TYPE_ICONS: Record<IncomeType, string> = {
 
 export interface Income {
   id: string;
-  source: string;
-  note: string;
-  type: IncomeType;
+  source: string; // Tương ứng với 'title' ở backend
   amount: number;
   date: string;
-  /** Legacy fields — backward compatible */
-  description: string;
-  categoryId: string;
-  categoryName?: string;
+  note: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateIncomeDto {
+  source: string;
   amount: number;
-  description: string;
-  categoryId: string;
   date: string;
-  source?: string;
-  type?: IncomeType;
   note?: string;
 }
 

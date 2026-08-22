@@ -11,6 +11,10 @@ interface CategoryFormProps {
   initialData?: Partial<CreateCategoryDto>;
   onSubmit: (data: CreateCategoryDto | UpdateCategoryDto) => void;
   isLoading?: boolean;
+  /** Lỗi từ server (400 Bad Request) — key = field name, value = error message */
+  serverErrors?: Record<string, string>;
+  /** Lỗi chung (ví dụ: 403, 409) — hiển thị ở đầu form */
+  generalError?: string | null;
 }
 
 const ICON_OPTIONS = [
@@ -20,18 +24,33 @@ const ICON_OPTIONS = [
   "shopping_bag",
   "fitness_center",
   "school",
+  "work",
+  "savings",
+  "payments",
+  "account_balance",
+  "local_hospital",
+  "flight",
 ];
 
+/**
+ * CategoryForm — Form tái sử dụng cho cả tạo mới và chỉnh sửa danh mục.
+ *
+ * Use case "Thêm danh mục":
+ * - Bấm "Thêm danh mục" & nhập Form → Bấm "Lưu"
+ * - Dữ liệu hợp lệ? → POST /api/categories → Thông báo thành công & cập nhật danh sách
+ * - Dữ liệu sai? → 400 Bad Request → Hiển thị lỗi tại Form
+ */
 export default function CategoryForm({
   initialData,
   onSubmit,
   isLoading = false,
+  serverErrors = {},
+  generalError = null,
 }: CategoryFormProps) {
   const [name, setName] = useState(initialData?.name || "");
   const [icon, setIcon] = useState(initialData?.icon || "restaurant");
   const [description, setDescription] = useState(initialData?.description || "");
-  // Using EXPENSE as default since it's most common for categories
-  const [type, setType] = useState<CategoryType>(initialData?.type || "EXPENSE");
+  const type: CategoryType = "EXPENSE"; // Hardcoded to EXPENSE as categories are only for expenses now
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,37 +64,16 @@ export default function CategoryForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      
-      {/* Category Type Selection (Radio) - Custom addition for completeness though not explicitly in U10 screenshot, it's necessary for domain */}
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-          Category Type <span className="text-red-600">*</span>
-        </label>
-        <div className="flex gap-4">
-          <label className="cursor-pointer flex items-center gap-2">
-            <input
-              type="radio"
-              name="type"
-              value="EXPENSE"
-              checked={type === "EXPENSE"}
-              onChange={() => setType("EXPENSE")}
-              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-600"
-            />
-            <span className="text-sm text-gray-900 font-medium">Expense</span>
-          </label>
-          <label className="cursor-pointer flex items-center gap-2">
-            <input
-              type="radio"
-              name="type"
-              value="INCOME"
-              checked={type === "INCOME"}
-              onChange={() => setType("INCOME")}
-              className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-600"
-            />
-            <span className="text-sm text-gray-900 font-medium">Income</span>
-          </label>
+
+      {/* General error message (403, 409, etc.) */}
+      {generalError && (
+        <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2.5 text-sm text-red-900 leading-relaxed">
+          <span className="material-symbols-outlined text-red-600 flex-shrink-0 mt-0.5" style={{ fontSize: "18px" }}>
+            error
+          </span>
+          <span>{generalError}</span>
         </div>
-      </div>
+      )}
 
       {/* Category Name */}
       <div>
@@ -91,15 +89,20 @@ export default function CategoryForm({
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g., Food & Dining, Freelance, Fitness"
-          className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all"
+          placeholder="e.g., Food & Dining, Transportation, Utilities"
+          className={`w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all ${
+            serverErrors.name ? "border-red-300 bg-red-50/30" : "border-gray-200"
+          }`}
         />
+        {serverErrors.name && (
+          <p className="text-xs text-red-600 mt-1">{serverErrors.name}</p>
+        )}
       </div>
 
       {/* Icon Selector Grid */}
       <div>
         <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-          Select Category Icon
+          Icon
         </label>
         <div className="grid grid-cols-6 sm:grid-cols-8 gap-3">
           {ICON_OPTIONS.map((iconName) => (
@@ -112,7 +115,7 @@ export default function CategoryForm({
                 onChange={() => setIcon(iconName)}
                 className="sr-only peer"
               />
-              <div className="w-11 h-11 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition-all text-gray-500">
+              <div className="w-11 h-11 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition-all text-gray-500 hover:border-gray-300">
                 <span className="material-symbols-outlined" style={{ fontSize: "22px" }}>
                   {iconName}
                 </span>
@@ -135,7 +138,7 @@ export default function CategoryForm({
           rows={3}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="What expenses or earnings belong in this category?"
+          placeholder="What kind of expenses belong to this category?"
           className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all"
         />
       </div>
