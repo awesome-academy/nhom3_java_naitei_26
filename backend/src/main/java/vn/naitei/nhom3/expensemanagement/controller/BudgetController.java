@@ -34,6 +34,14 @@ public class BudgetController {
         return ResponseEntity.ok(ApiResponse.success("Thành công", data));
     }
 
+    @GetMapping("/alerts")
+    @Operation(summary = "Get budget alerts (budgets with WARNING or EXCEEDED status in the current month)")
+    public ResponseEntity<ApiResponse<List<BudgetResponse>>> getBudgetAlerts(
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        List<BudgetResponse> data = budgetService.getBudgetAlerts(userPrincipal.getId());
+        return ResponseEntity.ok(ApiResponse.success("Thành công", data));
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get budget by ID")
     public ResponseEntity<ApiResponse<BudgetResponse>> getBudgetById(

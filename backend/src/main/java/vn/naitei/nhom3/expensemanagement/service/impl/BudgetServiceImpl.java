@@ -120,6 +120,22 @@ public class BudgetServiceImpl implements BudgetService {
         budgetRepository.delete(budget);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<BudgetResponse> getBudgetAlerts(Long userId) {
+        YearMonth currentYm = YearMonth.now();
+        List<Budget> currentBudgets = budgetRepository.findByUserIdAndYearAndMonth(
+                userId,
+                (short) currentYm.getYear(),
+                (byte) currentYm.getMonthValue()
+        );
+
+        return currentBudgets.stream()
+                .map(this::mapToResponse)
+                .filter(b -> !"NORMAL".equals(b.getAlertStatus()))
+                .collect(Collectors.toList());
+    }
+
     private Budget findUserBudget(Long userId, Long budgetId) {
         Budget budget = budgetRepository.findById(budgetId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ngân sách không tồn tại."));

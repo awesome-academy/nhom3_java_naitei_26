@@ -16,4 +16,6 @@ public interface BudgetService {
     BudgetResponse updateBudget(Long userId, Long budgetId, BudgetRequest request);
 
     void deleteBudget(Long userId, Long budgetId);
+
+    List<BudgetResponse> getBudgetAlerts(Long userId);
 }
