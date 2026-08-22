@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.naitei.nhom3.expensemanagement.common.response.ApiResponse;
 import vn.naitei.nhom3.expensemanagement.dto.dashboard.CategoryExpenseResponse;
+import vn.naitei.nhom3.expensemanagement.dto.dashboard.DashboardSummaryResponse;
 import vn.naitei.nhom3.expensemanagement.security.UserPrincipal;
 import vn.naitei.nhom3.expensemanagement.service.DashboardService;
 
@@ -28,6 +29,14 @@ public class DashboardController {
     public ResponseEntity<ApiResponse<List<CategoryExpenseResponse>>> getExpenseByCategory(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         List<CategoryExpenseResponse> data = dashboardService.getExpenseStatisticsByCategory(userPrincipal.getId());
+        return ResponseEntity.ok(ApiResponse.success("Thành công", data));
+    }
+
+    @GetMapping("/summary")
+    @Operation(summary = "Get dashboard financial summary (Total Income, Total Expense, Balance, Monthly metrics)")
+    public ResponseEntity<ApiResponse<DashboardSummaryResponse>> getDashboardSummary(
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        DashboardSummaryResponse data = dashboardService.getDashboardSummary(userPrincipal.getId());
         return ResponseEntity.ok(ApiResponse.success("Thành công", data));
     }
 }
