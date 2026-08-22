@@ -36,6 +36,37 @@ function getTrendRange(date: Date) {
   return { from: formatDate(from), to: formatDate(to) };
 }
 
+function getDateForPeriod(period: ReportPeriod, value: string) {
+  if (period === "month") {
+    const [year, month] = value.split("-").map(Number);
+    return new Date(year, month - 1, 1);
+  }
+  if (period === "quarter") {
+    const [year, quarter] = value.split("-Q").map(Number);
+    return new Date(year, (quarter - 1) * 3, 1);
+  }
+  return new Date(Number(value), 0, 1);
+}
+
+function getPeriodOptions(period: ReportPeriod, date: Date) {
+  if (period === "month") {
+    return Array.from({ length: 12 }, (_, index) => {
+      const optionDate = new Date(date.getFullYear(), date.getMonth() - index, 1);
+      return { value: getPeriodValue(period, optionDate), label: new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(optionDate) };
+    });
+  }
+  if (period === "quarter") {
+    return Array.from({ length: 8 }, (_, index) => {
+      const optionDate = new Date(date.getFullYear(), date.getMonth() - index * 3, 1);
+      return { value: getPeriodValue(period, optionDate), label: `Q${Math.floor(optionDate.getMonth() / 3) + 1} ${optionDate.getFullYear()}` };
+    });
+  }
+  return Array.from({ length: 5 }, (_, index) => {
+    const year = date.getFullYear() - index;
+    return { value: String(year), label: String(year) };
+  });
+}
+
 function formatTrendLabel(period: string) {
   const [year, month] = period.split("-").map(Number);
   return new Intl.DateTimeFormat("en-US", { month: "short" }).format(new Date(year, month - 1, 1));
@@ -44,11 +75,14 @@ function formatTrendLabel(period: string) {
 export default function ReportsPage() {
   const [period, setPeriod] = useState<ReportPeriod>("month");
   const referenceDate = useMemo(() => new Date(), []);
+  const [periodValue, setPeriodValue] = useState(getPeriodValue("month", referenceDate));
   const periodParams = useMemo(
-    () => ({ period, value: getPeriodValue(period, referenceDate) }),
-    [period, referenceDate]
+    () => ({ period, value: periodValue }),
+    [period, periodValue]
   );
-  const trendRange = useMemo(() => getTrendRange(referenceDate), [referenceDate]);
+  const selectedDate = useMemo(() => getDateForPeriod(period, periodValue), [period, periodValue]);
+  const trendRange = useMemo(() => getTrendRange(selectedDate), [selectedDate]);
+  const periodOptions = useMemo(() => getPeriodOptions(period, referenceDate), [period, referenceDate]);
   const summaryQuery = useReportSummary(periodParams);
   const comparisonQuery = useReportComparison(periodParams);
   const trendQuery = useReportTrend(trendRange);
@@ -87,7 +121,10 @@ export default function ReportsPage() {
               key={option}
               type="button"
               aria-pressed={period === option}
-              onClick={() => setPeriod(option)}
+              onClick={() => {
+                setPeriod(option);
+                setPeriodValue(getPeriodValue(option, referenceDate));
+              }}
               className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-colors ${
                 period === option
                   ? "bg-blue-600 text-white shadow-sm"
@@ -101,18 +138,22 @@ export default function ReportsPage() {
       </header>
 
       <div className="flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:border-blue-300 hover:text-blue-700"
+        <label className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:border-blue-300 hover:text-blue-700"
         >
           <CalendarDays className="h-4 w-4 text-blue-600" aria-hidden="true" />
-          {period === "month"
-            ? new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(referenceDate)
-            : period === "quarter"
-              ? `${periodParams.value} ${referenceDate.getFullYear()}`.replace(`${referenceDate.getFullYear()}-Q`, "Q")
-              : periodParams.value}
+          <span className="sr-only">Select report period</span>
+          <select
+            aria-label="Select report period"
+            value={periodValue}
+            onChange={(event) => setPeriodValue(event.target.value)}
+            className="cursor-pointer appearance-none bg-transparent pr-1 text-sm font-medium text-gray-700 outline-none"
+          >
+            {periodOptions.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
           <ChevronDown className="h-4 w-4 text-gray-400" aria-hidden="true" />
-        </button>
+        </label>
         <span className="text-xs text-gray-400">Dữ liệu theo kỳ đã chọn</span>
       </div>
 
