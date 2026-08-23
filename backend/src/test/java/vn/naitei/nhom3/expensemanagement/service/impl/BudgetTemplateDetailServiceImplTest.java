@@ -171,6 +171,18 @@ class BudgetTemplateDetailServiceImplTest {
                 () -> budgetTemplateDetailService.create(1L, 2L, validDetail()));
     }
 
+            @Test
+            void createThrowsWhenCategoryIsPrivate() {
+            Category category = activeCategory();
+            category.setUser(new vn.naitei.nhom3.expensemanagement.entity.User());
+            when(budgetTemplateRepository.findByIdAndDeletedAtIsNull(1L))
+                .thenReturn(Optional.of(activeTemplate()));
+            when(categoryRepository.findById(2L)).thenReturn(Optional.of(category));
+
+            assertThrows(BadRequestException.class,
+                () -> budgetTemplateDetailService.create(1L, 2L, validDetail()));
+            }
+
     @Test
     void createThrowsWhenDetailIsNull() {
         when(budgetTemplateRepository.findByIdAndDeletedAtIsNull(1L))
