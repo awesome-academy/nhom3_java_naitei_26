@@ -1,10 +1,20 @@
 package vn.naitei.nhom3.expensemanagement.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.List;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 import vn.naitei.nhom3.expensemanagement.dto.importexport.ExportEntityType;
 import vn.naitei.nhom3.expensemanagement.entity.Budget;
 import vn.naitei.nhom3.expensemanagement.entity.Category;
@@ -19,15 +29,6 @@ import vn.naitei.nhom3.expensemanagement.repository.ExpenseRepository;
 import vn.naitei.nhom3.expensemanagement.repository.IncomeRepository;
 import vn.naitei.nhom3.expensemanagement.repository.UserRepository;
 import vn.naitei.nhom3.expensemanagement.service.ExportService;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.List;
 
 /**
  * Ghi thẳng UTF-8 BOM vào đầu file để Excel Windows mở đúng ký tự tiếng Việt
@@ -119,7 +120,7 @@ public class ExportServiceImpl implements ExportService {
             printer.printRecord(
                     income.getUser().getEmail(),
                     income.getTitle(),
-                    "",
+                    income.getCategory().getName(),
                     income.getAmount().toPlainString(),
                     income.getIncomeDate(),
                     income.getNote());
