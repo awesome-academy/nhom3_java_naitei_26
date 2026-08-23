@@ -31,7 +31,6 @@ export const ROUTES = {
 export const USER_MENU = [
   { label: "Dashboard", href: ROUTES.DASHBOARD, icon: "LayoutDashboard" },
   { label: "Expenses", href: ROUTES.EXPENSES, icon: "Receipt" },
-  { label: "Incomes", href: ROUTES.INCOMES, icon: "Wallet" },
   { label: "Categories", href: ROUTES.CATEGORIES, icon: "Tag" },
   { label: "Budgets", href: ROUTES.BUDGETS, icon: "PiggyBank" },
   { label: "Reports", href: ROUTES.REPORTS, icon: "BarChart3" },
@@ -43,7 +42,6 @@ export const ADMIN_MENU = [
   { label: "Categories", href: ROUTES.ADMIN_CATEGORIES, icon: "Tag" },
   { label: "Budget Templates", href: ROUTES.ADMIN_BUDGET_TEMPLATES, icon: "FileText" },
   { label: "Expenses", href: ROUTES.ADMIN_EXPENSES, icon: "Receipt" },
-  { label: "Incomes", href: ROUTES.ADMIN_INCOMES, icon: "Wallet" },
   { label: "Activity Logs", href: ROUTES.ADMIN_ACTIVITY_LOGS, icon: "Activity" },
 ] as const;
 

@@ -19,7 +19,7 @@ import vn.naitei.nhom3.expensemanagement.repository.UserRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Configuration
+@org.springframework.stereotype.Component
 @RequiredArgsConstructor
 @Slf4j
 public class DataSeeder implements CommandLineRunner {

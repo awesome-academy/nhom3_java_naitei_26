@@ -70,4 +70,11 @@ public interface CategoryService {
      * - Chặn nếu đang được Expense/Income/Budget tham chiếu → 409 — BR-09
      */
     void deleteForUser(Long userId, Long id);
+
+    // ==================== ADMIN-LEVEL ====================
+    org.springframework.data.domain.Page<vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse> getAdminCategories(String search, CategoryType type, org.springframework.data.domain.Pageable pageable);
+    vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse getAdminCategoryById(Long id);
+    vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse createSystemCategory(CategoryRequest request);
+    vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse updateSystemCategory(Long id, CategoryRequest request);
+    void deleteSystemCategory(Long id);
 }

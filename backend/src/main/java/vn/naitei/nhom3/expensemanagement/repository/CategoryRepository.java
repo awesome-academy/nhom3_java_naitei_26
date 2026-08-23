@@ -12,6 +12,12 @@ import vn.naitei.nhom3.expensemanagement.entity.enums.CategoryType;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
+    @Query("SELECT c FROM Category c WHERE c.user IS NULL AND c.deletedAt IS NULL AND (:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(c.description) LIKE LOWER(CONCAT('%', :search, '%'))) AND (:type IS NULL OR c.type = :type)")
+    org.springframework.data.domain.Page<Category> findSystemCategories(@Param("search") String search, @Param("type") CategoryType type, org.springframework.data.domain.Pageable pageable);
+
+    @Query("SELECT (SELECT COUNT(e) FROM Expense e WHERE e.category.id = :categoryId) + (SELECT COUNT(b) FROM Budget b WHERE b.category.id = :categoryId)")
+    long countUsage(@Param("categoryId") Long categoryId);
+
     /**
      * Danh mục hệ thống (chung) chưa bị xoá mềm, lọc theo type, sắp xếp theo id.
      */

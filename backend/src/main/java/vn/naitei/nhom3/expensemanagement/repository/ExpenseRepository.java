@@ -75,5 +75,13 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
         String getCategoryName();
         String getCategoryIcon();
         BigDecimal getTotalAmount();
-    }
+    
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.data.jpa.repository.Query("UPDATE Expense e SET e.category.id = :newId WHERE e.category.id = :oldId")
+    void updateCategoryByOldCategory(@org.springframework.data.repository.query.Param("oldId") Long oldId, @org.springframework.data.repository.query.Param("newId") Long newId);
+}
+
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.data.jpa.repository.Query("UPDATE Expense e SET e.category.id = :newId WHERE e.category.id = :oldId")
+    void updateCategoryByOldCategory(@org.springframework.data.repository.query.Param("oldId") Long oldId, @org.springframework.data.repository.query.Param("newId") Long newId);
 }

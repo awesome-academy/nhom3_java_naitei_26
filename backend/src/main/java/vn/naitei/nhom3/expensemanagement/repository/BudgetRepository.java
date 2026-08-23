@@ -12,4 +12,8 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
 
     Optional<Budget> findByUserIdAndCategoryIdAndYearAndMonth(
             Long userId, Long categoryId, Short year, Byte month);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.data.jpa.repository.Query("UPDATE Budget b SET b.category.id = :newId WHERE b.category.id = :oldId")
+    void updateCategoryByOldCategory(@org.springframework.data.repository.query.Param("oldId") Long oldId, @org.springframework.data.repository.query.Param("newId") Long newId);
 }

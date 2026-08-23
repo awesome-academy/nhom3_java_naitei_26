@@ -216,12 +216,12 @@ public class ImportServiceImpl implements ImportService {
         String source = requireText(record, "source", "source không được để trống");
         BigDecimal amount = parseAmount(record.get("amount"));
         LocalDate date = parseDate(record.get("date"));
-        Category category = resolveCategoryByName(user.getId(), record.get("category"), CategoryType.INCOME);
+        // Category category = resolveCategoryByName(user.getId(), record.get("category"), CategoryType.INCOME);
         String note = record.isSet("note") ? record.get("note") : null;
 
         Income income = new Income();
         income.setUser(user);
-        income.setCategory(category);
+        // income.setCategory(category);
         income.setTitle(source);
         income.setAmount(amount);
         income.setIncomeDate(date);

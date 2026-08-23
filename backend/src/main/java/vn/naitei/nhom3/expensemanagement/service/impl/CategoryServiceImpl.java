@@ -176,4 +176,105 @@ public class CategoryServiceImpl implements CategoryService {
         category.setIcon(request.getIcon());
         category.setType(request.getType());
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public org.springframework.data.domain.Page<vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse> getAdminCategories(String search, vn.naitei.nhom3.expensemanagement.entity.enums.CategoryType type, org.springframework.data.domain.Pageable pageable) {
+        return categoryRepository.findSystemCategories(search, type, pageable)
+            .map(cat -> vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse.builder()
+                .id(cat.getId())
+                .name(cat.getName())
+                .description(cat.getDescription())
+                .icon(cat.getIcon())
+                .type(cat.getType())
+                .createdAt(cat.getCreatedAt())
+                .updatedAt(cat.getUpdatedAt())
+                .usageCount(categoryRepository.countUsage(cat.getId()))
+                .build());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse getAdminCategoryById(Long id) {
+        vn.naitei.nhom3.expensemanagement.entity.Category cat = categoryRepository.findById(id)
+            .orElseThrow(() -> new vn.naitei.nhom3.expensemanagement.exception.ResourceNotFoundException("Không tìm thấy danh mục chung với ID: " + id));
+        if (cat.getUser() != null) throw new vn.naitei.nhom3.expensemanagement.exception.ForbiddenException("Không thể truy cập danh mục riêng từ admin");
+        
+        return vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse.builder()
+            .id(cat.getId())
+            .name(cat.getName())
+            .description(cat.getDescription())
+            .icon(cat.getIcon())
+            .type(cat.getType())
+            .createdAt(cat.getCreatedAt())
+            .updatedAt(cat.getUpdatedAt())
+            .usageCount(categoryRepository.countUsage(cat.getId()))
+            .build();
+    }
+
+    @Override
+    @Transactional
+    public vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse createSystemCategory(vn.naitei.nhom3.expensemanagement.dto.category.CategoryRequest request) {
+        vn.naitei.nhom3.expensemanagement.entity.Category cat = new vn.naitei.nhom3.expensemanagement.entity.Category();
+        cat.setName(request.getName());
+        cat.setDescription(request.getDescription());
+        cat.setIcon(request.getIcon());
+        cat.setType(request.getType());
+        cat.setUser(null);
+        categoryRepository.save(cat);
+        
+        return getAdminCategoryById(cat.getId());
+    }
+
+    @Override
+    @Transactional
+    public vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse updateSystemCategory(Long id, vn.naitei.nhom3.expensemanagement.dto.category.CategoryRequest request) {
+        vn.naitei.nhom3.expensemanagement.entity.Category cat = categoryRepository.findById(id)
+            .orElseThrow(() -> new vn.naitei.nhom3.expensemanagement.exception.ResourceNotFoundException("Không tìm thấy danh mục chung với ID: " + id));
+        if (cat.getUser() != null) throw new vn.naitei.nhom3.expensemanagement.exception.ForbiddenException("Chỉ được sửa danh mục chung");
+        
+        cat.setName(request.getName());
+        cat.setDescription(request.getDescription());
+        cat.setIcon(request.getIcon());
+        cat.setType(request.getType());
+        categoryRepository.save(cat);
+        
+        return getAdminCategoryById(cat.getId());
+    }
+
+    @org.springframework.beans.factory.annotation.Autowired
+    private vn.naitei.nhom3.expensemanagement.repository.ExpenseRepository expenseRepository;
+    
+    @org.springframework.beans.factory.annotation.Autowired
+    private vn.naitei.nhom3.expensemanagement.repository.BudgetRepository budgetRepository;
+
+    @Override
+    @Transactional
+    public void deleteSystemCategory(Long id) {
+        vn.naitei.nhom3.expensemanagement.entity.Category cat = categoryRepository.findById(id)
+            .orElseThrow(() -> new vn.naitei.nhom3.expensemanagement.exception.ResourceNotFoundException("Không tìm thấy danh mục chung với ID: " + id));
+        if (cat.getUser() != null) throw new vn.naitei.nhom3.expensemanagement.exception.ForbiddenException("Chỉ được xoá danh mục chung");
+        
+        // Find or create "Uncategorized" category for fallback
+        vn.naitei.nhom3.expensemanagement.entity.Category fallback = categoryRepository.findByUserIsNullAndNameAndTypeAndDeletedAtIsNull("Uncategorized", cat.getType())
+            .orElseGet(() -> {
+                vn.naitei.nhom3.expensemanagement.entity.Category uncategorized = new vn.naitei.nhom3.expensemanagement.entity.Category();
+                uncategorized.setName("Uncategorized");
+                uncategorized.setDescription("Fallback category for deleted system categories");
+                uncategorized.setIcon("help");
+                uncategorized.setType(cat.getType());
+                return categoryRepository.save(uncategorized);
+            });
+            
+        // Migrate Expenses
+        expenseRepository.updateCategoryByOldCategory(cat.getId(), fallback.getId());
+        
+        // Migrate Budgets
+        budgetRepository.updateCategoryByOldCategory(cat.getId(), fallback.getId());
+        
+        // Soft delete
+        cat.setDeletedAt(java.time.LocalDateTime.now());
+        categoryRepository.save(cat);
+    }
 }
+
