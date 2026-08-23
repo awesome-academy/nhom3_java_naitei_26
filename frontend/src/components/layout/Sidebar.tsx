@@ -75,6 +75,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
+  const isProfileActive = pathname === "/profile";
+
   return (
     <>
       {/* Mobile Backdrop Overlay */}
@@ -168,8 +170,20 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         {/* Phần dưới cùng: User Profile Card & Nút Logout */}
         <div className="border-t border-slate-100 p-3.5">
-          <div className="flex items-center justify-between rounded-xl p-2 transition-colors hover:bg-slate-50">
-            <div className="flex min-w-0 items-center gap-3">
+          <div
+            className={cn(
+              "flex items-center justify-between rounded-xl p-2 transition-colors",
+              isProfileActive
+                ? "bg-blue-50/80 ring-1 ring-blue-200"
+                : "hover:bg-slate-50"
+            )}
+          >
+            {/* Box bấm chuyển sang Profile */}
+            <Link
+              href="/profile"
+              onClick={onClose}
+              className="flex min-w-0 flex-1 items-center gap-3 no-underline"
+            >
               {/* Avatar viết tắt */}
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
                 {getInitials(user?.name)}
@@ -184,7 +198,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   {user?.email || "john.smith@example.com"}
                 </span>
               </div>
-            </div>
+            </Link>
 
             {/* Nút Đăng xuất */}
             <button
