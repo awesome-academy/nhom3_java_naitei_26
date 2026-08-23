@@ -88,10 +88,6 @@ public class BudgetTemplateDetailServiceImpl implements BudgetTemplateDetailServ
             throw new BadRequestException("Category must have type EXPENSE");
         }
 
-        if (category.getUser() != null) {
-            throw new BadRequestException("Budget template category must be common");
-        }
-
         return category;
     }
 
