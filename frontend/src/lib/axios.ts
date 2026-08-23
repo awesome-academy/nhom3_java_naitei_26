@@ -120,7 +120,7 @@ apiClient.interceptors.response.use(
       }
     }
 
-    const message = error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại.";
+    const message = error.response?.data?.message || "An error occurred, please try again.";
     return Promise.reject({
       status: status || 500,
       message,

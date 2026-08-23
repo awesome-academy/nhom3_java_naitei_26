@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -92,6 +93,10 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
             @Param("userId") Long userId,
             @Param("from") LocalDate from,
             @Param("to") LocalDate to);
+
+    @Modifying
+    @Query("UPDATE Expense e SET e.category.id = :newId WHERE e.category.id = :oldId")
+    void updateCategoryByOldCategory(@Param("oldId") Long oldId, @Param("newId") Long newId);
 
     // ==================== PROJECTIONS ====================
     interface CategoryExpenseSummaryProjection {

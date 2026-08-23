@@ -58,7 +58,7 @@ export default function BudgetTemplateForm({ mode, id }: BudgetTemplateFormProps
   const updateMutation = useUpdateBudgetTemplate();
   const mutation = isEdit ? updateMutation : createMutation;
   const expenseCategories =
-    categories?.content.filter((category) => category.type === "EXPENSE") ?? [];
+    categories?.filter((category: Category) => category.type === "EXPENSE") ?? [];
   const total = values.details.reduce((sum, detail) => sum + (detail.amount || 0), 0);
 
   useEffect(() => {
@@ -278,7 +278,7 @@ export default function BudgetTemplateForm({ mode, id }: BudgetTemplateFormProps
                   <div className="min-w-0 flex-1 sm:min-w-[200px]">
                     <Select
                       label={`Category ${index + 1}`}
-                      options={expenseCategories.map((category) => ({
+                      options={expenseCategories.map((category: Category) => ({
                         label: category.name,
                         value: category.id,
                       }))}

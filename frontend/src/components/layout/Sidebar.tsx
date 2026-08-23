@@ -203,7 +203,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             {/* Nút Đăng xuất */}
             <button
               onClick={handleLogout}
-              title="Đăng xuất"
+              title="Logout"
               className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
             >
               <LogOut className="h-4.5 w-4.5" />
