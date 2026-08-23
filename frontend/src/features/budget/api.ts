@@ -4,7 +4,7 @@ import type { Budget, BudgetRequest } from "./types";
 
 export const budgetApi = {
   getBudgets: (year?: number, month?: number) =>
-    apiClient.get<ApiResponse<Budget[]>>("/budgets", {
+    apiClient.get<Budget[]>("/budgets", {
       params: { year, month },
     }),
 
@@ -12,7 +12,7 @@ export const budgetApi = {
     apiClient.get<ApiResponse<Budget>>(`/budgets/${id}`),
 
   getBudgetAlerts: () =>
-    apiClient.get<ApiResponse<Budget[]>>("/budgets/alerts"),
+    apiClient.get<Budget[]>("/budgets/alerts"),
 
   createBudget: (data: BudgetRequest) =>
     apiClient.post<ApiResponse<Budget>>("/budgets", data),

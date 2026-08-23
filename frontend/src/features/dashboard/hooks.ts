@@ -6,7 +6,7 @@ export function useDashboardSummary() {
     queryKey: ["dashboard", "summary"],
     queryFn: async () => {
       const res = await dashboardApi.getSummary();
-      return res.data.data;
+      return res.data;
     },
   });
 }
@@ -16,7 +16,7 @@ export function useCategoryExpense() {
     queryKey: ["dashboard", "expense-by-category"],
     queryFn: async () => {
       const res = await dashboardApi.getExpenseByCategory();
-      return res.data.data;
+      return res.data;
     },
   });
 }
