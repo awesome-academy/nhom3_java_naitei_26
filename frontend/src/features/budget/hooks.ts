@@ -7,7 +7,7 @@ export function useBudgets(year?: number, month?: number) {
     queryKey: ["budgets", { year, month }],
     queryFn: async () => {
       const res = await budgetApi.getBudgets(year, month);
-      return res.data;
+      return res.data.data;
     },
   });
 }
@@ -17,7 +17,7 @@ export function useBudgetAlerts() {
     queryKey: ["budgets", "alerts"],
     queryFn: async () => {
       const res = await budgetApi.getBudgetAlerts();
-      return res.data;
+      return res.data.data;
     },
   });
 }

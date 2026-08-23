@@ -14,7 +14,6 @@ import type {
   CreateBudgetTemplateDto,
   UpdateBudgetTemplateDto,
 } from "./types";
-import type { Category } from "@/features/category/types";
 
 interface BudgetTemplateFormProps {
   mode: "create" | "edit";
@@ -59,9 +58,7 @@ export default function BudgetTemplateForm({ mode, id }: BudgetTemplateFormProps
   const updateMutation = useUpdateBudgetTemplate();
   const mutation = isEdit ? updateMutation : createMutation;
   const expenseCategories =
-    categories?.filter(
-      (category: Category) => category.type === "EXPENSE" && category.scope === "COMMON"
-    ) ?? [];
+    categories?.filter((category: Category) => category.type === "EXPENSE") ?? [];
   const total = values.details.reduce((sum, detail) => sum + (detail.amount || 0), 0);
 
   useEffect(() => {
