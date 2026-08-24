@@ -139,10 +139,8 @@ class ExportServiceImplTest {
     @Test
     void exportIncomeMapsTitleFieldToSourceColumn() throws IOException {
         User user = user(1L, "Bob", "bob@test.com", Role.USER, UserStatus.ACTIVE);
-        Category category = category(20L, "Salary", CategoryType.INCOME, null);
         Income income = new Income();
         income.setUser(user);
-        income.setCategory(category);
         income.setTitle("Monthly salary");
         income.setAmount(new BigDecimal("5000000.00"));
         income.setIncomeDate(LocalDate.of(2026, 1, 1));
@@ -152,7 +150,7 @@ class ExportServiceImplTest {
         CSVRecord row = parse(csv).get(0);
 
         assertEquals("Monthly salary", row.get("source"));
-        assertEquals("Salary", row.get("category"));
+        assertEquals("", row.get("category"));
     }
 
     @Test
