@@ -120,7 +120,7 @@ public class ExportServiceImpl implements ExportService {
             printer.printRecord(
                     income.getUser().getEmail(),
                     income.getTitle(),
-                    income.getCategory().getName(),
+                    "",
                     income.getAmount().toPlainString(),
                     income.getIncomeDate(),
                     income.getNote());
