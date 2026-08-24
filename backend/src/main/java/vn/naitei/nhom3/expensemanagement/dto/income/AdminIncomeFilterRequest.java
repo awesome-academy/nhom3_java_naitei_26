@@ -1,0 +1,60 @@
+package vn.naitei.nhom3.expensemanagement.dto.income;
+
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Getter
+@Setter
+public class AdminIncomeFilterRequest {
+
+    @Min(value = 0, message = "Trang phải bắt đầu từ 0")
+    private int page = 0;
+
+    @Min(value = 1, message = "Kích thước trang phải từ 1 đến 100")
+    @Max(value = 100, message = "Kích thước trang phải từ 1 đến 100")
+    private int size = 10;
+
+    @Pattern(
+            regexp = "(?i)^(date|title|amount),(asc|desc)$",
+            message = "Sắp xếp phải có dạng field,asc hoặc field,desc")
+    private String sort;
+
+    @Size(max = 255, message = "Từ khoá tìm kiếm tối đa 255 ký tự")
+    private String search;
+
+    @Positive(message = "userId phải lớn hơn 0")
+    private Long userId;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate fromDate;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate toDate;
+
+    @DecimalMin(value = "0.00", message = "Số tiền tối thiểu không được âm")
+    private BigDecimal minAmount;
+
+    @DecimalMin(value = "0.00", message = "Số tiền tối đa không được âm")
+    private BigDecimal maxAmount;
+
+    @AssertTrue(message = "Ngày bắt đầu không được sau ngày kết thúc")
+    public boolean isDateRangeValid() {
+        return fromDate == null || toDate == null || !fromDate.isAfter(toDate);
+    }
+
+    @AssertTrue(message = "Số tiền tối thiểu không được lớn hơn số tiền tối đa")
+    public boolean isAmountRangeValid() {
+        return minAmount == null || maxAmount == null || minAmount.compareTo(maxAmount) <= 0;
+    }
+}
