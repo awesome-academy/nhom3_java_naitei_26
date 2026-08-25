@@ -11,10 +11,14 @@ interface BudgetCardProps {
 }
 
 function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("vi-VN", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "VND",
   }).format(amount);
+}
+
+function formatMonth(month: number): string {
+  return new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(2024, month - 1, 1));
 }
 
 export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
@@ -25,7 +29,7 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
   let progressBarColor = "bg-emerald-500";
   let statusBadge = (
     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-      <CheckCircle className="h-3 w-3" /> An toàn
+      <CheckCircle className="h-3 w-3" /> Safe
     </span>
   );
 
@@ -33,14 +37,14 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
     progressBarColor = "bg-red-500";
     statusBadge = (
       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
-        <AlertCircle className="h-3 w-3" /> Vượt ngân sách
+        <AlertCircle className="h-3 w-3" /> Over Budget
       </span>
     );
   } else if (isWarning) {
     progressBarColor = "bg-amber-500";
     statusBadge = (
       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-        <AlertTriangle className="h-3 w-3" /> Cảnh báo (≥80%)
+        <AlertTriangle className="h-3 w-3" /> Warning (≥80%)
       </span>
     );
   }
@@ -59,7 +63,7 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
             <div>
               <h3 className="font-semibold text-gray-900">{budget.categoryName}</h3>
               <p className="text-xs text-gray-500">
-                Tháng {budget.month}/{budget.year}
+                Target: {formatMonth(budget.month)} {budget.year}
               </p>
             </div>
           </div>
@@ -68,14 +72,16 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
             <button
               onClick={() => onEdit(budget)}
               className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
-              title="Chỉnh sửa ngân sách"
+              title="Edit budget"
+              aria-label={`Edit budget for ${budget.categoryName}`}
             >
               <Edit2 className="h-4 w-4" />
             </button>
             <button
               onClick={() => onDelete(budget)}
               className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-              title="Xóa ngân sách"
+              title="Delete budget"
+              aria-label={`Delete budget for ${budget.categoryName}`}
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -85,8 +91,16 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
         {/* Progress Bar & Percentage */}
         <div className="mt-5">
           <div className="flex justify-between items-center text-xs font-medium text-gray-600 mb-1.5">
-            <span>Tiến độ chi tiêu</span>
-            <span className={isExceeded ? "text-red-600 font-bold" : isWarning ? "text-amber-600 font-bold" : "text-gray-900"}>
+            <span>Spending progress</span>
+            <span
+              className={
+                isExceeded
+                  ? "text-red-600 font-bold"
+                  : isWarning
+                    ? "text-amber-600 font-bold"
+                    : "text-gray-900"
+              }
+            >
               {budget.spendingPercentage.toFixed(1)}%
             </span>
           </div>
@@ -101,13 +115,13 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
         {/* Amounts */}
         <div className="mt-4 grid grid-cols-2 gap-2 text-xs border-t pt-3">
           <div>
-            <span className="text-gray-500">Đã chi:</span>
+            <span className="text-gray-500">Spent:</span>
             <p className="font-semibold text-gray-900 text-sm mt-0.5">
               {formatCurrency(budget.actualSpending)}
             </p>
           </div>
           <div className="text-right">
-            <span className="text-gray-500">Hạn mức:</span>
+            <span className="text-gray-500">Limit:</span>
             <p className="font-semibold text-gray-900 text-sm mt-0.5">
               {formatCurrency(budget.amount)}
             </p>
@@ -118,7 +132,7 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
       {/* Footer: Remaining amount and status badge */}
       <div className="mt-4 pt-3 border-t flex items-center justify-between">
         <div className="text-xs">
-          <span className="text-gray-500">Còn lại: </span>
+          <span className="text-gray-500">Remaining: </span>
           <span className={`font-semibold ${remaining < 0 ? "text-red-600" : "text-emerald-600"}`}>
             {formatCurrency(remaining)}
           </span>
