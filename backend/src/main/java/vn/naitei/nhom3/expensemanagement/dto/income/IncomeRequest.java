@@ -2,6 +2,7 @@ package vn.naitei.nhom3.expensemanagement.dto.income;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class IncomeRequest {
     private BigDecimal amount;
 
     @NotNull(message = "Ngày nhận không được để trống")
+    @PastOrPresent(message = "Ngày nhận không được là ngày tương lai")
     private LocalDate date;
 
     private String note;
