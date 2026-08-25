@@ -38,7 +38,6 @@ export const USER_MENU = [
 ] as const;
 
 export const ADMIN_MENU = [
-  { label: "Dashboard", href: ROUTES.ADMIN_DASHBOARD, icon: "LayoutDashboard" },
   { label: "Users", href: ROUTES.ADMIN_USERS, icon: "Users" },
   { label: "Categories", href: ROUTES.ADMIN_CATEGORIES, icon: "Tag" },
   { label: "Budget Templates", href: ROUTES.ADMIN_BUDGET_TEMPLATES, icon: "FileText" },
