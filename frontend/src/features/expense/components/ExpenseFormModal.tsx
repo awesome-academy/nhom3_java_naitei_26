@@ -73,7 +73,7 @@ export default function ExpenseFormModal({
     const existingFileCount = expense?.attachments?.length ?? 0;
     if (existingFileCount + values.files.length > 5) {
       setError("files", {
-        message: `Chỉ có thể thêm tối đa ${Math.max(0, 5 - existingFileCount)} file`,
+        message: `You can add up to ${Math.max(0, 5 - existingFileCount)} more files`,
       });
       return;
     }
@@ -90,13 +90,13 @@ export default function ExpenseFormModal({
     };
     const options = {
       onSuccess: () => {
-        toast.success(expense ? "Cập nhật chi tiêu thành công" : "Tạo chi tiêu thành công");
+        toast.success(expense ? "Expense updated successfully" : "Expense created successfully");
         reset(getDefaultValues());
         onClose();
         onSuccess?.();
       },
       onError: (error: { message?: string }) => {
-        toast.error(error.message || "Không thể lưu khoản chi, vui lòng thử lại");
+        toast.error(error.message || "Unable to save the expense. Please try again.");
       },
     };
 
@@ -136,7 +136,7 @@ export default function ExpenseFormModal({
       window.open(fileUrl, "_blank", "noopener,noreferrer");
       window.setTimeout(() => URL.revokeObjectURL(fileUrl), 60_000);
     } catch {
-      toast.error("Không thể mở file đính kèm");
+      toast.error("Unable to open the attachment");
     }
   };
 
@@ -149,9 +149,9 @@ export default function ExpenseFormModal({
       {
         onSuccess: () => {
           setAttachmentToDelete(undefined);
-          toast.success("Xóa file đính kèm thành công");
+          toast.success("Attachment deleted successfully");
         },
-        onError: () => toast.error("Không thể xóa file đính kèm"),
+        onError: () => toast.error("Unable to delete the attachment"),
       }
     );
   };
@@ -160,40 +160,40 @@ export default function ExpenseFormModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={expense ? "Sửa khoản chi" : "Thêm khoản chi"}
+      title={expense ? "Edit expense" : "Add expense"}
       size="lg"
     >
       <form className="space-y-4" onSubmit={handleSubmit(submit)} noValidate>
         {isLoadingDetail && (
           <p className="rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-700">
-            Đang tải thông tin và file hiện có...
+            Loading expense details and existing attachments...
           </p>
         )}
-        <Input label="Tên khoản chi" error={errors.title?.message} {...register("title")} />
+        <Input label="Expense title" error={errors.title?.message} {...register("title")} />
         <div className="grid gap-4 sm:grid-cols-2">
           <Input
-            label="Số tiền"
+            label="Amount"
             type="number"
             min="0"
             step="0.01"
             error={errors.amount?.message}
             {...register("amount")}
           />
-          <Input label="Ngày chi" type="date" error={errors.date?.message} {...register("date")} />
+          <Input label="Date" type="date" error={errors.date?.message} {...register("date")} />
         </div>
         <Select
-          label="Danh mục"
+          label="Category"
           options={categories.map((category) => ({
             label: category.name,
             value: String(category.id),
           }))}
-          placeholder="Chọn danh mục"
+          placeholder="Select a category"
           error={errors.categoryId?.message}
           {...register("categoryId")}
         />
         <div>
           <label htmlFor="expense-note" className="mb-1 block text-sm font-medium text-gray-700">
-            Ghi chú
+            Note
           </label>
           <textarea
             id="expense-note"
@@ -205,7 +205,7 @@ export default function ExpenseFormModal({
         <div>
           {expense?.attachments && expense.attachments.length > 0 && (
             <div className="mb-4">
-              <p className="mb-2 text-sm font-medium text-gray-700">File hiện có</p>
+              <p className="mb-2 text-sm font-medium text-gray-700">Existing attachments</p>
               <ul className="space-y-2">
                 {expense.attachments.map((attachment) => (
                   <li
@@ -222,7 +222,7 @@ export default function ExpenseFormModal({
                     </button>
                     <button
                       type="button"
-                      aria-label={`Xóa file ${attachment.fileName}`}
+                      aria-label={`Delete file ${attachment.fileName}`}
                       className="rounded p-1 text-gray-500 hover:bg-red-50 hover:text-red-600"
                       onClick={() =>
                         setAttachmentToDelete({
@@ -239,7 +239,7 @@ export default function ExpenseFormModal({
             </div>
           )}
           <label htmlFor="expense-files" className="mb-1 block text-sm font-medium text-gray-700">
-            {expense ? "Thêm file mới" : "File đính kèm"}
+            {expense ? "Add new attachments" : "Attachments"}
           </label>
           <input
             ref={fileInputRef}
@@ -251,7 +251,7 @@ export default function ExpenseFormModal({
             onChange={(event) => selectFiles(event.target.files)}
           />
           <p className="mt-1 text-xs text-gray-500">
-            Tối đa 5 file, 5MB/file; hỗ trợ JPEG, PNG, PDF.
+            Up to 5 files, 5MB per file. JPEG, PNG, and PDF are supported.
           </p>
           {errors.files?.message && (
             <p className="mt-1 text-sm text-red-600">{errors.files.message}</p>
@@ -269,7 +269,7 @@ export default function ExpenseFormModal({
                   </span>
                   <button
                     type="button"
-                    aria-label={`Bỏ file ${file.name}`}
+                    aria-label={`Remove file ${file.name}`}
                     className="rounded p-1 text-gray-500 hover:bg-red-50 hover:text-red-600"
                     onClick={() => removeFile(index)}
                   >
@@ -282,10 +282,10 @@ export default function ExpenseFormModal({
         </div>
         <div className="flex justify-end gap-3 pt-2">
           <Button type="button" variant="outline" onClick={onClose} disabled={mutation.isPending}>
-            Hủy
+            Cancel
           </Button>
           <Button type="submit" isLoading={mutation.isPending}>
-            {expense ? "Lưu thay đổi" : "Tạo khoản chi"}
+            {expense ? "Save changes" : "Create expense"}
           </Button>
         </div>
       </form>

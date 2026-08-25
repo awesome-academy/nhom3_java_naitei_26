@@ -19,10 +19,10 @@ describe("ExpenseDeleteConfirmModal", () => {
       />
     );
 
-    expect(screen.getByRole("alertdialog")).toHaveTextContent("toàn bộ file đính kèm");
+    expect(screen.getByRole("alertdialog")).toHaveTextContent("all its attachments");
     expect(screen.getByText("Cơm trưa")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Hủy" }));
-    fireEvent.click(screen.getByRole("button", { name: "Xóa khoản chi" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Delete expense" }));
     expect(onCancel).toHaveBeenCalledOnce();
     expect(onConfirm).toHaveBeenCalledOnce();
   });
@@ -36,7 +36,7 @@ describe("ExpenseDeleteConfirmModal", () => {
         onConfirm={vi.fn()}
       />
     );
-    expect(screen.getByRole("button", { name: "Hủy" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Xóa khoản chi" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Delete expense" })).toBeDisabled();
   });
 });

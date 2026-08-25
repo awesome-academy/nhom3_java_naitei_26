@@ -55,18 +55,18 @@ export default function AttachmentDeleteConfirmModal({
           <AlertTriangle className="h-6 w-6 text-red-600" aria-hidden="true" />
         </div>
         <h2 id="delete-attachment-title" className="text-lg font-semibold text-gray-900">
-          Xóa file đính kèm?
+          Delete attachment?
         </h2>
         <p id="delete-attachment-description" className="mt-2 text-sm leading-6 text-gray-600">
-          File <strong className="break-all text-gray-900">{fileName}</strong> sẽ bị xóa vĩnh viễn
-          và không thể khôi phục.
+          The file <strong className="break-all text-gray-900">{fileName}</strong> will be
+          permanently deleted and cannot be recovered.
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button type="button" variant="outline" onClick={onCancel} disabled={isDeleting}>
-            Hủy
+            Cancel
           </Button>
           <Button type="button" variant="danger" onClick={onConfirm} isLoading={isDeleting}>
-            Xóa file
+            Delete file
           </Button>
         </div>
       </section>

@@ -55,18 +55,18 @@ export default function ExpenseDeleteConfirmModal({
           <AlertTriangle className="h-6 w-6 text-red-600" aria-hidden="true" />
         </div>
         <h2 id="delete-expense-title" className="text-lg font-semibold text-gray-900">
-          Xóa khoản chi?
+          Delete expense?
         </h2>
         <p id="delete-expense-description" className="mt-2 text-sm leading-6 text-gray-600">
-          Khoản chi <strong className="break-all text-gray-900">{expenseTitle}</strong> và toàn bộ
-          file đính kèm sẽ bị xóa vĩnh viễn. Thao tác này không thể hoàn tác.
+          The expense <strong className="break-all text-gray-900">{expenseTitle}</strong> and all
+          its attachments will be permanently deleted. This action cannot be undone.
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <Button type="button" variant="outline" onClick={onCancel} disabled={isDeleting}>
-            Hủy
+            Cancel
           </Button>
           <Button type="button" variant="danger" onClick={onConfirm} isLoading={isDeleting}>
-            Xóa khoản chi
+            Delete expense
           </Button>
         </div>
       </section>
