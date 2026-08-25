@@ -3,12 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, Paperclip, Trash2 } from "lucide-react";
-import { useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
-import Select from "@/components/ui/Select";
 import { expenseApi } from "../api";
 import {
   expenseFormSchema,
@@ -18,6 +17,7 @@ import {
 import { useCreateExpense, useDeleteExpenseAttachment, useUpdateExpense } from "../hooks";
 import type { Expense, ExpenseCategoryOption } from "../types";
 import AttachmentDeleteConfirmModal from "./AttachmentDeleteConfirmModal";
+import ExpenseCategorySelect from "./ExpenseCategorySelect";
 
 interface ExpenseFormModalProps {
   isOpen: boolean;
@@ -181,15 +181,20 @@ export default function ExpenseFormModal({
           />
           <Input label="Ngày chi" type="date" error={errors.date?.message} {...register("date")} />
         </div>
-        <Select
-          label="Danh mục"
-          options={categories.map((category) => ({
-            label: category.name,
-            value: String(category.id),
-          }))}
-          placeholder="Chọn danh mục"
-          error={errors.categoryId?.message}
-          {...register("categoryId")}
+        <Controller
+          name="categoryId"
+          control={control}
+          render={({ field }) => (
+            <ExpenseCategorySelect
+              id="expense-form-category"
+              label="Danh mục"
+              value={field.value}
+              categories={categories}
+              placeholder="Chọn danh mục"
+              error={errors.categoryId?.message}
+              onChange={field.onChange}
+            />
+          )}
         />
         <div>
           <label htmlFor="expense-note" className="mb-1 block text-sm font-medium text-gray-700">

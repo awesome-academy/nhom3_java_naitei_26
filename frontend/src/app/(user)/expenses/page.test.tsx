@@ -173,7 +173,8 @@ describe("ExpensesPage", () => {
     });
     render(<ExpensesPage />);
 
-    fireEvent.change(screen.getByLabelText("Danh mục"), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("combobox", { name: "Danh mục" }));
+    fireEvent.click(screen.getByRole("button", { name: "Ăn uống" }));
     fireEvent.change(screen.getByLabelText("Từ ngày"), { target: { value: "2026-08-01" } });
     fireEvent.change(screen.getByLabelText("Đến ngày"), { target: { value: "2026-08-31" } });
     fireEvent.change(screen.getByLabelText("Số tiền tối thiểu"), { target: { value: "10000" } });

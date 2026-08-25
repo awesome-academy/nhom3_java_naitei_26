@@ -51,9 +51,14 @@ export default function ExpensesPage() {
   const categoryQuery = useExpenseCategories();
   const editingExpenseQuery = useExpense(editingExpense?.id ?? 0);
   const fallbackCategories = useMemo(() => {
-    const categories = new Map<number, string>();
-    data?.items.forEach((expense) => categories.set(expense.categoryId, expense.categoryName));
-    return Array.from(categories, ([id, name]) => ({ id, name }));
+    const categories = new Map<number, { name: string; icon?: string | null }>();
+    data?.items.forEach((expense) =>
+      categories.set(expense.categoryId, {
+        name: expense.categoryName,
+        icon: expense.categoryIcon,
+      })
+    );
+    return Array.from(categories, ([id, category]) => ({ id, ...category }));
   }, [data?.items]);
   const categories = categoryQuery.data?.length ? categoryQuery.data : fallbackCategories;
   const hasActiveFilter = Object.values(filters).some(Boolean);

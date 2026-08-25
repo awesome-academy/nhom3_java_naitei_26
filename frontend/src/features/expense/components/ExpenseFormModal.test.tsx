@@ -18,7 +18,7 @@ vi.mock("../api", () => ({
   expenseApi: { downloadAttachment },
 }));
 
-const categories = [{ id: 3, name: "Ăn uống" }];
+const categories = [{ id: 3, name: "Ăn uống", icon: "restaurant" }];
 
 describe("ExpenseFormModal", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -45,7 +45,8 @@ describe("ExpenseFormModal", () => {
     });
     fireEvent.change(screen.getByLabelText("Số tiền"), { target: { value: "50000" } });
     fireEvent.change(screen.getByLabelText("Ngày chi"), { target: { value: "2026-08-14" } });
-    fireEvent.change(screen.getByLabelText("Danh mục"), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("combobox", { name: "Danh mục" }));
+    fireEvent.click(screen.getByRole("button", { name: "Ăn uống" }));
     const file = new File(["bill"], "bill.pdf", { type: "application/pdf" });
     fireEvent.change(screen.getByLabelText("File đính kèm"), { target: { files: [file] } });
     fireEvent.click(screen.getByRole("button", { name: "Tạo khoản chi" }));

@@ -10,6 +10,7 @@ const expense: Expense = {
   date: "2026-08-14",
   categoryId: 3,
   categoryName: "Ăn uống",
+  categoryIcon: "restaurant",
 };
 
 describe("ExpenseTable", () => {
@@ -32,11 +33,19 @@ describe("ExpenseTable", () => {
 
     expect(screen.getByText("Cơm trưa")).toBeInTheDocument();
     expect(screen.getByText("Ăn uống")).toBeInTheDocument();
+    expect(screen.getByText("restaurant")).toHaveClass("material-symbols-outlined");
     expect(screen.getByText(/50\.000/)).toBeInTheDocument();
     expect(screen.getByText("14/08/2026")).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("Cơm trưa"));
     expect(onRowClick).toHaveBeenCalledWith(expense);
+  });
+
+  it("không render icon rỗng khi category không có icon", () => {
+    render(<ExpenseTable expenses={[{ ...expense, categoryIcon: null }]} onRowClick={vi.fn()} />);
+
+    expect(screen.queryByText("restaurant")).not.toBeInTheDocument();
+    expect(screen.getByText("Ăn uống")).toBeInTheDocument();
   });
 
   it("hỗ trợ mở row bằng bàn phím", () => {

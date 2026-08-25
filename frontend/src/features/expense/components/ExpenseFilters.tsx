@@ -1,9 +1,9 @@
 import { RotateCcw, Search } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import Select from "@/components/ui/Select";
 import type { ExpenseFilterErrors } from "../filterUtils";
 import type { ExpenseCategoryOption, ExpenseFilterValues } from "../types";
+import ExpenseCategorySelect from "./ExpenseCategorySelect";
 
 interface ExpenseFiltersProps {
   values: ExpenseFilterValues;
@@ -42,15 +42,13 @@ export default function ExpenseFilters({
             onChange={(event) => onChange("search", event.target.value)}
           />
         </div>
-        <Select
-          aria-label="Danh mục"
+        <ExpenseCategorySelect
+          id="expense-filter-category"
           label="Danh mục"
           value={values.categoryId}
-          onChange={(event) => onChange("categoryId", event.target.value)}
-          options={[
-            { label: "Tất cả danh mục", value: "" },
-            ...categories.map((category) => ({ label: category.name, value: String(category.id) })),
-          ]}
+          categories={categories}
+          placeholder="Tất cả danh mục"
+          onChange={(value) => onChange("categoryId", value)}
         />
         <Input
           aria-label="Từ ngày"
