@@ -38,6 +38,7 @@ const expense = {
   date: "2026-08-14",
   categoryId: 3,
   categoryName: "Ăn uống",
+  categoryIcon: "restaurant",
   note: "Cơm văn phòng",
   attachments: [{ id: 7, fileName: "bill.pdf", fileUrl: "/download" }],
 };
@@ -138,8 +139,8 @@ describe("ExpenseDetailContent", () => {
   });
 
   it("chỉ xóa Expense sau khi xác nhận và điều hướng khi thành công", () => {
-    mocks.deleteExpense.mockImplementation(
-      (_id: number, options: { onSuccess: () => void }) => options.onSuccess()
+    mocks.deleteExpense.mockImplementation((_id: number, options: { onSuccess: () => void }) =>
+      options.onSuccess()
     );
     render(<ExpenseDetailContent expenseId={12} />);
     fireEvent.click(screen.getByRole("button", { name: "Delete expense" }));

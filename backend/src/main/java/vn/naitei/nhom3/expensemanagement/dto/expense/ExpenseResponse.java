@@ -20,6 +20,7 @@ public class ExpenseResponse {
     private final String note;
     private final Long categoryId;
     private final String categoryName;
+    private final String categoryIcon;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 

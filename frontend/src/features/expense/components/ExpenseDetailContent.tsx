@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, FileText, Pencil, Trash2 } from "lucide-react";
@@ -107,7 +107,9 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
             Back to expenses
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Expense details</h1>
-          <p className="mt-1 text-sm text-gray-500">View expense information and manage attachments</p>
+          <p className="mt-1 text-sm text-gray-500">
+            View expense information and manage attachments
+          </p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" onClick={() => setIsEditing(true)}>
@@ -126,7 +128,22 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
           <DetailField label="Expense title" value={expense.title} />
           <DetailField label="Amount" value={formatAmount(expense.amount)} highlight />
           <DetailField label="Date" value={formatDate(expense.date)} />
-          <DetailField label="Category" value={expense.categoryName} />
+          <DetailField
+            label="Category"
+            value={
+              <span className="inline-flex items-center gap-1.5">
+                {expense.categoryIcon?.trim() && (
+                  <span
+                    className="material-symbols-outlined text-[18px] leading-none"
+                    aria-hidden="true"
+                  >
+                    {expense.categoryIcon}
+                  </span>
+                )}
+                {expense.categoryName}
+              </span>
+            }
+          />
           <DetailField label="Note" value={expense.note?.trim() || "No note"} wide />
         </dl>
       </Card>
@@ -195,14 +212,16 @@ function DetailField({
   wide = false,
 }: {
   label: string;
-  value: string;
+  value: ReactNode;
   highlight?: boolean;
   wide?: boolean;
 }) {
   return (
     <div className={wide ? "sm:col-span-2" : undefined}>
       <dt className="text-sm font-medium text-gray-500">{label}</dt>
-      <dd className={`mt-1 break-words text-base ${highlight ? "font-semibold text-red-600" : "text-gray-900"}`}>
+      <dd
+        className={`mt-1 break-words text-base ${highlight ? "font-semibold text-red-600" : "text-gray-900"}`}
+      >
         {value}
       </dd>
     </div>
@@ -233,7 +252,10 @@ function DetailMessage({
       <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
       {description && <p className="mx-auto mt-2 max-w-lg text-sm text-gray-500">{description}</p>}
       {action && <div className="mt-6">{action}</div>}
-      <Link href={ROUTES.EXPENSES} className="mt-5 inline-block text-sm text-blue-600 hover:underline">
+      <Link
+        href={ROUTES.EXPENSES}
+        className="mt-5 inline-block text-sm text-blue-600 hover:underline"
+      >
         Back to expenses
       </Link>
     </Card>
@@ -242,12 +264,15 @@ function DetailMessage({
 
 function mergeCurrentCategory(
   categories: ExpenseCategoryOption[],
-  expense?: { categoryId: number; categoryName: string }
+  expense?: { categoryId: number; categoryName: string; categoryIcon?: string | null }
 ) {
   if (!expense || categories.some((category) => category.id === expense.categoryId)) {
     return categories;
   }
-  return [{ id: expense.categoryId, name: expense.categoryName }, ...categories];
+  return [
+    { id: expense.categoryId, name: expense.categoryName, icon: expense.categoryIcon },
+    ...categories,
+  ];
 }
 
 function formatAmount(amount: number) {

@@ -22,6 +22,7 @@ public final class ExpenseMapper {
                 expense.getNote(),
                 expense.getCategory().getId(),
                 expense.getCategory().getName(),
+                expense.getCategory().getIcon(),
                 expense.getCreatedAt(),
                 expense.getUpdatedAt(),
                 attachments);

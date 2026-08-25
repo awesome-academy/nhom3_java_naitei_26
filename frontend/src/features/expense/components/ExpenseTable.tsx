@@ -76,7 +76,15 @@ export default function ExpenseTable({
               >
                 <td className="px-6 py-4 font-semibold text-gray-900">{expense.title}</td>
                 <td className="px-4 py-4">
-                  <span className="inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                    {expense.categoryIcon?.trim() && (
+                      <span
+                        aria-hidden="true"
+                        className="material-symbols-outlined text-[16px] leading-none"
+                      >
+                        {expense.categoryIcon}
+                      </span>
+                    )}
                     {expense.categoryName}
                   </span>
                 </td>

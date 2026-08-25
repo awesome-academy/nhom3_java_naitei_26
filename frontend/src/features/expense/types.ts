@@ -11,6 +11,7 @@ export interface Expense {
   note?: string | null;
   categoryId: number;
   categoryName: string;
+  categoryIcon?: string | null;
   createdAt?: string;
   updatedAt?: string | null;
   attachments?: ExpenseAttachment[];
@@ -60,6 +61,7 @@ export interface ExpensePageResponse {
 export interface ExpenseCategoryOption {
   id: number;
   name: string;
+  icon?: string | null;
 }
 
 export interface ExpenseFilterValues {

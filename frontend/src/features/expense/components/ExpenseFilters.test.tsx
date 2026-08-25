@@ -19,7 +19,7 @@ describe("ExpenseFilters", () => {
     render(
       <ExpenseFilters
         values={values}
-        categories={[{ id: 3, name: "Ăn uống" }]}
+        categories={[{ id: 3, name: "Ăn uống", icon: "restaurant" }]}
         errors={{}}
         onChange={onChange}
         onReset={onReset}
@@ -29,7 +29,9 @@ describe("ExpenseFilters", () => {
     fireEvent.change(screen.getByLabelText("Search by expense title"), {
       target: { value: "cơm" },
     });
-    fireEvent.change(screen.getByLabelText("Category"), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("combobox", { name: "Category" }));
+    expect(screen.getByText("restaurant")).toHaveClass("material-symbols-outlined");
+    fireEvent.click(screen.getByRole("button", { name: "Ăn uống" }));
     fireEvent.click(screen.getByRole("button", { name: "Reset" }));
 
     expect(screen.getByText("From date")).toBeInTheDocument();

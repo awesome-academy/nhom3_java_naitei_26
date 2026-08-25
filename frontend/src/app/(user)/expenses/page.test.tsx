@@ -173,7 +173,8 @@ describe("ExpensesPage", () => {
     });
     render(<ExpensesPage />);
 
-    fireEvent.change(screen.getByLabelText("Category"), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("combobox", { name: "Category" }));
+    fireEvent.click(screen.getByRole("button", { name: "Ăn uống" }));
     fireEvent.change(screen.getByLabelText("From date"), { target: { value: "2026-08-01" } });
     fireEvent.change(screen.getByLabelText("To date"), { target: { value: "2026-08-31" } });
     fireEvent.change(screen.getByLabelText("Minimum amount"), { target: { value: "10000" } });

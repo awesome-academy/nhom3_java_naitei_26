@@ -83,6 +83,7 @@ class ExpenseApiIntegrationTest {
                 .andExpect(jsonPath("$.message").value("Tạo chi tiêu thành công"))
                 .andExpect(jsonPath("$.data.date").value("2026-08-14"))
                 .andExpect(jsonPath("$.data.categoryName").value("Ăn uống"))
+                .andExpect(jsonPath("$.data.categoryIcon").value("restaurant"))
                 .andReturn().getResponse().getContentAsString();
         Long expenseId = extractId(response);
 
@@ -91,7 +92,8 @@ class ExpenseApiIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("Cơm trưa"))
                 .andExpect(jsonPath("$.data.createdAt").isNotEmpty())
-                .andExpect(jsonPath("$.data.categoryName").value("Ăn uống"));
+                .andExpect(jsonPath("$.data.categoryName").value("Ăn uống"))
+                .andExpect(jsonPath("$.data.categoryIcon").value("restaurant"));
 
         mockMvc.perform(put("/api/expenses/{id}", expenseId)
                         .header("Authorization", bearer(tokenA))
@@ -200,6 +202,7 @@ class ExpenseApiIntegrationTest {
     private Category saveCategory(String name, CategoryType type) {
         Category category = new Category();
         category.setName(name);
+        category.setIcon(type == CategoryType.EXPENSE ? "restaurant" : null);
         category.setType(type);
         return categoryRepository.saveAndFlush(category);
     }
