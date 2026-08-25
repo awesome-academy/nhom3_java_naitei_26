@@ -21,20 +21,20 @@ export default function AdminUserDetailContent({ userId }: AdminUserDetailConten
           <ArrowLeft className="h-5 w-5 text-gray-500 hover:text-gray-700" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Chi tiết người dùng</h1>
+          <h1 className="text-2xl font-bold text-gray-900">User Detail</h1>
           <p className="text-sm text-gray-500 mt-1">User ID: {userId}</p>
         </div>
       </div>
 
-      <Card title="Thông tin người dùng">
+      <Card title="User Information">
         {isLoading && <Skeleton className="h-16 w-full" />}
         {isError && (
-          <p className="text-sm text-gray-500">Không tải được thông tin người dùng.</p>
+          <p className="text-sm text-gray-500">Unable to load user information.</p>
         )}
         {!isLoading && !isError && user && (
           <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div>
-              <dt className="text-xs uppercase text-gray-400">Tên</dt>
+              <dt className="text-xs uppercase text-gray-400">Name</dt>
               <dd className="text-sm font-medium text-gray-900">{user.name}</dd>
             </div>
             <div>
@@ -42,14 +42,14 @@ export default function AdminUserDetailContent({ userId }: AdminUserDetailConten
               <dd className="text-sm font-medium text-gray-900">{user.email}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase text-gray-400">Vai trò</dt>
+              <dt className="text-xs uppercase text-gray-400">Role</dt>
               <dd className="text-sm font-medium text-gray-900">{user.role}</dd>
             </div>
           </dl>
         )}
       </Card>
 
-      <Card title="Nhật ký hoạt động">
+      <Card title="Activity Log">
         <ActivityLogTable userId={userId} />
       </Card>
     </div>

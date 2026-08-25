@@ -56,7 +56,7 @@ export default function AdminUsersPage() {
   const handleRoleChange = (user: AdminUser, role: UserRole) => {
     if (role === user.role) return;
     const confirmed = window.confirm(
-      `Đổi vai trò của "${user.name}" thành ${role === "ADMIN" ? "Admin" : "User"}?`
+      `Change "${user.name}"'s role to ${role === "ADMIN" ? "Admin" : "User"}?`
     );
     if (!confirmed) return;
     updateRole.mutate({ id: user.id, role });
@@ -65,7 +65,7 @@ export default function AdminUsersPage() {
   const handleStatusToggle = (user: AdminUser) => {
     const nextStatus: UserStatus = user.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
     if (nextStatus === "INACTIVE") {
-      const confirmed = window.confirm(`Khoá tài khoản "${user.name}"?`);
+      const confirmed = window.confirm(`Deactivate "${user.name}"'s account?`);
       if (!confirmed) return;
     }
     updateStatus.mutate({ id: user.id, status: nextStatus });
@@ -84,11 +84,11 @@ export default function AdminUsersPage() {
             User Management
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Quản lý danh sách người dùng, đổi vai trò và khoá/mở khoá tài khoản
+            Manage the user list, change roles, and activate/deactivate accounts
           </p>
         </div>
         <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-right text-xs text-blue-800">
-          <span className="block font-semibold">Tổng người dùng</span>
+          <span className="block font-semibold">Total Users</span>
           <strong className="text-lg">{data?.totalItems ?? "-"}</strong>
         </div>
       </div>
@@ -98,32 +98,32 @@ export default function AdminUsersPage() {
           <div className="relative md:col-span-2">
             <Search className="absolute bottom-3 left-3 z-10 h-4 w-4 text-gray-400" aria-hidden="true" />
             <Input
-              label="Tìm kiếm"
-              aria-label="Tìm theo tên hoặc email"
+              label="Search"
+              aria-label="Search by name or email"
               className="pl-9"
-              placeholder="Tìm theo tên hoặc email..."
+              placeholder="Search by name or email..."
               value={filters.search}
               onChange={(event) => changeFilter("search", event.target.value)}
             />
           </div>
           <Select
-            label="Trạng thái"
-            aria-label="Lọc theo trạng thái"
+            label="Status"
+            aria-label="Filter by status"
             value={filters.status}
             onChange={(event) => changeFilter("status", event.target.value as UserStatus | "")}
             options={[
-              { label: "Tất cả trạng thái", value: "" },
-              { label: "Đang hoạt động", value: "ACTIVE" },
-              { label: "Đã khoá", value: "INACTIVE" },
+              { label: "All statuses", value: "" },
+              { label: "Active", value: "ACTIVE" },
+              { label: "Deactivated", value: "INACTIVE" },
             ]}
           />
           <Select
-            label="Vai trò"
-            aria-label="Lọc theo vai trò"
+            label="Role"
+            aria-label="Filter by role"
             value={filters.role}
             onChange={(event) => changeFilter("role", event.target.value as UserRole | "")}
             options={[
-              { label: "Tất cả vai trò", value: "" },
+              { label: "All roles", value: "" },
               { label: "Admin", value: "ADMIN" },
               { label: "User", value: "USER" },
             ]}
@@ -132,7 +132,7 @@ export default function AdminUsersPage() {
         <div className="mt-3 flex justify-end">
           <Button variant="ghost" size="sm" onClick={resetFilters} disabled={!hasActiveFilter}>
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
-            Đặt lại
+            Reset
           </Button>
         </div>
       </section>
@@ -141,12 +141,12 @@ export default function AdminUsersPage() {
         {query.isError ? (
           <div className="flex min-h-64 flex-col items-center justify-center gap-3 p-6 text-center">
             <AlertCircle className="h-9 w-9 text-red-500" aria-hidden="true" />
-            <p className="font-medium text-gray-900">Không thể tải danh sách người dùng</p>
-            <p className="text-sm text-gray-500">Vui lòng kiểm tra kết nối và thử lại.</p>
-            <Button variant="outline" onClick={() => query.refetch()}>Thử lại</Button>
+            <p className="font-medium text-gray-900">Unable to load the user list</p>
+            <p className="text-sm text-gray-500">Please check your connection and try again.</p>
+            <Button variant="outline" onClick={() => query.refetch()}>Retry</Button>
           </div>
         ) : query.isLoading ? (
-          <div className="animate-pulse space-y-3 p-6" aria-label="Đang tải danh sách người dùng">
+          <div className="animate-pulse space-y-3 p-6" aria-label="Loading user list">
             <div className="h-10 rounded bg-gray-200" />
             {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-14 rounded bg-gray-100" />)}
           </div>
@@ -157,16 +157,16 @@ export default function AdminUsersPage() {
                 <thead className="border-b border-[#E2E8F0] bg-slate-50/80 text-xs font-semibold uppercase tracking-wider text-[#515f74]">
                   <tr>
                     <th scope="col" className="px-6 py-3.5">User / Account</th>
-                    <th scope="col" className="px-4 py-3.5">Vai trò</th>
-                    <th scope="col" className="px-4 py-3.5">Trạng thái</th>
-                    <th scope="col" className="px-4 py-3.5">Ngày tạo</th>
-                    <th scope="col" className="px-4 py-3.5 text-right">Hành động</th>
+                    <th scope="col" className="px-4 py-3.5">Role</th>
+                    <th scope="col" className="px-4 py-3.5">Status</th>
+                    <th scope="col" className="px-4 py-3.5">Created At</th>
+                    <th scope="col" className="px-4 py-3.5 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E2E8F0]">
                   {(data?.items ?? []).length === 0 ? (
                     <tr><td colSpan={5} className="px-6 py-16 text-center text-gray-500">
-                      {hasActiveFilter ? "Không tìm thấy người dùng phù hợp" : "Chưa có người dùng nào"}
+                      {hasActiveFilter ? "No matching users found" : "No users yet"}
                     </td></tr>
                   ) : data?.items.map((user) => {
                     const isSelf = String(currentUser?.id) === String(user.id);
@@ -180,7 +180,7 @@ export default function AdminUsersPage() {
                             <div className="min-w-0">
                               <p className="truncate font-semibold text-gray-900">
                                 {user.name}
-                                {isSelf && <span className="ml-1.5 text-xs font-normal text-gray-400">(bạn)</span>}
+                                {isSelf && <span className="ml-1.5 text-xs font-normal text-gray-400">(you)</span>}
                               </p>
                               <p className="truncate text-xs text-gray-500">{user.email}</p>
                             </div>
@@ -188,7 +188,7 @@ export default function AdminUsersPage() {
                         </td>
                         <td className="px-4 py-4">
                           <select
-                            aria-label={`Vai trò của ${user.name}`}
+                            aria-label={`${user.name}'s role`}
                             className="rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                             value={user.role}
                             disabled={isMutating}
@@ -211,7 +211,7 @@ export default function AdminUsersPage() {
                             ) : (
                               <Ban className="h-3.5 w-3.5" />
                             )}
-                            {user.status === "ACTIVE" ? "Đang hoạt động" : "Đã khoá"}
+                            {user.status === "ACTIVE" ? "Active" : "Deactivated"}
                           </span>
                         </td>
                         <td className="px-4 py-4 text-xs font-medium text-gray-600">
@@ -220,7 +220,7 @@ export default function AdminUsersPage() {
                         <td className="px-4 py-4 text-right">
                           <button
                             type="button"
-                            title={isSelf ? "Không thể tự khoá tài khoản của mình" : undefined}
+                            title={isSelf ? "You cannot deactivate your own account" : undefined}
                             disabled={isMutating || isSelf}
                             onClick={() => handleStatusToggle(user)}
                             className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
@@ -232,12 +232,12 @@ export default function AdminUsersPage() {
                             {user.status === "ACTIVE" ? (
                               <>
                                 <Ban className="h-3.5 w-3.5" />
-                                Khoá
+                                Deactivate
                               </>
                             ) : (
                               <>
                                 <CheckCircle2 className="h-3.5 w-3.5" />
-                                Mở khoá
+                                Activate
                               </>
                             )}
                           </button>
@@ -251,7 +251,7 @@ export default function AdminUsersPage() {
             {data && (
               <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#E2E8F0] bg-slate-50/40 px-6 py-4 text-sm text-gray-600">
                 <span>
-                  Hiển thị <strong>{data.totalItems === 0 ? 0 : data.page * data.size + 1}–{data.page * data.size + data.items.length}</strong> trên tổng <strong>{data.totalItems}</strong> người dùng
+                  Showing <strong>{data.totalItems === 0 ? 0 : data.page * data.size + 1}–{data.page * data.size + data.items.length}</strong> of <strong>{data.totalItems}</strong> users
                 </span>
                 <div className={query.isFetching ? "opacity-60" : undefined} aria-busy={query.isFetching}>
                   <Pagination currentPage={data.page} totalPages={data.totalPages} onPageChange={setPage} />
