@@ -17,14 +17,14 @@ describe("ExpenseTable", () => {
   it("hiển thị loading mà không hiện empty state", () => {
     render(<ExpenseTable expenses={[]} isLoading onRowClick={vi.fn()} />);
 
-    expect(screen.getByLabelText("Đang tải danh sách chi tiêu")).toBeInTheDocument();
-    expect(screen.queryByText("Chưa có khoản chi tiêu nào")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Loading expenses")).toBeInTheDocument();
+    expect(screen.queryByText("No expenses yet")).not.toBeInTheDocument();
   });
 
   it("hiển thị empty state", () => {
     render(<ExpenseTable expenses={[]} onRowClick={vi.fn()} />);
 
-    expect(screen.getByText("Chưa có khoản chi tiêu nào")).toBeInTheDocument();
+    expect(screen.getByText("No expenses yet")).toBeInTheDocument();
   });
 
   it("render đúng dữ liệu và xử lý click row", () => {
@@ -61,7 +61,7 @@ describe("ExpenseTable", () => {
     const onEdit = vi.fn();
     render(<ExpenseTable expenses={[expense]} onRowClick={onRowClick} onEdit={onEdit} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Sửa Cơm trưa" }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit Cơm trưa" }));
 
     expect(onEdit).toHaveBeenCalledWith(expense);
     expect(onRowClick).not.toHaveBeenCalled();

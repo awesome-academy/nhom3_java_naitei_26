@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import axios from "axios";
 import { toast } from "sonner";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
@@ -14,18 +15,25 @@ import { useCreateBudget, useUpdateBudget } from "@/features/budget/hooks";
 import type { Budget } from "@/features/budget/types";
 
 const budgetSchema = z.object({
-  categoryId: z.string().min(1, "Vui lòng chọn danh mục"),
+  categoryId: z.string().min(1, "Please select a category"),
   amount: z
     .string()
-    .min(1, "Vui lòng nhập số tiền")
+    .min(1, "Please enter a budget amount")
     .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-      message: "Số tiền ngân sách phải lớn hơn 0",
+      message: "The budget amount must be greater than 0",
     }),
-  month: z.string().min(1, "Vui lòng chọn tháng"),
-  year: z.string().min(1, "Vui lòng chọn năm"),
+  month: z.string().min(1, "Please select a month"),
+  year: z.string().min(1, "Please select a year"),
 });
 
 type BudgetFormValues = z.infer<typeof budgetSchema>;
+
+function getErrorMessage(error: unknown, fallback: string): string {
+  if (axios.isAxiosError<{ message?: string }>(error)) {
+    return error.response?.data?.message || fallback;
+  }
+  return fallback;
+}
 
 interface CreateEditBudgetModalProps {
   isOpen: boolean;
@@ -95,22 +103,22 @@ export default function CreateEditBudgetModal({
         { id: budget.id, data: payload },
         {
           onSuccess: () => {
-            toast.success("Cập nhật ngân sách thành công");
+            toast.success("Budget updated successfully");
             onClose();
           },
-          onError: (error: any) => {
-            toast.error(error?.response?.data?.message || "Không thể cập nhật ngân sách");
+          onError: (error: unknown) => {
+            toast.error(getErrorMessage(error, "Unable to update budget"));
           },
         }
       );
     } else {
       createMutation.mutate(payload, {
         onSuccess: () => {
-          toast.success("Tạo ngân sách thành công");
+          toast.success("Budget created successfully");
           onClose();
         },
-        onError: (error: any) => {
-          toast.error(error?.response?.data?.message || "Không thể tạo ngân sách");
+        onError: (error: unknown) => {
+          toast.error(getErrorMessage(error, "Unable to create budget"));
         },
       });
     }
@@ -122,36 +130,36 @@ export default function CreateEditBudgetModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditing ? "Chỉnh sửa ngân sách" : "Thiết lập ngân sách mới"}
+      title={isEditing ? "Edit Budget" : "New Budget"}
       size="md"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Select
-          label="Danh mục chi tiêu"
+          label="Expense Category"
           options={categories.map((c) => ({
             label: c.name,
             value: String(c.id),
           }))}
-          placeholder="Chọn danh mục áp dụng ngân sách"
+          placeholder="Select a category for this budget"
           error={errors.categoryId?.message}
           {...register("categoryId")}
         />
 
         <Input
-          label="Hạn mức ngân sách (VNĐ)"
+          label="Budget Limit (VND)"
           type="number"
           min="1"
           step="1"
-          placeholder="Ví dụ: 3000000"
+          placeholder="Example: 3000000"
           error={errors.amount?.message}
           {...register("amount")}
         />
 
         <div className="grid grid-cols-2 gap-4">
           <Select
-            label="Tháng áp dụng"
+            label="Month"
             options={Array.from({ length: 12 }, (_, i) => ({
-              label: `Tháng ${i + 1}`,
+              label: `Month ${i + 1}`,
               value: String(i + 1),
             }))}
             error={errors.month?.message}
@@ -159,9 +167,9 @@ export default function CreateEditBudgetModal({
           />
 
           <Select
-            label="Năm áp dụng"
+            label="Year"
             options={[2024, 2025, 2026, 2027, 2028].map((y) => ({
-              label: `Năm ${y}`,
+              label: `Year ${y}`,
               value: String(y),
             }))}
             error={errors.year?.message}
@@ -171,10 +179,10 @@ export default function CreateEditBudgetModal({
 
         <div className="flex justify-end gap-3 pt-4 border-t">
           <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
-            Hủy
+            Cancel
           </Button>
           <Button type="submit" isLoading={isPending}>
-            {isEditing ? "Lưu thay đổi" : "Thiết lập"}
+            {isEditing ? "Save Changes" : "Create Budget"}
           </Button>
         </div>
       </form>

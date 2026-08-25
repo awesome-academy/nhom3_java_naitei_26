@@ -54,8 +54,8 @@ describe("ExpensesPage", () => {
       expect.objectContaining({ page: 0, size: 10, sort: "date,desc" }),
       true
     );
-    expect(screen.getByLabelText("Đang tải danh sách chi tiêu")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Thêm chi tiêu/i })).toBeEnabled();
+    expect(screen.getByLabelText("Loading expenses")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Add expense/i })).toBeEnabled();
   });
 
   it("hiển thị lỗi và cho phép thử lại", () => {
@@ -68,9 +68,9 @@ describe("ExpensesPage", () => {
     });
 
     render(<ExpensesPage />);
-    fireEvent.click(screen.getByRole("button", { name: "Thử lại" }));
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
 
-    expect(screen.getByText("Không thể tải danh sách chi tiêu")).toBeInTheDocument();
+    expect(screen.getByText("Unable to load expenses")).toBeInTheDocument();
     expect(refetch).toHaveBeenCalledOnce();
   });
 
@@ -85,8 +85,8 @@ describe("ExpensesPage", () => {
 
     render(<ExpensesPage />);
 
-    expect(screen.getByText("Chưa có khoản chi tiêu nào")).toBeInTheDocument();
-    expect(screen.getByText("Hiển thị 0 trên tổng 0 khoản chi")).toBeInTheDocument();
+    expect(screen.getByText("No expenses yet")).toBeInTheDocument();
+    expect(screen.getByText("Showing 0 of 0 expenses")).toBeInTheDocument();
   });
 
   it("render dữ liệu, phân trang 0-based và điều hướng khi click row", async () => {
@@ -128,10 +128,10 @@ describe("ExpensesPage", () => {
     });
 
     render(<ExpensesPage />);
-    fireEvent.click(screen.getByRole("button", { name: "Sửa Cơm trưa" }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit Cơm trưa" }));
 
-    expect(screen.getByRole("heading", { name: "Sửa khoản chi" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Tên khoản chi")).toHaveValue("Cơm trưa");
+    expect(screen.getByRole("heading", { name: "Edit expense" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Expense title")).toHaveValue("Cơm trưa");
     expect(push).not.toHaveBeenCalled();
   });
 
@@ -147,7 +147,7 @@ describe("ExpensesPage", () => {
 
     render(<ExpensesPage />);
     fireEvent.click(screen.getByRole("button", { name: "2" }));
-    fireEvent.change(screen.getByLabelText("Tìm theo tên khoản chi"), {
+    fireEvent.change(screen.getByLabelText("Search by expense title"), {
       target: { value: "  cơm  " },
     });
 
@@ -173,12 +173,12 @@ describe("ExpensesPage", () => {
     });
     render(<ExpensesPage />);
 
-    fireEvent.click(screen.getByRole("combobox", { name: "Danh mục" }));
+    fireEvent.click(screen.getByRole("combobox", { name: "Category" }));
     fireEvent.click(screen.getByRole("button", { name: "Ăn uống" }));
-    fireEvent.change(screen.getByLabelText("Từ ngày"), { target: { value: "2026-08-01" } });
-    fireEvent.change(screen.getByLabelText("Đến ngày"), { target: { value: "2026-08-31" } });
-    fireEvent.change(screen.getByLabelText("Số tiền tối thiểu"), { target: { value: "10000" } });
-    fireEvent.change(screen.getByLabelText("Số tiền tối đa"), { target: { value: "200000" } });
+    fireEvent.change(screen.getByLabelText("From date"), { target: { value: "2026-08-01" } });
+    fireEvent.change(screen.getByLabelText("To date"), { target: { value: "2026-08-31" } });
+    fireEvent.change(screen.getByLabelText("Minimum amount"), { target: { value: "10000" } });
+    fireEvent.change(screen.getByLabelText("Maximum amount"), { target: { value: "200000" } });
 
     const lastFilter = useExpensesMock.mock.lastCall?.[0];
     expect(lastFilter).toBeDefined();
@@ -205,13 +205,13 @@ describe("ExpensesPage", () => {
     });
     render(<ExpensesPage />);
 
-    fireEvent.change(screen.getByLabelText("Từ ngày"), { target: { value: "2026-08-20" } });
-    fireEvent.change(screen.getByLabelText("Đến ngày"), { target: { value: "2026-08-01" } });
-    expect(screen.getByText("Ngày bắt đầu không được sau ngày kết thúc")).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("From date"), { target: { value: "2026-08-20" } });
+    fireEvent.change(screen.getByLabelText("To date"), { target: { value: "2026-08-01" } });
+    expect(screen.getByText("The start date cannot be after the end date")).toBeInTheDocument();
     expect(useExpensesMock.mock.lastCall?.[1]).toBe(false);
 
-    fireEvent.click(screen.getByRole("button", { name: "Đặt lại" }));
-    expect(screen.getByLabelText("Từ ngày")).toHaveValue("");
+    fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+    expect(screen.getByLabelText("From date")).toHaveValue("");
     expect(useExpensesMock.mock.lastCall?.[1]).toBe(true);
   });
 });

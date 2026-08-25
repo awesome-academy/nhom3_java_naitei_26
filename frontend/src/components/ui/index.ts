@@ -11,3 +11,4 @@ export { default as Pagination } from "./Pagination";
 export { default as Badge } from "./Badge";
 export { default as Card } from "./Card";
 export { default as Skeleton, CardSkeleton, TableRowSkeleton } from "./Skeleton";
+export { default as MaterialSymbol } from "./MaterialSymbol";

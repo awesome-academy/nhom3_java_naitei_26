@@ -14,6 +14,7 @@ import {
 import type { Income } from "@/features/income/types";
 import { ROUTES } from "@/lib/constants";
 import { useIncomes, useDeleteIncome } from "@/features/income/hooks";
+import { formatCurrency } from "@/lib/utils";
 
 const PAGE_SIZE = 10;
 
@@ -124,12 +125,7 @@ export default function IncomesPage() {
 
   // ─── Format helper cho delete modal ────────────────────
   const formatDeleteAmount = (amount: number): string => {
-    const formatted = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-    }).format(Math.abs(amount));
-    return `+${formatted}`;
+    return `+${formatCurrency(amount)}`;
   };
 
   return (

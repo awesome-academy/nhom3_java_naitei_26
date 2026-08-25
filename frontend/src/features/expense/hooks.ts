@@ -41,6 +41,8 @@ export function useCreateExpense() {
     mutationFn: (input: ExpenseMutationInput) => expenseApi.create(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["report"] });
     },
   });
 }
@@ -52,6 +54,8 @@ export function useUpdateExpense() {
       expenseApi.update(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["report"] });
     },
   });
 }
@@ -62,6 +66,8 @@ export function useDeleteExpense() {
     mutationFn: (id: number) => expenseApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["report"] });
     },
   });
 }

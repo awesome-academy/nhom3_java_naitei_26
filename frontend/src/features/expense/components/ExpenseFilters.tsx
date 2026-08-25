@@ -24,7 +24,7 @@ export default function ExpenseFilters({
 }: ExpenseFiltersProps) {
   return (
     <section
-      aria-label="Bộ lọc chi tiêu"
+      aria-label="Expense filters"
       className="rounded-2xl border border-gray-200 bg-white p-4"
     >
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
@@ -34,32 +34,32 @@ export default function ExpenseFilters({
             className="absolute bottom-3 left-3 z-10 h-4 w-4 text-gray-400"
           />
           <Input
-            aria-label="Tìm theo tên khoản chi"
+            aria-label="Search by expense title"
             className="pl-9"
-            label="Tìm kiếm"
-            placeholder="Tìm theo tên khoản chi..."
+            label="Search"
+            placeholder="Search by expense title..."
             value={values.search}
             onChange={(event) => onChange("search", event.target.value)}
           />
         </div>
         <ExpenseCategorySelect
           id="expense-filter-category"
-          label="Danh mục"
+          label="Category"
           value={values.categoryId}
           categories={categories}
-          placeholder="Tất cả danh mục"
+          placeholder="All categories"
           onChange={(value) => onChange("categoryId", value)}
         />
         <Input
-          aria-label="Từ ngày"
-          label="Từ ngày"
+          aria-label="From date"
+          label="From date"
           type="date"
           value={values.fromDate}
           onChange={(event) => onChange("fromDate", event.target.value)}
         />
         <Input
-          aria-label="Đến ngày"
-          label="Đến ngày"
+          aria-label="To date"
+          label="To date"
           type="date"
           value={values.toDate}
           onChange={(event) => onChange("toDate", event.target.value)}
@@ -67,24 +67,24 @@ export default function ExpenseFilters({
         <div className="flex items-end justify-end">
           <Button variant="ghost" size="sm" onClick={onReset}>
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
-            Đặt lại
+            Reset
           </Button>
         </div>
         <Input
-          aria-label="Số tiền tối thiểu"
-          label="Số tiền từ"
+          aria-label="Minimum amount"
+          label="Minimum amount"
           type="number"
           min="0"
-          placeholder="Tiền tối thiểu"
+          placeholder="Minimum amount"
           value={values.minAmount}
           onChange={(event) => onChange("minAmount", event.target.value)}
         />
         <Input
-          aria-label="Số tiền tối đa"
-          label="Số tiền đến"
+          aria-label="Maximum amount"
+          label="Maximum amount"
           type="number"
           min="0"
-          placeholder="Tiền tối đa"
+          placeholder="Maximum amount"
           value={values.maxAmount}
           onChange={(event) => onChange("maxAmount", event.target.value)}
         />
@@ -93,7 +93,7 @@ export default function ExpenseFilters({
       {errors.amount && <p className="mt-2 text-sm text-red-600">{errors.amount}</p>}
       {isCategoryFallback && (
         <p className="mt-2 text-xs text-amber-700">
-          Category API chưa sẵn sàng; danh mục đang lấy tạm từ danh sách chi tiêu.
+          The Category API is unavailable; categories are temporarily derived from expenses.
         </p>
       )}
     </section>

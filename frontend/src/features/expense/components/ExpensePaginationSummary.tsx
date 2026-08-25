@@ -12,7 +12,7 @@ export default function ExpensePaginationSummary({
   totalItems,
 }: ExpensePaginationSummaryProps) {
   if (totalItems === 0) {
-    return <span>Hiển thị 0 trên tổng 0 khoản chi</span>;
+    return <span>Showing 0 of 0 expenses</span>;
   }
 
   const firstItem = page * size + 1;
@@ -20,11 +20,11 @@ export default function ExpensePaginationSummary({
 
   return (
     <span>
-      Hiển thị{" "}
+      Showing{" "}
       <strong>
         {firstItem}–{lastItem}
       </strong>{" "}
-      trên tổng <strong>{totalItems}</strong> khoản chi
+      of <strong>{totalItems}</strong> expenses
     </span>
   );
 }

@@ -13,13 +13,13 @@ interface ExpenseTableProps {
 export default function ExpenseTable({
   expenses,
   isLoading = false,
-  emptyMessage = "Chưa có khoản chi tiêu nào",
+  emptyMessage = "No expenses yet",
   onRowClick,
   onEdit,
 }: ExpenseTableProps) {
   if (isLoading) {
     return (
-      <div aria-label="Đang tải danh sách chi tiêu" className="animate-pulse space-y-3 p-6">
+      <div aria-label="Loading expenses" className="animate-pulse space-y-3 p-6">
         <div className="h-10 rounded bg-gray-200" />
         {Array.from({ length: 5 }).map((_, index) => (
           <div key={index} className="h-14 rounded bg-gray-100" />
@@ -34,20 +34,20 @@ export default function ExpenseTable({
         <thead className="border-b border-gray-200 bg-gray-50 text-xs font-semibold uppercase tracking-wider text-gray-500">
           <tr>
             <th scope="col" className="px-6 py-3.5">
-              Tên khoản chi
+              Expense title
             </th>
             <th scope="col" className="px-4 py-3.5">
-              Danh mục
+              Category
             </th>
             <th scope="col" className="px-4 py-3.5 text-right">
-              Số tiền
+              Amount
             </th>
             <th scope="col" className="px-6 py-3.5">
-              Ngày chi
+              Date
             </th>
             {onEdit && (
               <th scope="col" className="px-6 py-3.5 text-right">
-                Thao tác
+                Actions
               </th>
             )}
           </tr>
@@ -96,7 +96,7 @@ export default function ExpenseTable({
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"
-                      aria-label={`Sửa ${expense.title}`}
+                      aria-label={`Edit ${expense.title}`}
                       className="rounded-lg p-2 text-gray-500 hover:bg-blue-50 hover:text-blue-700"
                       onClick={(event) => {
                         event.stopPropagation();

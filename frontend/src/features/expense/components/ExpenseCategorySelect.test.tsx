@@ -13,15 +13,15 @@ describe("ExpenseCategorySelect", () => {
     render(
       <ExpenseCategorySelect
         id="category"
-        label="Danh mục"
+        label="Category"
         value=""
         categories={categories}
-        placeholder="Chọn danh mục"
+        placeholder="Select a category"
         onChange={onChange}
       />
     );
 
-    fireEvent.click(screen.getByRole("combobox", { name: "Danh mục" }));
+    fireEvent.click(screen.getByRole("combobox", { name: "Category" }));
 
     expect(screen.getByText("restaurant")).toHaveClass("material-symbols-outlined");
     expect(screen.getByText("home")).toHaveClass("material-symbols-outlined");
@@ -34,15 +34,15 @@ describe("ExpenseCategorySelect", () => {
     render(
       <ExpenseCategorySelect
         id="category"
-        label="Danh mục"
+        label="Category"
         value=""
         categories={[{ id: 3, name: "Other", icon: null }]}
-        placeholder="Chọn danh mục"
+        placeholder="Select a category"
         onChange={onChange}
       />
     );
 
-    fireEvent.click(screen.getByRole("combobox", { name: "Danh mục" }));
+    fireEvent.click(screen.getByRole("combobox", { name: "Category" }));
     fireEvent.click(screen.getByRole("button", { name: "Other" }));
     expect(onChange).toHaveBeenCalledWith("3");
   });

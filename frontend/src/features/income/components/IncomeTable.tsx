@@ -8,7 +8,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { Income } from "../types";
 
 
@@ -177,12 +177,7 @@ export default function IncomeTable({
  * Format amount thành dạng +$X,XXX.XX
  */
 function formatIncomeAmount(amount: number): string {
-  const formatted = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format(Math.abs(amount));
-  return `+${formatted}`;
+  return `+${formatCurrency(amount)}`;
 }
 
 /**

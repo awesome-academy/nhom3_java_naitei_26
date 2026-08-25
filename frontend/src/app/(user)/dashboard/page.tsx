@@ -30,7 +30,11 @@ function formatCurrency(amount: number | undefined): string {
 
 export default function DashboardPage() {
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
-  const { data: summary, isLoading: isSummaryLoading, isError: isSummaryError } = useDashboardSummary();
+  const {
+    data: summary,
+    isLoading: isSummaryLoading,
+    isError: isSummaryError,
+  } = useDashboardSummary();
   const {
     data: categoryData,
     isLoading: isCategoryLoading,
@@ -43,15 +47,15 @@ export default function DashboardPage() {
       {/* Header & Quick Action */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Tổng quan tài chính</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Theo dõi tình hình thu chi, số dư và ngân sách của bạn trong tháng này
+            Review your income, spending, balance, and budget progress for this month
           </p>
         </div>
         <div className="flex items-center gap-3">
           <Button onClick={() => setIsExpenseModalOpen(true)}>
             <Plus className="h-4 w-4" />
-            Thêm chi tiêu
+            Add New Expense
           </Button>
         </div>
       </div>
@@ -61,7 +65,7 @@ export default function DashboardPage() {
         {/* Card 1: Tổng thu nhập */}
         <Card className="p-5">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-500">Tổng thu nhập</span>
+            <span className="text-sm font-medium text-gray-500">Total Income</span>
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
               <TrendingUp className="h-5 w-5" />
             </div>
@@ -71,19 +75,19 @@ export default function DashboardPage() {
               {isSummaryLoading ? (
                 <div className="h-8 w-32 animate-pulse rounded bg-gray-200" />
               ) : isSummaryError ? (
-                <span className="text-sm text-red-500">Lỗi tải dữ liệu</span>
+                <span className="text-sm text-red-500">Unable to load data</span>
               ) : (
                 formatCurrency(summary?.totalIncome)
               )}
             </div>
-            <p className="mt-1 text-xs text-gray-500">Toàn bộ thu nhập đã ghi nhận</p>
+            <p className="mt-1 text-xs text-gray-500">All recorded income</p>
           </div>
         </Card>
 
         {/* Card 2: Tổng chi tiêu */}
         <Card className="p-5">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-500">Tổng chi tiêu</span>
+            <span className="text-sm font-medium text-gray-500">Total Expense</span>
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-600">
               <TrendingDown className="h-5 w-5" />
             </div>
@@ -93,19 +97,19 @@ export default function DashboardPage() {
               {isSummaryLoading ? (
                 <div className="h-8 w-32 animate-pulse rounded bg-gray-200" />
               ) : isSummaryError ? (
-                <span className="text-sm text-red-500">Lỗi tải dữ liệu</span>
+                <span className="text-sm text-red-500">Unable to load data</span>
               ) : (
                 formatCurrency(summary?.totalExpense)
               )}
             </div>
-            <p className="mt-1 text-xs text-gray-500">Toàn bộ chi tiêu đã ghi nhận</p>
+            <p className="mt-1 text-xs text-gray-500">All recorded expenses</p>
           </div>
         </Card>
 
         {/* Card 3: Số dư hiện tại */}
         <Card className="p-5">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-500">Số dư hiện tại</span>
+            <span className="text-sm font-medium text-gray-500">Remaining Balance</span>
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
               <Wallet className="h-5 w-5" />
             </div>
@@ -115,21 +119,25 @@ export default function DashboardPage() {
               {isSummaryLoading ? (
                 <div className="h-8 w-32 animate-pulse rounded bg-gray-200" />
               ) : isSummaryError ? (
-                <span className="text-sm text-red-500">Lỗi tải dữ liệu</span>
+                <span className="text-sm text-red-500">Unable to load data</span>
               ) : (
-                <span className={summary && summary.remainingBalance < 0 ? "text-red-600" : "text-gray-900"}>
+                <span
+                  className={
+                    summary && summary.remainingBalance < 0 ? "text-red-600" : "text-gray-900"
+                  }
+                >
                   {formatCurrency(summary?.remainingBalance)}
                 </span>
               )}
             </div>
-            <p className="mt-1 text-xs text-gray-500">Tổng thu - Tổng chi</p>
+            <p className="mt-1 text-xs text-gray-500">Total income - total expenses</p>
           </div>
         </Card>
 
         {/* Card 4: Chi tiêu tháng này */}
         <Card className="p-5">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-500">Chi tiêu tháng này</span>
+            <span className="text-sm font-medium text-gray-500">This Month&apos;s Spending</span>
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
               <Calendar className="h-5 w-5" />
             </div>
@@ -139,13 +147,13 @@ export default function DashboardPage() {
               {isSummaryLoading ? (
                 <div className="h-8 w-32 animate-pulse rounded bg-gray-200" />
               ) : isSummaryError ? (
-                <span className="text-sm text-red-500">Lỗi tải dữ liệu</span>
+                <span className="text-sm text-red-500">Unable to load data</span>
               ) : (
                 formatCurrency(summary?.monthlyExpense)
               )}
             </div>
             <p className="mt-1 text-xs text-emerald-600 font-medium">
-              Thu nhập tháng: {formatCurrency(summary?.monthlyIncome)}
+              Monthly income: {formatCurrency(summary?.monthlyIncome)}
             </p>
           </div>
         </Card>
@@ -165,7 +173,7 @@ export default function DashboardPage() {
         {/* Quick Links & Shortcuts */}
         <div className="space-y-6">
           <Card className="p-6">
-            <h2 className="text-base font-semibold text-gray-900 border-b pb-4">Truy cập nhanh</h2>
+            <h2 className="text-base font-semibold text-gray-900 border-b pb-4">Quick Access</h2>
             <div className="mt-4 space-y-3">
               <Link
                 href="/expenses"
@@ -176,8 +184,8 @@ export default function DashboardPage() {
                     <Receipt className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-900">Danh sách chi tiêu</div>
-                    <div className="text-xs text-gray-500">Xem và quản lý tất cả giao dịch</div>
+                    <div className="text-sm font-medium text-gray-900">Expense List</div>
+                    <div className="text-xs text-gray-500">View and manage all transactions</div>
                   </div>
                 </div>
                 <ArrowRight className="h-4 w-4 text-gray-400" />
@@ -192,8 +200,8 @@ export default function DashboardPage() {
                     <PiggyBank className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-900">Quản lý ngân sách</div>
-                    <div className="text-xs text-gray-500">Kiểm soát hạn mức các danh mục</div>
+                    <div className="text-sm font-medium text-gray-900">Budget Management</div>
+                    <div className="text-xs text-gray-500">Track spending limits by category</div>
                   </div>
                 </div>
                 <ArrowRight className="h-4 w-4 text-gray-400" />
@@ -208,8 +216,8 @@ export default function DashboardPage() {
                     <FileText className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-900">Báo cáo & Phân tích</div>
-                    <div className="text-xs text-gray-500">Xu hướng tài chính theo thời gian</div>
+                    <div className="text-sm font-medium text-gray-900">Reports &amp; Analytics</div>
+                    <div className="text-xs text-gray-500">Review financial trends over time</div>
                   </div>
                 </div>
                 <ArrowRight className="h-4 w-4 text-gray-400" />

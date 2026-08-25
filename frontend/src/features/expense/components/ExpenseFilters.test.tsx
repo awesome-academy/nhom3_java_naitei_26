@@ -26,18 +26,18 @@ describe("ExpenseFilters", () => {
       />
     );
 
-    fireEvent.change(screen.getByLabelText("Tìm theo tên khoản chi"), {
+    fireEvent.change(screen.getByLabelText("Search by expense title"), {
       target: { value: "cơm" },
     });
-    fireEvent.click(screen.getByRole("combobox", { name: "Danh mục" }));
+    fireEvent.click(screen.getByRole("combobox", { name: "Category" }));
     expect(screen.getByText("restaurant")).toHaveClass("material-symbols-outlined");
     fireEvent.click(screen.getByRole("button", { name: "Ăn uống" }));
-    fireEvent.click(screen.getByRole("button", { name: "Đặt lại" }));
+    fireEvent.click(screen.getByRole("button", { name: "Reset" }));
 
-    expect(screen.getByText("Từ ngày")).toBeInTheDocument();
-    expect(screen.getByText("Đến ngày")).toBeInTheDocument();
-    expect(screen.getByText("Số tiền từ")).toBeInTheDocument();
-    expect(screen.getByText("Số tiền đến")).toBeInTheDocument();
+    expect(screen.getByText("From date")).toBeInTheDocument();
+    expect(screen.getByText("To date")).toBeInTheDocument();
+    expect(screen.getAllByText("Minimum amount").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Maximum amount").length).toBeGreaterThan(0);
     expect(onChange).toHaveBeenCalledWith("search", "cơm");
     expect(onChange).toHaveBeenCalledWith("categoryId", "3");
     expect(onReset).toHaveBeenCalledOnce();
@@ -48,15 +48,15 @@ describe("ExpenseFilters", () => {
       <ExpenseFilters
         values={values}
         categories={[]}
-        errors={{ date: "Ngày không hợp lệ", amount: "Tiền không hợp lệ" }}
+        errors={{ date: "Invalid date", amount: "Invalid amount" }}
         isCategoryFallback
         onChange={vi.fn()}
         onReset={vi.fn()}
       />
     );
 
-    expect(screen.getByText("Ngày không hợp lệ")).toBeInTheDocument();
-    expect(screen.getByText("Tiền không hợp lệ")).toBeInTheDocument();
-    expect(screen.getByText(/Category API chưa sẵn sàng/)).toBeInTheDocument();
+    expect(screen.getByText("Invalid date")).toBeInTheDocument();
+    expect(screen.getByText("Invalid amount")).toBeInTheDocument();
+    expect(screen.getByText(/Category API is unavailable/)).toBeInTheDocument();
   });
 });

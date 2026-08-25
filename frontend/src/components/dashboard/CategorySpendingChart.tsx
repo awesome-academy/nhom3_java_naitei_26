@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import Card from "@/components/ui/Card";
+import MaterialSymbol from "@/components/ui/MaterialSymbol";
 import type { CategorySpending } from "@/features/dashboard/types";
 import { AlertCircle, PieChart as PieChartIcon } from "lucide-react";
 
@@ -42,7 +43,7 @@ export default function CategorySpendingChart({
       <Card className="p-6">
         <div className="flex items-center gap-2 border-b pb-4">
           <PieChartIcon className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
+          <h2 className="text-base font-semibold text-gray-900">Spending by Category</h2>
         </div>
         <div className="flex h-64 items-center justify-center">
           <div className="h-40 w-40 animate-pulse rounded-full border-8 border-gray-100 border-t-indigo-500" />
@@ -56,11 +57,11 @@ export default function CategorySpendingChart({
       <Card className="p-6">
         <div className="flex items-center gap-2 border-b pb-4">
           <PieChartIcon className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
+          <h2 className="text-base font-semibold text-gray-900">Spending by Category</h2>
         </div>
         <div className="flex h-64 flex-col items-center justify-center gap-2 text-red-500">
           <AlertCircle className="h-8 w-8" />
-          <p className="text-sm font-medium">Không thể tải dữ liệu biểu đồ</p>
+          <p className="text-sm font-medium">Unable to load chart data</p>
         </div>
       </Card>
     );
@@ -71,11 +72,11 @@ export default function CategorySpendingChart({
       <Card className="p-6">
         <div className="flex items-center gap-2 border-b pb-4">
           <PieChartIcon className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
+          <h2 className="text-base font-semibold text-gray-900">Spending by Category</h2>
         </div>
         <div className="flex h-64 flex-col items-center justify-center gap-2 text-gray-400">
           <PieChartIcon className="h-10 w-10 stroke-[1.5]" />
-          <p className="text-sm">Chưa có dữ liệu chi tiêu để hiển thị biểu đồ</p>
+          <p className="text-sm">No spending data is available for this chart</p>
         </div>
       </Card>
     );
@@ -88,6 +89,7 @@ export default function CategorySpendingChart({
     icon: item.categoryIcon,
   }));
 
+  const totalAmount = chartData.reduce((sum, item) => sum + item.value, 0);
   const activeItem = activeIndex !== null ? chartData[activeIndex] : null;
 
   return (
@@ -95,9 +97,9 @@ export default function CategorySpendingChart({
       <div className="flex items-center justify-between border-b pb-4">
         <div className="flex items-center gap-2">
           <PieChartIcon className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
+          <h2 className="text-base font-semibold text-gray-900">Spending by Category</h2>
         </div>
-        <span className="text-xs text-gray-500 font-medium">Theo danh mục</span>
+        <span className="text-xs text-gray-500 font-medium">Category breakdown</span>
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-5 items-center">
@@ -107,10 +109,14 @@ export default function CategorySpendingChart({
             <PieChart>
               <Pie
                 data={chartData}
-                innerRadius={65}
+                cx="50%"
+                cy="50%"
+                innerRadius={78}
                 outerRadius={95}
                 paddingAngle={3}
                 dataKey="value"
+                label={false}
+                labelLine={false}
                 onMouseEnter={(_, index) => setActiveIndex(index)}
                 onMouseLeave={() => setActiveIndex(null)}
               >
@@ -118,17 +124,15 @@ export default function CategorySpendingChart({
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
-                    className="transition-all duration-200 cursor-pointer focus:outline-none"
-                    style={{
-                      filter: activeIndex === index ? "brightness(1.1)" : "none",
-                      transform: activeIndex === index ? "scale(1.03)" : "scale(1)",
-                      transformOrigin: "center",
-                    }}
+                    className="transition-opacity duration-200 cursor-pointer focus:outline-none"
+                    opacity={activeIndex === null || activeIndex === index ? 1 : 0.55}
+                    stroke={activeIndex === index ? "#ffffff" : "transparent"}
+                    strokeWidth={activeIndex === index ? 3 : 1}
                   />
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: any) => [formatCurrency(Number(value)), "Số tiền"]}
+                formatter={(value) => [formatCurrency(Number(value)), "Amount"]}
                 contentStyle={{
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
@@ -139,24 +143,26 @@ export default function CategorySpendingChart({
           </ResponsiveContainer>
 
           {/* Center Dynamic Value display */}
-          <div className="pointer-events-none absolute flex flex-col items-center justify-center text-center">
+          <div className="pointer-events-none absolute inset-0 flex min-w-0 flex-col items-center justify-center gap-0.5 px-5 text-center leading-tight">
             {activeItem ? (
               <>
-                <span className="text-xs font-medium text-gray-500 truncate max-w-[100px]">
+                <span className="max-w-[120px] truncate text-xs font-medium text-gray-500">
                   {activeItem.name}
                 </span>
-                <span className="text-sm font-bold text-gray-900">
+                <span className="max-w-[132px] truncate whitespace-nowrap text-xs font-bold text-gray-900">
                   {formatCurrency(activeItem.value)}
                 </span>
-                <span className="text-xs font-semibold text-indigo-600">
-                  {activeItem.percentage}%
+                <span className="text-[10px] font-semibold text-indigo-600">
+                  {activeItem.percentage}% of total
                 </span>
               </>
             ) : (
               <>
-                <span className="text-xs font-medium text-gray-400">Danh mục</span>
-                <span className="text-base font-bold text-gray-700">{data.length}</span>
-                <span className="text-[10px] text-gray-400">Đã ghi nhận</span>
+                <span className="text-xs font-medium text-gray-400">Total Expenses</span>
+                <span className="max-w-[132px] truncate whitespace-nowrap text-xs font-bold text-gray-700">
+                  {formatCurrency(totalAmount)}
+                </span>
+                <span className="text-[10px] text-gray-400">Hover a slice for details</span>
               </>
             )}
           </div>
@@ -182,17 +188,18 @@ export default function CategorySpendingChart({
                     className="h-3 w-3 rounded-full shrink-0"
                     style={{ backgroundColor: color }}
                   />
-                  <span className="text-xs font-medium text-gray-700 truncate">
-                    {item.icon ? `${item.icon} ` : ""}{item.name}
-                  </span>
+                  <MaterialSymbol
+                    icon={item.icon || "category"}
+                    size={18}
+                    className="shrink-0 text-gray-500"
+                  />
+                  <span className="truncate text-xs font-medium text-gray-700">{item.name}</span>
                 </div>
                 <div className="text-right shrink-0">
                   <div className="text-xs font-bold text-gray-900">
                     {formatCurrency(item.value)}
                   </div>
-                  <div className="text-[10px] font-semibold text-gray-500">
-                    {item.percentage}%
-                  </div>
+                  <div className="text-[10px] font-semibold text-gray-500">{item.percentage}%</div>
                 </div>
               </div>
             );

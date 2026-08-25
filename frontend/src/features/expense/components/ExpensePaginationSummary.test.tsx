@@ -16,6 +16,6 @@ describe("ExpensePaginationSummary", () => {
 
   it("hiển thị tổng bằng 0", () => {
     render(<ExpensePaginationSummary page={0} size={10} itemCount={0} totalItems={0} />);
-    expect(screen.getByText("Hiển thị 0 trên tổng 0 khoản chi")).toBeInTheDocument();
+    expect(screen.getByText("Showing 0 of 0 expenses")).toBeInTheDocument();
   });
 });

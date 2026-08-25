@@ -25,6 +25,8 @@ export function useCreateIncome() {
     mutationFn: (data: CreateIncomeDto) => incomeApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["report"] });
     },
   });
 }
@@ -36,6 +38,8 @@ export function useUpdateIncome() {
       incomeApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["report"] });
     },
   });
 }
@@ -46,6 +50,8 @@ export function useDeleteIncome() {
     mutationFn: (id: string) => incomeApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["report"] });
     },
   });
 }

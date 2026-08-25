@@ -30,10 +30,10 @@ describe("expenseFormSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.flatten().fieldErrors).toMatchObject({
-        title: ["Tên khoản chi không được để trống"],
-        amount: ["Số tiền phải lớn hơn 0"],
-        date: ["Ngày chi không được ở tương lai"],
-        categoryId: ["Danh mục không được để trống"],
+        title: ["Expense title is required"],
+        amount: ["Amount must be greater than 0"],
+        date: ["Date cannot be in the future"],
+        categoryId: ["Category is required"],
       });
     }
   });
@@ -45,6 +45,6 @@ describe("expenseFormSchema", () => {
     });
     expect(expenseFormSchema.safeParse({ ...validForm, files: [wrongType] }).success).toBe(false);
     expect(expenseFormSchema.safeParse({ ...validForm, files: [oversized] }).success).toBe(false);
-    expect(getFileValidationError([wrongType])).toBe("File đính kèm chỉ hỗ trợ JPEG, PNG hoặc PDF");
+    expect(getFileValidationError([wrongType])).toBe("Attachments must be JPEG, PNG, or PDF files");
   });
 });
