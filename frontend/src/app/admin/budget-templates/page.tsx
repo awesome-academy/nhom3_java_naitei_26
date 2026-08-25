@@ -5,6 +5,7 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import { useBudgetTemplates, useDeleteBudgetTemplate } from "@/features/budget-template/hooks";
+import { formatCurrency } from "@/lib/utils";
 
 export default function AdminBudgetTemplatesPage() {
   const { data: templates, isLoading, isError } = useBudgetTemplates();
@@ -89,7 +90,7 @@ export default function AdminBudgetTemplatesPage() {
                             {detail.categoryName ?? "Category"}:
                           </span>
                           <span className="shrink-0 font-mono font-semibold text-[#131b2e]">
-                            {formatAmount(detail.amount)}
+                            {formatCurrency(detail.amount)}
                           </span>
                         </div>
                       ))
@@ -106,7 +107,7 @@ export default function AdminBudgetTemplatesPage() {
                   <div>
                     <span className="block text-[11px] text-slate-400">Total Budget</span>
                     <span className="font-mono text-sm font-bold text-[#004ac6]">
-                      {formatAmount(total)}
+                      {formatCurrency(total)}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
@@ -143,14 +144,6 @@ export default function AdminBudgetTemplatesPage() {
       )}
     </div>
   );
-}
-
-function formatAmount(amount: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format(amount);
 }
 
 function LoadingState() {

@@ -1,12 +1,17 @@
 package vn.naitei.nhom3.expensemanagement.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.Locale;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import vn.naitei.nhom3.expensemanagement.dto.expense.AdminExpenseFilterRequest;
 import vn.naitei.nhom3.expensemanagement.dto.expense.AdminExpensePageResponse;
 import vn.naitei.nhom3.expensemanagement.dto.expense.AdminExpenseResponse;
@@ -14,9 +19,6 @@ import vn.naitei.nhom3.expensemanagement.entity.Expense;
 import vn.naitei.nhom3.expensemanagement.repository.ExpenseRepository;
 import vn.naitei.nhom3.expensemanagement.repository.specification.ExpenseSpecification;
 import vn.naitei.nhom3.expensemanagement.service.ExpenseAdminService;
-
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Implementation of {@link ExpenseAdminService} for the system-wide expense list (A10).
@@ -47,6 +49,12 @@ public class ExpenseAdminServiceImpl implements ExpenseAdminService {
                 expenses.getSize(),
                 expenses.getTotalElements(),
                 expenses.getTotalPages());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal getTotalExpenseAcrossAllUsers() {
+        return expenseRepository.sumTotalExpenseAcrossAllUsers();
     }
 
     private AdminExpenseResponse toAdminResponse(Expense expense) {

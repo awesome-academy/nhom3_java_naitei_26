@@ -5,18 +5,13 @@ import { CalendarDays, ChevronDown, LoaderCircle, TrendingUp } from "lucide-reac
 import Card from "@/components/ui/Card";
 import { useReportComparison, useReportSummary, useReportTrend } from "@/features/report/hooks";
 import type { ReportPeriod, ReportTrendPoint } from "@/features/report/types";
+import { formatCurrency } from "@/lib/utils";
 
 const periodLabels: Record<ReportPeriod, string> = {
   month: "Month",
   quarter: "Quarter",
   year: "Year",
 };
-
-const money = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 2,
-});
 
 const categoryColors = ["bg-blue-600", "bg-indigo-600", "bg-emerald-600", "bg-amber-500"];
 
@@ -30,10 +25,31 @@ function getPeriodValue(period: ReportPeriod, date: Date) {
   return `${date.getFullYear()}-Q${Math.floor(date.getMonth() / 3) + 1}`;
 }
 
-function getTrendRange(date: Date) {
-  const from = new Date(date.getFullYear(), date.getMonth() - 5, 1);
-  const to = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+function getSelectedPeriodRange(period: ReportPeriod, value: string) {
+  const selectedDate = getDateForPeriod(period, value);
+
+  if (period === "month") {
+    const from = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+    const to = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+    return { from: formatDate(from), to: formatDate(to) };
+  }
+
+  if (period === "quarter") {
+    const from = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+    const to = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 3, 0);
+    return { from: formatDate(from), to: formatDate(to) };
+  }
+
+  const from = new Date(selectedDate.getFullYear(), 0, 1);
+  const to = new Date(selectedDate.getFullYear(), 12, 0);
   return { from: formatDate(from), to: formatDate(to) };
+}
+
+function getDaysInSelectedPeriod(period: ReportPeriod, value: string) {
+  const range = getSelectedPeriodRange(period, value);
+  const from = new Date(`${range.from}T00:00:00Z`);
+  const to = new Date(`${range.to}T00:00:00Z`);
+  return Math.floor((to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 }
 
 function getDateForPeriod(period: ReportPeriod, value: string) {
@@ -80,8 +96,8 @@ export default function ReportsPage() {
     () => ({ period, value: periodValue }),
     [period, periodValue]
   );
-  const selectedDate = useMemo(() => getDateForPeriod(period, periodValue), [period, periodValue]);
-  const trendRange = useMemo(() => getTrendRange(selectedDate), [selectedDate]);
+  const trendRange = useMemo(() => getSelectedPeriodRange(period, periodValue), [period, periodValue]);
+  const daysInSelectedPeriod = useMemo(() => getDaysInSelectedPeriod(period, periodValue), [period, periodValue]);
   const periodOptions = useMemo(() => getPeriodOptions(period, referenceDate), [period, referenceDate]);
   const summaryQuery = useReportSummary(periodParams);
   const comparisonQuery = useReportComparison(periodParams);
@@ -90,6 +106,7 @@ export default function ReportsPage() {
   const hasError = summaryQuery.isError || comparisonQuery.isError || trendQuery.isError;
   const trendPoints = trendQuery.data ?? [];
   const categories = summaryQuery.data?.byCategory ?? [];
+  const trendDescription = `Income and expense trend for the selected ${periodLabels[period].toLowerCase()}`;
   const maxTrendValue = Math.max(
     1,
     ...trendPoints.flatMap((point) => [point.income, point.expense])
@@ -112,7 +129,7 @@ export default function ReportsPage() {
             Reports &amp; Analytics
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Phân tích dòng tiền, xu hướng và phân bổ chi tiêu
+            Deep-dive financial visual analytics, trends, and categorical distribution
           </p>
         </div>
         <div className="flex items-center gap-1 rounded-xl border border-gray-200 bg-white p-1.5 shadow-sm">
@@ -154,14 +171,14 @@ export default function ReportsPage() {
           </select>
           <ChevronDown className="h-4 w-4 text-gray-400" aria-hidden="true" />
         </label>
-        <span className="text-xs text-gray-400">Dữ liệu theo kỳ đã chọn</span>
+        <span className="text-xs text-gray-400">Data for selected period</span>
       </div>
 
       <section className="grid grid-cols-1 gap-5 md:grid-cols-3">
         <Card className="border-emerald-100 bg-white p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Total Net Savings</p>
           <p className="mt-2 text-2xl font-bold tabular-nums text-emerald-600">
-            {isLoading ? <LoaderCircle className="h-6 w-6 animate-spin" aria-label="Loading" /> : money.format(comparisonQuery.data?.balance ?? 0)}
+            {isLoading ? <LoaderCircle className="h-6 w-6 animate-spin" aria-label="Loading" /> : formatCurrency(comparisonQuery.data?.balance ?? 0)}
           </p>
           <div className="mt-2 flex items-center gap-1.5 text-xs text-gray-500">
             <TrendingUp className="h-3.5 w-3.5 text-emerald-500" aria-hidden="true" />
@@ -172,15 +189,15 @@ export default function ReportsPage() {
         </Card>
         <Card className="p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Daily Average Spending</p>
-          <p className="mt-2 text-2xl font-bold tabular-nums text-gray-900">-</p>
-          <p className="mt-2 text-xs text-gray-500">Daily average is not provided by the report API</p>
+          <p className="mt-2 text-2xl font-bold tabular-nums text-gray-900">{formatCurrency((summaryQuery.data?.totalExpense ?? 0) / daysInSelectedPeriod)}</p>
+          <p className="mt-2 text-xs text-gray-500">Average expense per day in the selected period</p>
         </Card>
         <Card className="border-blue-100 p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Top Expense Category</p>
           <p className="mt-2 text-2xl font-bold text-blue-700">{topCategory?.name ?? "-"}</p>
           <p className="mt-2 text-xs text-gray-500">
             {topCategory && totalExpense > 0
-              ? `${((topCategory.amount / totalExpense) * 100).toFixed(1)}% of total expenditures (${money.format(topCategory.amount)})`
+              ? `${((topCategory.amount / totalExpense) * 100).toFixed(1)}% of total expenditures (${formatCurrency(topCategory.amount)})`
               : "No category data available"}
           </p>
         </Card>
@@ -188,7 +205,7 @@ export default function ReportsPage() {
 
       {hasError && (
         <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
-          Không thể tải đầy đủ dữ liệu báo cáo. Vui lòng thử lại sau.
+          Unable to load complete report data. Please try again later.
         </div>
       )}
 
@@ -197,14 +214,14 @@ export default function ReportsPage() {
           <div className="mb-6 flex flex-col justify-between gap-3 border-b border-gray-100 pb-4 sm:flex-row sm:items-start">
             <div>
               <h2 className="text-base font-bold text-gray-900">Income vs. Expense Trend</h2>
-              <p className="mt-0.5 text-xs text-gray-500">Monthly cashflow comparison over the last 6 months</p>
+              <p className="mt-0.5 text-xs text-gray-500">{trendDescription}</p>
             </div>
             <div className="flex items-center gap-3 text-xs font-medium text-gray-600">
               <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />Income</span>
               <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-rose-500" />Expense</span>
             </div>
           </div>
-          {isLoading ? renderState("Đang tải dữ liệu xu hướng...") : trendPoints.length === 0 ? renderState("Chưa có dữ liệu xu hướng") : (
+          {isLoading ? renderState("Loading trend data...") : trendPoints.length === 0 ? renderState("No trend data available") : (
             <div className="flex h-64 items-end justify-between gap-2 px-1 sm:gap-4">
             {trendPoints.map((point: ReportTrendPoint) => (
               <div key={point.period} className="flex min-w-0 flex-1 flex-col items-center gap-2">
@@ -212,12 +229,12 @@ export default function ReportsPage() {
                   <div
                     className="w-1/2 rounded-t-md bg-emerald-500 transition-all"
                     style={{ height: `${(point.income / maxTrendValue) * 100}%` }}
-                    title={`Income: ${money.format(point.income)}`}
+                    title={`Income: ${formatCurrency(point.income)}`}
                   />
                   <div
                     className="w-1/2 rounded-t-md bg-rose-500 transition-all"
                     style={{ height: `${(point.expense / maxTrendValue) * 100}%` }}
-                    title={`Expense: ${money.format(point.expense)}`}
+                    title={`Expense: ${formatCurrency(point.expense)}`}
                   />
                 </div>
                 <span className="text-[11px] font-semibold text-gray-500">
@@ -236,17 +253,17 @@ export default function ReportsPage() {
               <p className="mt-0.5 text-xs text-gray-500">Top spending categories this period</p>
             </div>
             <span className="text-xs font-semibold tabular-nums text-gray-500">
-              Total: {money.format(totalExpense)}
+              Total: {formatCurrency(totalExpense)}
             </span>
           </div>
-          {isLoading ? renderState("Đang tải phân bổ danh mục...") : categories.length === 0 ? renderState("Chưa có dữ liệu danh mục") : (
+          {isLoading ? renderState("Loading category distribution...") : categories.length === 0 ? renderState("No category data available") : (
           <div className="space-y-5 pt-1">
             {categories.map((category, index) => (
               <div key={category.name}>
                 <div className="mb-1.5 flex justify-between gap-3 text-xs font-semibold">
                   <span className="text-gray-900">{category.name}</span>
                   <span className="shrink-0 tabular-nums text-gray-500">
-                    {money.format(category.amount)} ({totalExpense > 0 ? ((category.amount / totalExpense) * 100).toFixed(1) : "0.0"}%)
+                    {formatCurrency(category.amount)} ({totalExpense > 0 ? ((category.amount / totalExpense) * 100).toFixed(1) : "0.0"}%)
                   </span>
                 </div>
                 <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">

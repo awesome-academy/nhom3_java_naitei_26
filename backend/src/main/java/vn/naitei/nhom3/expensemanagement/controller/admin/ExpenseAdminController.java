@@ -1,12 +1,15 @@
 package vn.naitei.nhom3.expensemanagement.controller.admin;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import vn.naitei.nhom3.expensemanagement.common.response.ApiResponse;
 import vn.naitei.nhom3.expensemanagement.dto.expense.AdminExpenseFilterRequest;
 import vn.naitei.nhom3.expensemanagement.dto.expense.AdminExpensePageResponse;
@@ -40,5 +43,10 @@ public class ExpenseAdminController {
             @Valid @ModelAttribute AdminExpenseFilterRequest filter) {
         AdminExpensePageResponse response = expenseAdminService.getAllSystem(filter);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<ApiResponse<BigDecimal>> getTotalAcrossAllUsers() {
+        return ResponseEntity.ok(ApiResponse.success(expenseAdminService.getTotalExpenseAcrossAllUsers()));
     }
 }

@@ -8,6 +8,7 @@ import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { useCategories } from "@/features/category/hooks";
+import { formatCurrency } from "@/lib/utils";
 import { useBudgetTemplate, useCreateBudgetTemplate, useUpdateBudgetTemplate } from "./hooks";
 import type {
   BudgetTemplateDetailDto,
@@ -330,7 +331,7 @@ export default function BudgetTemplateForm({ mode, id }: BudgetTemplateFormProps
           <div className="flex items-center justify-between rounded-xl border border-[#E2E8F0] bg-slate-50 p-4 text-sm">
             <span className="font-semibold text-[#515f74]">Calculated Template Total:</span>
             <span className="font-mono text-lg font-bold text-[#004ac6]">
-              {formatAmount(total)} USD
+              {formatCurrency(total)}
             </span>
           </div>
 
@@ -357,14 +358,6 @@ export default function BudgetTemplateForm({ mode, id }: BudgetTemplateFormProps
       </Card>
     </div>
   );
-}
-
-function formatAmount(amount: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format(amount);
 }
 
 function FormState({ message, isError = false }: { message: string; isError?: boolean }) {
