@@ -21,11 +21,11 @@ export const useUpdateAdminUserRole = () => {
   return useMutation({
     mutationFn: updateAdminUserRole,
     onSuccess: () => {
-      toast.success("Cập nhật vai trò thành công");
+      toast.success("Role updated successfully");
       queryClient.invalidateQueries({ queryKey: adminUserKeys.lists() });
     },
     onError: (error: any) => {
-      toast.error(error?.message || "Không thể cập nhật vai trò");
+      toast.error(error?.message || "Unable to update role");
     },
   });
 };
@@ -35,11 +35,11 @@ export const useUpdateAdminUserStatus = () => {
   return useMutation({
     mutationFn: updateAdminUserStatus,
     onSuccess: () => {
-      toast.success("Cập nhật trạng thái thành công");
+      toast.success("Status updated successfully");
       queryClient.invalidateQueries({ queryKey: adminUserKeys.lists() });
     },
     onError: (error: any) => {
-      toast.error(error?.message || "Không thể cập nhật trạng thái");
+      toast.error(error?.message || "Unable to update status");
     },
   });
 };
