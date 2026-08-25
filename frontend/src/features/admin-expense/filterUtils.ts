@@ -8,17 +8,17 @@ export interface AdminExpenseFilterErrors {
 export function validateAdminExpenseFilters(values: AdminExpenseFilterValues): AdminExpenseFilterErrors {
   const errors: AdminExpenseFilterErrors = {};
   if (values.fromDate && values.toDate && values.fromDate > values.toDate) {
-    errors.date = "Ngày bắt đầu không được sau ngày kết thúc";
+    errors.date = "Start date must not be after end date";
   }
 
   const minAmount = parseAmount(values.minAmount);
   const maxAmount = parseAmount(values.maxAmount);
   if (minAmount !== undefined && minAmount < 0) {
-    errors.amount = "Số tiền tối thiểu không được âm";
+    errors.amount = "Minimum amount must not be negative";
   } else if (maxAmount !== undefined && maxAmount < 0) {
-    errors.amount = "Số tiền tối đa không được âm";
+    errors.amount = "Maximum amount must not be negative";
   } else if (minAmount !== undefined && maxAmount !== undefined && minAmount > maxAmount) {
-    errors.amount = "Số tiền tối thiểu không được lớn hơn số tiền tối đa";
+    errors.amount = "Minimum amount must not be greater than maximum amount";
   }
   return errors;
 }
