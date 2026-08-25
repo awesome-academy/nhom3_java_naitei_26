@@ -27,7 +27,7 @@ interface StoredUserData {
 interface DashboardSummary {
   totalIncome: number;
   totalExpense: number;
-  balance: number;
+  remainingBalance: number;
 }
 
 // Hook đọc user từ localStorage chuẩn React 19
@@ -59,7 +59,7 @@ export default function ProfilePage() {
   const [summary, setSummary] = useState<DashboardSummary>({
     totalIncome: 0,
     totalExpense: 0,
-    balance: 0,
+    remainingBalance: 0,
   });
 
   const [loadingProfile, setLoadingProfile] = useState(false);
@@ -72,15 +72,20 @@ export default function ProfilePage() {
   }
 
   useEffect(() => {
-    // Lấy số liệu tài chính từ API
     const fetchSummary = async () => {
       try {
         const res = await apiClient.get("/dashboard/summary");
-        if (res.data?.data) {
-          setSummary(res.data.data);
+        const data = res.data?.data || res.data; // Xử lý bóc tách linh hoạt
+
+        if (data) {
+          setSummary({
+            totalIncome: Number(data.totalIncome || 0),
+            totalExpense: Number(data.totalExpense || 0),
+            remainingBalance: Number(data.remainingBalance || 0),
+          });
         }
-      } catch {
-        // Fallback khi backend chưa có API
+      } catch (err) {
+        console.error("Failed to load profile summary:", err);
       }
     };
 
@@ -111,11 +116,10 @@ export default function ProfilePage() {
     }
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
+  const formatCurrency = (amount: number = 0) => {
+    return new Intl.NumberFormat("vi-VN", {
       style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
+      currency: "VND",
     }).format(amount);
   };
 
@@ -208,7 +212,7 @@ export default function ProfilePage() {
           </div>
           <div className="flex flex-col">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Remaining Balance</span>
-            <span className="text-lg font-bold text-blue-700">{formatCurrency(summary.balance)}</span>
+            <span className="text-lg font-bold text-blue-700">{formatCurrency(summary.remainingBalance)}</span>
           </div>
         </div>
       </div>
