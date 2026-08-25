@@ -2,10 +2,18 @@
 
 import { AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import axios from "axios";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { useDeleteBudget } from "@/features/budget/hooks";
 import type { Budget } from "@/features/budget/types";
+
+function getErrorMessage(error: unknown): string {
+  if (axios.isAxiosError<{ message?: string }>(error)) {
+    return error.response?.data?.message || "Unable to delete budget";
+  }
+  return "Unable to delete budget";
+}
 
 interface DeleteBudgetModalProps {
   isOpen: boolean;
@@ -13,11 +21,7 @@ interface DeleteBudgetModalProps {
   budget: Budget | null;
 }
 
-export default function DeleteBudgetModal({
-  isOpen,
-  onClose,
-  budget,
-}: DeleteBudgetModalProps) {
+export default function DeleteBudgetModal({ isOpen, onClose, budget }: DeleteBudgetModalProps) {
   const deleteMutation = useDeleteBudget();
 
   if (!budget) return null;
@@ -25,17 +29,17 @@ export default function DeleteBudgetModal({
   const handleDelete = () => {
     deleteMutation.mutate(budget.id, {
       onSuccess: () => {
-        toast.success("Xóa ngân sách thành công");
+        toast.success("Budget deleted successfully");
         onClose();
       },
-      onError: (error: any) => {
-        toast.error(error?.response?.data?.message || "Không thể xóa ngân sách");
+      onError: (error: unknown) => {
+        toast.error(getErrorMessage(error));
       },
     });
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Xác nhận xóa ngân sách" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title="Delete Budget" size="sm">
       <div className="space-y-4">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
@@ -43,12 +47,12 @@ export default function DeleteBudgetModal({
           </div>
           <div>
             <p className="text-sm text-gray-700">
-              Bạn có chắc chắn muốn xóa hạn mức ngân sách cho danh mục{" "}
-              <strong className="text-gray-900">{budget.categoryName}</strong> (Tháng{" "}
-              {budget.month}/{budget.year}) không?
+              Are you sure you want to delete the budget limit for{" "}
+              <strong className="text-gray-900">{budget.categoryName}</strong> (Month {budget.month}
+              /{budget.year})?
             </p>
             <p className="mt-1 text-xs text-gray-500">
-              Hành động này không xóa các giao dịch chi tiêu liên quan.
+              This will not delete any related expense transactions.
             </p>
           </div>
         </div>
@@ -60,7 +64,7 @@ export default function DeleteBudgetModal({
             onClick={onClose}
             disabled={deleteMutation.isPending}
           >
-            Hủy
+            Cancel
           </Button>
           <Button
             type="button"
@@ -68,7 +72,7 @@ export default function DeleteBudgetModal({
             onClick={handleDelete}
             isLoading={deleteMutation.isPending}
           >
-            Xác nhận xóa
+            Delete Budget
           </Button>
         </div>
       </div>
