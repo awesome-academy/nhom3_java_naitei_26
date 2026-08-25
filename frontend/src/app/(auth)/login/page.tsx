@@ -27,7 +27,7 @@ export default function LoginPage() {
       localStorage.setItem("user", JSON.stringify(user));
 
       if (user?.role === "ADMIN") {
-        router.push("/admin/dashboard");
+        router.push("/admin/users");
       } else {
         router.push("/dashboard");
       }
