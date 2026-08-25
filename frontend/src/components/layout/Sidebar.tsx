@@ -14,7 +14,11 @@ import {
   BarChart3,
   LogOut,
   X,
+  AlertTriangle,
+  AlertCircle,
+  Check,
 } from "lucide-react";
+import { useBudgets } from "@/features/budget/hooks";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard,
@@ -58,6 +62,64 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const user = useStoredUser();
+
+ const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const currentMonthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format(now);
+  const ackKey = `ack_budget_ids_${currentYear}_${currentMonth}`;
+
+  // 1. Fetch danh sách ngân sách tháng hiện tại
+  const { data: currentBudgets = [] } = useBudgets(currentYear, currentMonth);
+
+  // 2. Lấy danh sách ID đã acknowledge từ localStorage
+  const acknowledgedIdsStr = useSyncExternalStore(
+    (callback) => {
+      window.addEventListener("storage", callback);
+      return () => window.removeEventListener("storage", callback);
+    },
+    () => localStorage.getItem(ackKey) || "[]",
+    () => "[]"
+  );
+
+  let acknowledgedIds: number[] = [];
+  try {
+    acknowledgedIds = JSON.parse(acknowledgedIdsStr);
+  } catch {
+    acknowledgedIds = [];
+  }
+
+  // 3. Lọc danh sách cảnh báo thực tế
+  const activeAlertBudgets = currentBudgets.filter((b) => {
+    const isExceeded = b.alertStatus === "EXCEEDED" || (b.spendingPercentage != null && b.spendingPercentage > 100);
+    const isWarning = b.alertStatus === "WARNING" || (b.spendingPercentage != null && b.spendingPercentage >= 80 && b.spendingPercentage <= 100);
+    return isExceeded || isWarning;
+  });
+
+  const currentAlertIds = activeAlertBudgets.map((b) => b.id);
+
+  // 4. Kiểm tra xem có cảnh báo nào CHƯA được acknowledge không
+  const unacknowledgedBudgets = activeAlertBudgets.filter(
+    (b) => !acknowledgedIds.includes(b.id)
+  );
+
+  const exceededCount = unacknowledgedBudgets.filter(
+    (b) => b.alertStatus === "EXCEEDED" || (b.spendingPercentage != null && b.spendingPercentage > 100)
+  ).length;
+
+  const warningCount = unacknowledgedBudgets.filter(
+    (b) =>
+      b.alertStatus === "WARNING" ||
+      (b.spendingPercentage != null && b.spendingPercentage >= 80 && b.spendingPercentage <= 100)
+  ).length;
+
+  const hasAlerts = unacknowledgedBudgets.length > 0;
+
+  // 5. Lưu toàn bộ ID cảnh báo hiện tại khi bấm Acknowledge
+  const handleAcknowledge = () => {
+    localStorage.setItem(ackKey, JSON.stringify(currentAlertIds));
+    window.dispatchEvent(new Event("storage"));
+  };
 
   const handleLogout = () => {
     document.cookie = "access_token=; path=/; max-age=0;";
@@ -166,6 +228,43 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               );
             })}
           </nav>
+
+          {/* Ô thông báo cảnh báo ngân sách (Chỉ hiện khi có cảnh báo & chưa Acknowledge) */}
+          {hasAlerts && (
+            <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/70 p-3.5 shadow-xs transition-all">
+              <div className="flex items-center gap-2 text-amber-900">
+                <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  {currentMonthName} {currentYear} Alerts
+                </span>
+              </div>
+
+              <div className="mt-2 space-y-1 text-xs text-amber-950">
+                {exceededCount > 0 && (
+                  <p className="flex items-center gap-1.5 text-red-700 font-semibold">
+                    <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                    <span>{exceededCount} {exceededCount === 1 ? "category" : "categories"} over budget</span>
+                  </p>
+                )}
+                {warningCount > 0 && (
+                  <p className="flex items-center gap-1.5 text-amber-800">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 ml-1 mr-1" />
+                    <span>{warningCount} {warningCount === 1 ? "category" : "categories"} near limit (≥80%)</span>
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleAcknowledge}
+                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-amber-600 py-1.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-amber-700 active:scale-98"
+              >
+                <Check className="h-3.5 w-3.5" />
+                <span>Acknowledge</span>
+              </button>
+            </div>
+          )}
+
         </div>
 
         {/* Phần dưới cùng: User Profile Card & Nút Logout */}
