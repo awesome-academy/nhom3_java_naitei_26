@@ -16,7 +16,7 @@ vi.mock("recharts", () => {
 });
 
 describe("CategorySpendingChart", () => {
-  it("renders Material Symbol icons while preserving the English chart copy", () => {
+  it("renders Material Symbol icons and a contained center summary", () => {
     const { container } = render(
       <CategorySpendingChart
         data={[
@@ -35,8 +35,8 @@ describe("CategorySpendingChart", () => {
 
     expect(screen.getByText("Spending by Category")).toBeInTheDocument();
     expect(screen.getByText("Category breakdown")).toBeInTheDocument();
-    expect(screen.getByText("Categories")).toBeInTheDocument();
-    expect(screen.getByText("Recorded")).toBeInTheDocument();
+    expect(screen.getByText("Total Expenses")).toBeInTheDocument();
+    expect(screen.getByText("Hover a slice for details")).toBeInTheDocument();
     expect(container.querySelector(".material-symbols-outlined")).toHaveTextContent("restaurant");
   });
 });
