@@ -1,5 +1,7 @@
 package vn.naitei.nhom3.expensemanagement.service;
 
+import java.math.BigDecimal;
+
 import vn.naitei.nhom3.expensemanagement.dto.expense.AdminExpenseFilterRequest;
 import vn.naitei.nhom3.expensemanagement.dto.expense.AdminExpensePageResponse;
 
@@ -16,4 +18,6 @@ public interface ExpenseAdminService {
      * @return paginated list of expenses with user identity information
      */
     AdminExpensePageResponse getAllSystem(AdminExpenseFilterRequest filter);
+
+    BigDecimal getTotalExpenseAcrossAllUsers();
 }

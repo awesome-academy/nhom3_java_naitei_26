@@ -10,3 +10,11 @@ export function useAdminExpenses(filters: AdminExpenseFilters, enabled = true) {
     enabled,
   });
 }
+
+export function useAdminExpenseTotal(enabled = true) {
+  return useQuery({
+    queryKey: ["admin-expense-total"],
+    queryFn: () => adminExpenseApi.getTotal().then((response) => response.data),
+    enabled,
+  });
+}

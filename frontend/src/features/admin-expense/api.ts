@@ -6,4 +6,5 @@ const BASE = "/admin/expenses";
 export const adminExpenseApi = {
   getAll: (params: AdminExpenseFilters) =>
     apiClient.get<AdminExpensePage>(BASE, { params }),
+  getTotal: () => apiClient.get<number>(`${BASE}/total`),
 };

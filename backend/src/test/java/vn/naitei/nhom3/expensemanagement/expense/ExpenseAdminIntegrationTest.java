@@ -1,7 +1,13 @@
 package vn.naitei.nhom3.expensemanagement.expense;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +19,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import vn.naitei.nhom3.expensemanagement.entity.Category;
 import vn.naitei.nhom3.expensemanagement.entity.Expense;
 import vn.naitei.nhom3.expensemanagement.entity.User;
@@ -24,15 +34,6 @@ import vn.naitei.nhom3.expensemanagement.repository.ExpenseRepository;
 import vn.naitei.nhom3.expensemanagement.repository.UserRepository;
 import vn.naitei.nhom3.expensemanagement.security.JwtTokenProvider;
 import vn.naitei.nhom3.expensemanagement.security.UserPrincipal;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Integration tests for GET /api/admin/expenses (Task #99032 – A10).
@@ -131,6 +132,22 @@ class ExpenseAdminIntegrationTest {
         assertThat(first.get("categoryId").asLong()).isEqualTo(expenseCategory.getId());
         assertThat(first.get("categoryName").asText()).isEqualTo(expenseCategory.getName());
     }
+
+        @Test
+        void shouldReturnTotalExpenseAcrossAllUsersIndependentOfFilters() {
+        BigDecimal baseline = get("/api/admin/expenses/total", adminToken)
+            .at("/data").decimalValue();
+
+        saveExpense(userA, expenseCategory, "Server total A", new BigDecimal("50000"), LocalDate.of(2026, 8, 10));
+        saveExpense(userB, expenseCategory, "Server total B", new BigDecimal("70000"), LocalDate.of(2026, 8, 11));
+
+        JsonNode filteredResponse = get("/api/admin/expenses/total?userId=" + userA.getId()
+            + "&page=99&size=1&categoryId=" + anotherCategory.getId(), adminToken);
+
+        assertThat(filteredResponse.at("/status").asInt()).isEqualTo(200);
+        assertThat(filteredResponse.at("/data").decimalValue())
+            .isEqualByComparingTo(baseline.add(new BigDecimal("120000")));
+        }
 
     @Test
     void shouldFilterByUserId() {

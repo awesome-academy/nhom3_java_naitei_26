@@ -10,7 +10,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useUsers } from "@/features/user/hooks";
 import { useExpenseCategories } from "@/features/expense/hooks";
-import { useAdminExpenses } from "@/features/admin-expense/hooks";
+import { useAdminExpenseTotal, useAdminExpenses } from "@/features/admin-expense/hooks";
 import {
   toAdminExpenseFilters,
   validateAdminExpenseFilters,
@@ -40,6 +40,7 @@ export default function AdminExpensesPage() {
     toAdminExpenseFilters(effectiveFilters, page, sort, PAGE_SIZE),
     isValid
   );
+  const totalExpenseQuery = useAdminExpenseTotal();
   const categoriesQuery = useExpenseCategories();
   const usersQuery = useUsers({ page: 0, size: 100 }, false);
   const categoryOptions = Array.isArray(categoriesQuery.data) ? categoriesQuery.data : [];
@@ -68,12 +69,18 @@ export default function AdminExpensesPage() {
             System Expense Records
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Kiểm tra và lọc toàn bộ khoản chi tiêu của người dùng trong hệ thống
+            Review and filter all user expense records across the system
           </p>
         </div>
-        <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-right text-xs text-blue-800">
-          <span className="block font-semibold">Tổng giao dịch</span>
-          <strong className="text-lg">{data?.totalItems ?? "-"}</strong>
+        <div className="flex gap-3">
+          <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-right text-xs text-blue-800">
+            <span className="block font-semibold">Total Transactions</span>
+            <strong className="text-lg">{data?.totalItems ?? "-"}</strong>
+          </div>
+          <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-right text-xs text-blue-800">
+            <span className="block font-semibold">Total Expenses</span>
+            <strong className="text-lg">{totalExpenseQuery.isLoading ? "-" : formatCurrency(totalExpenseQuery.data ?? 0)}</strong>
+          </div>
         </div>
       </div>
 
@@ -82,21 +89,21 @@ export default function AdminExpensesPage() {
           <div className="relative md:col-span-2">
             <Search className="absolute bottom-3 left-3 z-10 h-4 w-4 text-gray-400" aria-hidden="true" />
             <Input
-              label="Tìm kiếm"
-              aria-label="Tìm theo tên khoản chi"
+              label="Search"
+              aria-label="Search by expense name"
               className="pl-9"
-              placeholder="Tìm tên khoản chi..."
+              placeholder="Search expense title..."
               value={filters.search}
               onChange={(event) => changeFilter("search", event.target.value)}
             />
           </div>
           <Select
-            label="Người dùng / tài khoản"
-            aria-label="Lọc theo người dùng"
+            label="User / Account"
+            aria-label="Filter by user"
             value={filters.userId}
             onChange={(event) => changeFilter("userId", event.target.value)}
             options={[
-              { label: "Tất cả người dùng", value: "" },
+              { label: "All Users", value: "" },
               ...userOptions.map((user) => ({
                 label: `${user.name} (${user.email})`,
                 value: user.id,
@@ -104,12 +111,12 @@ export default function AdminExpensesPage() {
             ]}
           />
           <Select
-            label="Danh mục"
-            aria-label="Lọc theo danh mục"
+            label="Category"
+            aria-label="Filter by category"
             value={filters.categoryId}
             onChange={(event) => changeFilter("categoryId", event.target.value)}
             options={[
-              { label: "Tất cả danh mục", value: "" },
+              { label: "All Categories", value: "" },
               ...categoryOptions.map((category) => ({
                 label: category.name,
                 value: String(category.id),
@@ -117,43 +124,43 @@ export default function AdminExpensesPage() {
             ]}
           />
           <Select
-            label="Sắp xếp"
-            aria-label="Sắp xếp khoản chi"
+            label="Sort"
+            aria-label="Sort expenses"
             value={sort}
             onChange={(event) => {
               setSort(event.target.value);
               setPage(0);
             }}
             options={[
-              { label: "Ngày mới nhất", value: "date,desc" },
-              { label: "Ngày cũ nhất", value: "date,asc" },
-              { label: "Số tiền tăng dần", value: "amount,asc" },
-              { label: "Số tiền giảm dần", value: "amount,desc" },
-              { label: "Tên A-Z", value: "title,asc" },
-              { label: "Tên Z-A", value: "title,desc" },
+              { label: "Newest date", value: "date,desc" },
+              { label: "Oldest date", value: "date,asc" },
+              { label: "Amount ascending", value: "amount,asc" },
+              { label: "Amount descending", value: "amount,desc" },
+              { label: "Name A-Z", value: "title,asc" },
+              { label: "Name Z-A", value: "title,desc" },
             ]}
           />
           <Input
-            label="Từ ngày"
+            label="From Date"
             type="date"
             value={filters.fromDate}
             onChange={(event) => changeFilter("fromDate", event.target.value)}
           />
           <Input
-            label="Đến ngày"
+            label="To Date"
             type="date"
             value={filters.toDate}
             onChange={(event) => changeFilter("toDate", event.target.value)}
           />
           <Input
-            label="Số tiền từ"
+            label="Min Amount"
             type="number"
             min="0"
             value={filters.minAmount}
             onChange={(event) => changeFilter("minAmount", event.target.value)}
           />
           <Input
-            label="Số tiền đến"
+            label="Max Amount"
             type="number"
             min="0"
             value={filters.maxAmount}
@@ -169,7 +176,7 @@ export default function AdminExpensesPage() {
         <div className="mt-3 flex justify-end">
           <Button variant="ghost" size="sm" onClick={resetFilters}>
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
-            Đặt lại
+            Reset
           </Button>
         </div>
       </section>
@@ -178,12 +185,12 @@ export default function AdminExpensesPage() {
         {query.isError ? (
           <div className="flex min-h-64 flex-col items-center justify-center gap-3 p-6 text-center">
             <AlertCircle className="h-9 w-9 text-red-500" aria-hidden="true" />
-            <p className="font-medium text-gray-900">Không thể tải danh sách khoản chi</p>
-            <p className="text-sm text-gray-500">Vui lòng kiểm tra kết nối và thử lại.</p>
-            <Button variant="outline" onClick={() => query.refetch()}>Thử lại</Button>
+            <p className="font-medium text-gray-900">Unable to load expense records</p>
+            <p className="text-sm text-gray-500">Check your connection and try again.</p>
+            <Button variant="outline" onClick={() => query.refetch()}>Try again</Button>
           </div>
         ) : query.isLoading ? (
-          <div className="animate-pulse space-y-3 p-6" aria-label="Đang tải danh sách khoản chi">
+          <div className="animate-pulse space-y-3 p-6" aria-label="Loading expense records">
             <div className="h-10 rounded bg-gray-200" />
             {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-14 rounded bg-gray-100" />)}
           </div>
@@ -203,7 +210,7 @@ export default function AdminExpensesPage() {
                 <tbody className="divide-y divide-[#E2E8F0]">
                   {(data?.items ?? []).length === 0 ? (
                     <tr><td colSpan={5} className="px-6 py-16 text-center text-gray-500">
-                      {hasActiveFilter ? "Không tìm thấy khoản chi phù hợp" : "Chưa có khoản chi nào"}
+                      {hasActiveFilter ? "No matching expense records found" : "No expense records found"}
                     </td></tr>
                   ) : data?.items.map((expense) => (
                     <tr key={expense.id} className="transition-colors hover:bg-slate-50/70">
@@ -232,7 +239,7 @@ export default function AdminExpensesPage() {
             {data && (
               <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#E2E8F0] bg-slate-50/40 px-6 py-4 text-sm text-gray-600">
                 <span>
-                  Hiển thị <strong>{data.totalItems === 0 ? 0 : data.page * data.size + 1}–{data.page * data.size + data.items.length}</strong> trên tổng <strong>{data.totalItems}</strong> khoản chi
+                  Showing <strong>{data.totalItems === 0 ? 0 : data.page * data.size + 1}–{data.page * data.size + data.items.length}</strong> of <strong>{data.totalItems}</strong> expense records
                 </span>
                 <div className={query.isFetching ? "opacity-60" : undefined} aria-busy={query.isFetching}>
                   <Pagination currentPage={data.page} totalPages={data.totalPages} onPageChange={setPage} />
