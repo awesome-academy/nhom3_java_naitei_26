@@ -89,6 +89,7 @@ export default function CategorySpendingChart({
     icon: item.categoryIcon,
   }));
 
+  const totalAmount = chartData.reduce((sum, item) => sum + item.value, 0);
   const activeItem = activeIndex !== null ? chartData[activeIndex] : null;
 
   return (
@@ -108,10 +109,14 @@ export default function CategorySpendingChart({
             <PieChart>
               <Pie
                 data={chartData}
-                innerRadius={65}
+                cx="50%"
+                cy="50%"
+                innerRadius={78}
                 outerRadius={95}
                 paddingAngle={3}
                 dataKey="value"
+                label={false}
+                labelLine={false}
                 onMouseEnter={(_, index) => setActiveIndex(index)}
                 onMouseLeave={() => setActiveIndex(null)}
               >
@@ -119,12 +124,10 @@ export default function CategorySpendingChart({
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
-                    className="transition-all duration-200 cursor-pointer focus:outline-none"
-                    style={{
-                      filter: activeIndex === index ? "brightness(1.1)" : "none",
-                      transform: activeIndex === index ? "scale(1.03)" : "scale(1)",
-                      transformOrigin: "center",
-                    }}
+                    className="transition-opacity duration-200 cursor-pointer focus:outline-none"
+                    opacity={activeIndex === null || activeIndex === index ? 1 : 0.55}
+                    stroke={activeIndex === index ? "#ffffff" : "transparent"}
+                    strokeWidth={activeIndex === index ? 3 : 1}
                   />
                 ))}
               </Pie>
@@ -140,24 +143,26 @@ export default function CategorySpendingChart({
           </ResponsiveContainer>
 
           {/* Center Dynamic Value display */}
-          <div className="pointer-events-none absolute flex flex-col items-center justify-center text-center">
+          <div className="pointer-events-none absolute inset-0 flex min-w-0 flex-col items-center justify-center gap-0.5 px-5 text-center leading-tight">
             {activeItem ? (
               <>
-                <span className="text-xs font-medium text-gray-500 truncate max-w-[100px]">
+                <span className="max-w-[120px] truncate text-xs font-medium text-gray-500">
                   {activeItem.name}
                 </span>
-                <span className="text-sm font-bold text-gray-900">
+                <span className="max-w-[132px] truncate whitespace-nowrap text-xs font-bold text-gray-900">
                   {formatCurrency(activeItem.value)}
                 </span>
-                <span className="text-xs font-semibold text-indigo-600">
-                  {activeItem.percentage}%
+                <span className="text-[10px] font-semibold text-indigo-600">
+                  {activeItem.percentage}% of total
                 </span>
               </>
             ) : (
               <>
-                <span className="text-xs font-medium text-gray-400">Categories</span>
-                <span className="text-base font-bold text-gray-700">{data.length}</span>
-                <span className="text-[10px] text-gray-400">Recorded</span>
+                <span className="text-xs font-medium text-gray-400">Total Expenses</span>
+                <span className="max-w-[132px] truncate whitespace-nowrap text-xs font-bold text-gray-700">
+                  {formatCurrency(totalAmount)}
+                </span>
+                <span className="text-[10px] text-gray-400">Hover a slice for details</span>
               </>
             )}
           </div>
