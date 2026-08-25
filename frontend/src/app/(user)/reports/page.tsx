@@ -25,10 +25,31 @@ function getPeriodValue(period: ReportPeriod, date: Date) {
   return `${date.getFullYear()}-Q${Math.floor(date.getMonth() / 3) + 1}`;
 }
 
-function getTrendRange(date: Date) {
-  const from = new Date(date.getFullYear(), date.getMonth() - 5, 1);
-  const to = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+function getSelectedPeriodRange(period: ReportPeriod, value: string) {
+  const selectedDate = getDateForPeriod(period, value);
+
+  if (period === "month") {
+    const from = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+    const to = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+    return { from: formatDate(from), to: formatDate(to) };
+  }
+
+  if (period === "quarter") {
+    const from = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+    const to = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 3, 0);
+    return { from: formatDate(from), to: formatDate(to) };
+  }
+
+  const from = new Date(selectedDate.getFullYear(), 0, 1);
+  const to = new Date(selectedDate.getFullYear(), 12, 0);
   return { from: formatDate(from), to: formatDate(to) };
+}
+
+function getDaysInSelectedPeriod(period: ReportPeriod, value: string) {
+  const range = getSelectedPeriodRange(period, value);
+  const from = new Date(`${range.from}T00:00:00Z`);
+  const to = new Date(`${range.to}T00:00:00Z`);
+  return Math.floor((to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 }
 
 function getDateForPeriod(period: ReportPeriod, value: string) {
@@ -75,8 +96,8 @@ export default function ReportsPage() {
     () => ({ period, value: periodValue }),
     [period, periodValue]
   );
-  const selectedDate = useMemo(() => getDateForPeriod(period, periodValue), [period, periodValue]);
-  const trendRange = useMemo(() => getTrendRange(selectedDate), [selectedDate]);
+  const trendRange = useMemo(() => getSelectedPeriodRange(period, periodValue), [period, periodValue]);
+  const daysInSelectedPeriod = useMemo(() => getDaysInSelectedPeriod(period, periodValue), [period, periodValue]);
   const periodOptions = useMemo(() => getPeriodOptions(period, referenceDate), [period, referenceDate]);
   const summaryQuery = useReportSummary(periodParams);
   const comparisonQuery = useReportComparison(periodParams);
@@ -167,8 +188,8 @@ export default function ReportsPage() {
         </Card>
         <Card className="p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Daily Average Spending</p>
-          <p className="mt-2 text-2xl font-bold tabular-nums text-gray-900">-</p>
-          <p className="mt-2 text-xs text-gray-500">Daily average is not provided by the report API</p>
+          <p className="mt-2 text-2xl font-bold tabular-nums text-gray-900">{formatCurrency((summaryQuery.data?.totalExpense ?? 0) / daysInSelectedPeriod)}</p>
+          <p className="mt-2 text-xs text-gray-500">Average expense per day in the selected period</p>
         </Card>
         <Card className="border-blue-100 p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Top Expense Category</p>
