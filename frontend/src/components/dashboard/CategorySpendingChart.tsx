@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import Card from "@/components/ui/Card";
+import MaterialSymbol from "@/components/ui/MaterialSymbol";
 import type { CategorySpending } from "@/features/dashboard/types";
 import { AlertCircle, PieChart as PieChartIcon } from "lucide-react";
 
@@ -182,10 +183,12 @@ export default function CategorySpendingChart({
                     className="h-3 w-3 rounded-full shrink-0"
                     style={{ backgroundColor: color }}
                   />
-                  <span className="text-xs font-medium text-gray-700 truncate">
-                    {item.icon ? `${item.icon} ` : ""}
-                    {item.name}
-                  </span>
+                  <MaterialSymbol
+                    icon={item.icon || "category"}
+                    size={18}
+                    className="shrink-0 text-gray-500"
+                  />
+                  <span className="truncate text-xs font-medium text-gray-700">{item.name}</span>
                 </div>
                 <div className="text-right shrink-0">
                   <div className="text-xs font-bold text-gray-900">
