@@ -106,6 +106,7 @@ export default function ReportsPage() {
   const hasError = summaryQuery.isError || comparisonQuery.isError || trendQuery.isError;
   const trendPoints = trendQuery.data ?? [];
   const categories = summaryQuery.data?.byCategory ?? [];
+  const trendDescription = `Income and expense trend for the selected ${periodLabels[period].toLowerCase()}`;
   const maxTrendValue = Math.max(
     1,
     ...trendPoints.flatMap((point) => [point.income, point.expense])
@@ -213,7 +214,7 @@ export default function ReportsPage() {
           <div className="mb-6 flex flex-col justify-between gap-3 border-b border-gray-100 pb-4 sm:flex-row sm:items-start">
             <div>
               <h2 className="text-base font-bold text-gray-900">Income vs. Expense Trend</h2>
-              <p className="mt-0.5 text-xs text-gray-500">Monthly cashflow comparison over the last 6 months</p>
+              <p className="mt-0.5 text-xs text-gray-500">{trendDescription}</p>
             </div>
             <div className="flex items-center gap-3 text-xs font-medium text-gray-600">
               <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />Income</span>
