@@ -20,9 +20,12 @@ const budget: Budget = {
 };
 
 describe("BudgetCard", () => {
-  it("uses English labels and formatting", () => {
-    render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
+  it("renders the category icon as a Material Symbol and uses English labels", () => {
+    const { container } = render(
+      <BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />
+    );
 
+    expect(container.querySelector(".material-symbols-outlined")).toHaveTextContent("restaurant");
     expect(screen.getByText("Target: August 2026")).toBeInTheDocument();
     expect(screen.getByText("Spending progress")).toBeInTheDocument();
     expect(screen.getByText("Warning (≥80%)")).toBeInTheDocument();

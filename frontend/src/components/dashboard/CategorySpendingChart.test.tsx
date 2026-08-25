@@ -15,9 +15,9 @@ vi.mock("recharts", () => {
   };
 });
 
-describe("CategorySpendingChart language", () => {
-  it("renders the chart copy in English", () => {
-    render(
+describe("CategorySpendingChart", () => {
+  it("renders Material Symbol icons while preserving the English chart copy", () => {
+    const { container } = render(
       <CategorySpendingChart
         data={[
           {
@@ -37,5 +37,6 @@ describe("CategorySpendingChart language", () => {
     expect(screen.getByText("Category breakdown")).toBeInTheDocument();
     expect(screen.getByText("Categories")).toBeInTheDocument();
     expect(screen.getByText("Recorded")).toBeInTheDocument();
+    expect(container.querySelector(".material-symbols-outlined")).toHaveTextContent("restaurant");
   });
 });

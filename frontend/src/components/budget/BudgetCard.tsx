@@ -2,6 +2,7 @@
 
 import { Edit2, Trash2, AlertTriangle, CheckCircle, AlertCircle } from "lucide-react";
 import Card from "@/components/ui/Card";
+import MaterialSymbol from "@/components/ui/MaterialSymbol";
 import type { Budget } from "@/features/budget/types";
 
 interface BudgetCardProps {
@@ -58,7 +59,7 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 font-semibold text-base">
-              {budget.categoryIcon || "🏷️"}
+              <MaterialSymbol icon={budget.categoryIcon || "category"} size={22} />
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">{budget.categoryName}</h3>
