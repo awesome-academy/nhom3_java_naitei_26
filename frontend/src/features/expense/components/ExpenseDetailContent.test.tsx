@@ -28,7 +28,7 @@ vi.mock("../hooks", () => ({
 }));
 vi.mock("./ExpenseFormModal", () => ({
   default: ({ isOpen, expense }: { isOpen: boolean; expense?: { title: string } }) =>
-    isOpen ? <div role="dialog">Form sửa {expense?.title}</div> : null,
+    isOpen ? <div role="dialog">Edit form {expense?.title}</div> : null,
 }));
 
 const expense = {
@@ -60,14 +60,14 @@ describe("ExpenseDetailContent", () => {
 
   it("không tải API với id không hợp lệ", () => {
     render(<ExpenseDetailContent expenseId={null} />);
-    expect(screen.getByText("Đường dẫn khoản chi không hợp lệ")).toBeInTheDocument();
+    expect(screen.getByText("Invalid expense URL")).toBeInTheDocument();
     expect(mocks.useExpense).toHaveBeenCalledWith(0);
   });
 
   it("hiển thị trạng thái loading", () => {
     mocks.useExpense.mockReturnValue({ isLoading: true, refetch: mocks.refetch });
     render(<ExpenseDetailContent expenseId={12} />);
-    expect(screen.getByLabelText("Đang tải chi tiết khoản chi")).toBeInTheDocument();
+    expect(screen.getByLabelText("Loading expense details")).toBeInTheDocument();
   });
 
   it("hiển thị lỗi an toàn và cho thử lại", () => {
@@ -77,8 +77,8 @@ describe("ExpenseDetailContent", () => {
       refetch: mocks.refetch,
     });
     render(<ExpenseDetailContent expenseId={12} />);
-    expect(screen.getByText("không thuộc quyền truy cập", { exact: false })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Thử lại" }));
+    expect(screen.getByText("you do not have access", { exact: false })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
     expect(mocks.refetch).toHaveBeenCalledOnce();
   });
 
@@ -90,8 +90,8 @@ describe("ExpenseDetailContent", () => {
     expect(screen.getByText("14/08/2026")).toBeInTheDocument();
     expect(screen.getByText("Ăn uống")).toBeInTheDocument();
     expect(screen.getByText("Cơm văn phòng")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Sửa khoản chi" }));
-    expect(screen.getByRole("dialog")).toHaveTextContent("Form sửa Cơm trưa");
+    fireEvent.click(screen.getByRole("button", { name: "Edit expense" }));
+    expect(screen.getByRole("dialog")).toHaveTextContent("Edit form Cơm trưa");
   });
 
   it("hiển thị empty state khi không có ghi chú và attachment", () => {
@@ -102,8 +102,8 @@ describe("ExpenseDetailContent", () => {
       refetch: mocks.refetch,
     });
     render(<ExpenseDetailContent expenseId={12} />);
-    expect(screen.getByText("Không có ghi chú")).toBeInTheDocument();
-    expect(screen.getByText("Khoản chi này chưa có file đính kèm.")).toBeInTheDocument();
+    expect(screen.getByText("No note")).toBeInTheDocument();
+    expect(screen.getByText("This expense has no attachments.")).toBeInTheDocument();
   });
 
   it("tải attachment bằng Blob và mở tab mới", async () => {
@@ -126,15 +126,15 @@ describe("ExpenseDetailContent", () => {
       (_variables: unknown, options: { onError: () => void }) => options.onError()
     );
     render(<ExpenseDetailContent expenseId={12} />);
-    fireEvent.click(screen.getByRole("button", { name: "Xóa file bill.pdf" }));
-    fireEvent.click(screen.getByRole("button", { name: "Xóa file" }));
+    fireEvent.click(screen.getByRole("button", { name: "Delete file bill.pdf" }));
+    fireEvent.click(screen.getByRole("button", { name: "Delete file" }));
 
     expect(mocks.deleteAttachment).toHaveBeenCalledWith(
       { expenseId: 12, attachmentId: 7 },
       expect.any(Object)
     );
     expect(screen.getAllByText("bill.pdf").length).toBeGreaterThan(0);
-    expect(mocks.toastError).toHaveBeenCalledWith("Không thể xóa file đính kèm");
+    expect(mocks.toastError).toHaveBeenCalledWith("Unable to delete the attachment");
   });
 
   it("chỉ xóa Expense sau khi xác nhận và điều hướng khi thành công", () => {
@@ -142,9 +142,9 @@ describe("ExpenseDetailContent", () => {
       (_id: number, options: { onSuccess: () => void }) => options.onSuccess()
     );
     render(<ExpenseDetailContent expenseId={12} />);
-    fireEvent.click(screen.getByRole("button", { name: "Xóa khoản chi" }));
+    fireEvent.click(screen.getByRole("button", { name: "Delete expense" }));
     expect(mocks.deleteExpense).not.toHaveBeenCalled();
-    fireEvent.click(screen.getAllByRole("button", { name: "Xóa khoản chi" })[1]);
+    fireEvent.click(screen.getAllByRole("button", { name: "Delete expense" })[1]);
 
     expect(mocks.deleteExpense).toHaveBeenCalledWith(12, expect.any(Object));
     expect(mocks.replace).toHaveBeenCalledWith("/expenses");

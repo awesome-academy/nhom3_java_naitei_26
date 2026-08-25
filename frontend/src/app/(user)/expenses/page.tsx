@@ -72,12 +72,12 @@ export default function ExpensesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Chi tiêu</h1>
-          <p className="text-sm text-gray-500 mt-1">Quản lý các khoản chi tiêu của bạn</p>
+          <h1 className="text-2xl font-bold text-gray-900">Expenses</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage your expenses</p>
         </div>
         <Button onClick={() => setIsCreateOpen(true)}>
           <Plus className="h-4 w-4" />
-          Thêm chi tiêu
+          Add expense
         </Button>
       </div>
 
@@ -94,10 +94,10 @@ export default function ExpensesPage() {
         {isError ? (
           <div className="flex min-h-64 flex-col items-center justify-center gap-3 p-6 text-center">
             <AlertCircle className="h-9 w-9 text-red-500" aria-hidden="true" />
-            <p className="font-medium text-gray-900">Không thể tải danh sách chi tiêu</p>
-            <p className="text-sm text-gray-500">Vui lòng kiểm tra kết nối và thử lại.</p>
+            <p className="font-medium text-gray-900">Unable to load expenses</p>
+            <p className="text-sm text-gray-500">Check your connection and try again.</p>
             <Button variant="outline" onClick={() => refetch()}>
-              Thử lại
+              Try again
             </Button>
           </div>
         ) : (
@@ -106,7 +106,7 @@ export default function ExpensesPage() {
               expenses={data?.items ?? []}
               isLoading={isLoading}
               emptyMessage={
-                hasActiveFilter ? "Không tìm thấy khoản chi phù hợp" : "Chưa có khoản chi tiêu nào"
+                hasActiveFilter ? "No matching expenses found" : "No expenses yet"
               }
               onRowClick={(expense) => router.push(`/expenses/${expense.id}`)}
               onEdit={setEditingExpense}

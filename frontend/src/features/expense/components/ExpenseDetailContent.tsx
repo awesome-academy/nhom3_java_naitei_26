@@ -41,7 +41,7 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
   );
 
   if (!expenseId) {
-    return <DetailMessage title="Đường dẫn khoản chi không hợp lệ" />;
+    return <DetailMessage title="Invalid expense URL" />;
   }
 
   if (detailQuery.isLoading) {
@@ -51,9 +51,9 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
   if (detailQuery.isError || !expense) {
     return (
       <DetailMessage
-        title="Không thể tải chi tiết khoản chi"
-        description="Khoản chi không tồn tại, không thuộc quyền truy cập hoặc kết nối đang gặp lỗi."
-        action={<Button onClick={() => detailQuery.refetch()}>Thử lại</Button>}
+        title="Unable to load expense details"
+        description="The expense does not exist, you do not have access, or there is a connection problem."
+        action={<Button onClick={() => detailQuery.refetch()}>Try again</Button>}
       />
     );
   }
@@ -65,7 +65,7 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
       window.open(objectUrl, "_blank", "noopener,noreferrer");
       window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
     } catch {
-      toast.error("Không thể mở file đính kèm");
+      toast.error("Unable to open the attachment");
     }
   };
 
@@ -78,9 +78,9 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
       {
         onSuccess: () => {
           setAttachmentToDelete(undefined);
-          toast.success("Xóa file đính kèm thành công");
+          toast.success("Attachment deleted successfully");
         },
-        onError: () => toast.error("Không thể xóa file đính kèm"),
+        onError: () => toast.error("Unable to delete the attachment"),
       }
     );
   };
@@ -88,10 +88,10 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
   const deleteExpense = () => {
     deleteExpenseMutation.mutate(expense.id, {
       onSuccess: () => {
-        toast.success("Xóa khoản chi thành công");
+        toast.success("Expense deleted successfully");
         router.replace(ROUTES.EXPENSES);
       },
-      onError: () => toast.error("Không thể xóa khoản chi, vui lòng thử lại"),
+      onError: () => toast.error("Unable to delete the expense. Please try again."),
     });
   };
 
@@ -104,34 +104,34 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
             className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-blue-600"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            Quay lại danh sách
+            Back to expenses
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Chi tiết khoản chi</h1>
-          <p className="mt-1 text-sm text-gray-500">Xem thông tin và quản lý file đính kèm</p>
+          <h1 className="text-2xl font-bold text-gray-900">Expense details</h1>
+          <p className="mt-1 text-sm text-gray-500">View expense information and manage attachments</p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" onClick={() => setIsEditing(true)}>
             <Pencil className="h-4 w-4" aria-hidden="true" />
-            Sửa khoản chi
+            Edit expense
           </Button>
           <Button variant="danger" onClick={() => setIsDeleteOpen(true)}>
             <Trash2 className="h-4 w-4" aria-hidden="true" />
-            Xóa khoản chi
+            Delete expense
           </Button>
         </div>
       </div>
 
       <Card>
         <dl className="grid gap-6 sm:grid-cols-2">
-          <DetailField label="Tên khoản chi" value={expense.title} />
-          <DetailField label="Số tiền" value={formatAmount(expense.amount)} highlight />
-          <DetailField label="Ngày chi" value={formatDate(expense.date)} />
-          <DetailField label="Danh mục" value={expense.categoryName} />
-          <DetailField label="Ghi chú" value={expense.note?.trim() || "Không có ghi chú"} wide />
+          <DetailField label="Expense title" value={expense.title} />
+          <DetailField label="Amount" value={formatAmount(expense.amount)} highlight />
+          <DetailField label="Date" value={formatDate(expense.date)} />
+          <DetailField label="Category" value={expense.categoryName} />
+          <DetailField label="Note" value={expense.note?.trim() || "No note"} wide />
         </dl>
       </Card>
 
-      <Card title="File đính kèm" description="Bấm vào tên file để xem nội dung">
+      <Card title="Attachments" description="Select a file name to view it">
         {expense.attachments?.length ? (
           <ul className="divide-y divide-gray-100 rounded-lg border border-gray-200">
             {expense.attachments.map((attachment) => (
@@ -149,7 +149,7 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
                 </button>
                 <button
                   type="button"
-                  aria-label={`Xóa file ${attachment.fileName}`}
+                  aria-label={`Delete file ${attachment.fileName}`}
                   className="rounded-lg p-2 text-gray-500 hover:bg-red-50 hover:text-red-600"
                   onClick={() => setAttachmentToDelete(attachment)}
                 >
@@ -160,7 +160,7 @@ export default function ExpenseDetailContent({ expenseId }: ExpenseDetailContent
           </ul>
         ) : (
           <p className="rounded-lg bg-gray-50 px-4 py-8 text-center text-sm text-gray-500">
-            Khoản chi này chưa có file đính kèm.
+            This expense has no attachments.
           </p>
         )}
       </Card>
@@ -211,7 +211,7 @@ function DetailField({
 
 function DetailLoading() {
   return (
-    <div aria-label="Đang tải chi tiết khoản chi" className="space-y-6">
+    <div aria-label="Loading expense details" className="space-y-6">
       <Skeleton className="h-20 w-full" />
       <Skeleton className="h-64 w-full" />
       <Skeleton className="h-40 w-full" />
@@ -234,7 +234,7 @@ function DetailMessage({
       {description && <p className="mx-auto mt-2 max-w-lg text-sm text-gray-500">{description}</p>}
       {action && <div className="mt-6">{action}</div>}
       <Link href={ROUTES.EXPENSES} className="mt-5 inline-block text-sm text-blue-600 hover:underline">
-        Quay lại danh sách
+        Back to expenses
       </Link>
     </Card>
   );

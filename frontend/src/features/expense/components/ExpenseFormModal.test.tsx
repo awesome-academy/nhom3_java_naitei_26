@@ -29,26 +29,26 @@ describe("ExpenseFormModal", () => {
 
   it("validate các field bắt buộc", async () => {
     render(<ExpenseFormModal isOpen categories={categories} onClose={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Tạo khoản chi" }));
+    fireEvent.click(screen.getByRole("button", { name: "Create expense" }));
 
-    expect(await screen.findByText("Tên khoản chi không được để trống")).toBeInTheDocument();
-    expect(screen.getByText("Số tiền không được để trống")).toBeInTheDocument();
-    expect(screen.getByText("Ngày chi không được để trống")).toBeInTheDocument();
-    expect(screen.getByText("Danh mục không được để trống")).toBeInTheDocument();
+    expect(await screen.findByText("Expense title is required")).toBeInTheDocument();
+    expect(screen.getByText("Amount is required")).toBeInTheDocument();
+    expect(screen.getByText("Date is required")).toBeInTheDocument();
+    expect(screen.getByText("Category is required")).toBeInTheDocument();
     expect(createMutate).not.toHaveBeenCalled();
   });
 
   it("submit create đúng data và file", async () => {
     render(<ExpenseFormModal isOpen categories={categories} onClose={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Tên khoản chi"), {
+    fireEvent.change(screen.getByLabelText("Expense title"), {
       target: { value: "Cơm trưa" },
     });
-    fireEvent.change(screen.getByLabelText("Số tiền"), { target: { value: "50000" } });
-    fireEvent.change(screen.getByLabelText("Ngày chi"), { target: { value: "2026-08-14" } });
-    fireEvent.change(screen.getByLabelText("Danh mục"), { target: { value: "3" } });
+    fireEvent.change(screen.getByLabelText("Amount"), { target: { value: "50000" } });
+    fireEvent.change(screen.getByLabelText("Date"), { target: { value: "2026-08-14" } });
+    fireEvent.change(screen.getByLabelText("Category"), { target: { value: "3" } });
     const file = new File(["bill"], "bill.pdf", { type: "application/pdf" });
-    fireEvent.change(screen.getByLabelText("File đính kèm"), { target: { files: [file] } });
-    fireEvent.click(screen.getByRole("button", { name: "Tạo khoản chi" }));
+    fireEvent.change(screen.getByLabelText("Attachments"), { target: { files: [file] } });
+    fireEvent.click(screen.getByRole("button", { name: "Create expense" }));
 
     await waitFor(() => {
       expect(createMutate).toHaveBeenCalledWith(
@@ -88,13 +88,13 @@ describe("ExpenseFormModal", () => {
         onClose={vi.fn()}
       />
     );
-    expect(screen.getByLabelText("Tên khoản chi")).toHaveValue("Cơm trưa");
+    expect(screen.getByLabelText("Expense title")).toHaveValue("Cơm trưa");
 
     const file = new File(["bill"], "bill.pdf", { type: "application/pdf" });
-    fireEvent.change(screen.getByLabelText("Thêm file mới"), { target: { files: [file] } });
-    fireEvent.click(screen.getByRole("button", { name: "Lưu thay đổi" }));
+    fireEvent.change(screen.getByLabelText("Add new attachments"), { target: { files: [file] } });
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
-    expect(await screen.findByText("Chỉ có thể thêm tối đa 0 file")).toBeInTheDocument();
+    expect(await screen.findByText("You can add up to 0 more files")).toBeInTheDocument();
     expect(updateMutate).not.toHaveBeenCalled();
   });
 
@@ -104,15 +104,15 @@ describe("ExpenseFormModal", () => {
       type: "application/octet-stream",
     });
 
-    fireEvent.change(screen.getByLabelText("File đính kèm"), {
+    fireEvent.change(screen.getByLabelText("Attachments"), {
       target: { files: [invalidFile] },
     });
 
     expect(
-      await screen.findByText("File đính kèm chỉ hỗ trợ JPEG, PNG hoặc PDF")
+      await screen.findByText("Attachments must be JPEG, PNG, or PDF files")
     ).toBeInTheDocument();
     expect(screen.getByText("script.exe")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Tạo khoản chi" }));
+    fireEvent.click(screen.getByRole("button", { name: "Create expense" }));
     expect(createMutate).not.toHaveBeenCalled();
   });
 
@@ -145,12 +145,12 @@ describe("ExpenseFormModal", () => {
     await waitFor(() =>
       expect(open).toHaveBeenCalledWith("blob:preview", "_blank", "noopener,noreferrer")
     );
-    fireEvent.click(screen.getByRole("button", { name: "Xóa file bill.pdf" }));
+    fireEvent.click(screen.getByRole("button", { name: "Delete file bill.pdf" }));
     const confirmDialog = screen.getByRole("alertdialog");
     expect(confirmDialog).toBeInTheDocument();
-    expect(screen.getByText("Xóa file đính kèm?")).toBeInTheDocument();
+    expect(screen.getByText("Delete attachment?")).toBeInTheDocument();
     expect(within(confirmDialog).getByText("bill.pdf")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Xóa file" }));
+    fireEvent.click(screen.getByRole("button", { name: "Delete file" }));
     expect(deleteAttachmentMutate).toHaveBeenCalledWith(
       { expenseId: 12, attachmentId: 7 },
       expect.any(Object)

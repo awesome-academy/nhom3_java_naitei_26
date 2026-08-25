@@ -16,8 +16,8 @@ describe("AttachmentDeleteConfirmModal", () => {
     );
 
     expect(screen.getByText("bill.pdf")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Hủy" }));
-    fireEvent.click(screen.getByRole("button", { name: "Xóa file" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Delete file" }));
     expect(onCancel).toHaveBeenCalledOnce();
     expect(onConfirm).toHaveBeenCalledOnce();
   });
@@ -33,7 +33,7 @@ describe("AttachmentDeleteConfirmModal", () => {
       />
     );
 
-    expect(screen.getByRole("button", { name: "Hủy" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
     fireEvent.keyDown(document, { key: "Escape" });
     expect(onCancel).not.toHaveBeenCalled();
   });

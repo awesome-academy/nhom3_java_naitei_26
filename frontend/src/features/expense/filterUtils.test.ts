@@ -38,15 +38,15 @@ describe("expense filter utilities", () => {
         fromDate: "2026-08-20",
         toDate: "2026-08-01",
       }).date
-    ).toBe("Ngày bắt đầu không được sau ngày kết thúc");
+    ).toBe("The start date cannot be after the end date");
   });
 
   it("validate khoảng tiền âm và đảo", () => {
     expect(validateExpenseFilters({ ...emptyValues, minAmount: "-1" }).amount).toBe(
-      "Số tiền tối thiểu không được âm"
+      "The minimum amount cannot be negative"
     );
     expect(
       validateExpenseFilters({ ...emptyValues, minAmount: "200", maxAmount: "100" }).amount
-    ).toBe("Số tiền tối thiểu không được lớn hơn số tiền tối đa");
+    ).toBe("The minimum amount cannot exceed the maximum amount");
   });
 });
