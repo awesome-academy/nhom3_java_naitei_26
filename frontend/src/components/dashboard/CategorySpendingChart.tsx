@@ -24,7 +24,7 @@ const COLORS = [
 ];
 
 function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("vi-VN", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "VND",
   }).format(amount);
@@ -42,7 +42,7 @@ export default function CategorySpendingChart({
       <Card className="p-6">
         <div className="flex items-center gap-2 border-b pb-4">
           <PieChartIcon className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
+          <h2 className="text-base font-semibold text-gray-900">Spending by Category</h2>
         </div>
         <div className="flex h-64 items-center justify-center">
           <div className="h-40 w-40 animate-pulse rounded-full border-8 border-gray-100 border-t-indigo-500" />
@@ -56,11 +56,11 @@ export default function CategorySpendingChart({
       <Card className="p-6">
         <div className="flex items-center gap-2 border-b pb-4">
           <PieChartIcon className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
+          <h2 className="text-base font-semibold text-gray-900">Spending by Category</h2>
         </div>
         <div className="flex h-64 flex-col items-center justify-center gap-2 text-red-500">
           <AlertCircle className="h-8 w-8" />
-          <p className="text-sm font-medium">Không thể tải dữ liệu biểu đồ</p>
+          <p className="text-sm font-medium">Unable to load chart data</p>
         </div>
       </Card>
     );
@@ -71,11 +71,11 @@ export default function CategorySpendingChart({
       <Card className="p-6">
         <div className="flex items-center gap-2 border-b pb-4">
           <PieChartIcon className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
+          <h2 className="text-base font-semibold text-gray-900">Spending by Category</h2>
         </div>
         <div className="flex h-64 flex-col items-center justify-center gap-2 text-gray-400">
           <PieChartIcon className="h-10 w-10 stroke-[1.5]" />
-          <p className="text-sm">Chưa có dữ liệu chi tiêu để hiển thị biểu đồ</p>
+          <p className="text-sm">No spending data is available for this chart</p>
         </div>
       </Card>
     );
@@ -95,9 +95,9 @@ export default function CategorySpendingChart({
       <div className="flex items-center justify-between border-b pb-4">
         <div className="flex items-center gap-2">
           <PieChartIcon className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-base font-semibold text-gray-900">Cơ cấu chi tiêu</h2>
+          <h2 className="text-base font-semibold text-gray-900">Spending by Category</h2>
         </div>
-        <span className="text-xs text-gray-500 font-medium">Theo danh mục</span>
+        <span className="text-xs text-gray-500 font-medium">Category breakdown</span>
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-5 items-center">
@@ -128,7 +128,7 @@ export default function CategorySpendingChart({
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: any) => [formatCurrency(Number(value)), "Số tiền"]}
+                formatter={(value) => [formatCurrency(Number(value)), "Amount"]}
                 contentStyle={{
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
@@ -154,9 +154,9 @@ export default function CategorySpendingChart({
               </>
             ) : (
               <>
-                <span className="text-xs font-medium text-gray-400">Danh mục</span>
+                <span className="text-xs font-medium text-gray-400">Categories</span>
                 <span className="text-base font-bold text-gray-700">{data.length}</span>
-                <span className="text-[10px] text-gray-400">Đã ghi nhận</span>
+                <span className="text-[10px] text-gray-400">Recorded</span>
               </>
             )}
           </div>
@@ -183,16 +183,15 @@ export default function CategorySpendingChart({
                     style={{ backgroundColor: color }}
                   />
                   <span className="text-xs font-medium text-gray-700 truncate">
-                    {item.icon ? `${item.icon} ` : ""}{item.name}
+                    {item.icon ? `${item.icon} ` : ""}
+                    {item.name}
                   </span>
                 </div>
                 <div className="text-right shrink-0">
                   <div className="text-xs font-bold text-gray-900">
                     {formatCurrency(item.value)}
                   </div>
-                  <div className="text-[10px] font-semibold text-gray-500">
-                    {item.percentage}%
-                  </div>
+                  <div className="text-[10px] font-semibold text-gray-500">{item.percentage}%</div>
                 </div>
               </div>
             );
