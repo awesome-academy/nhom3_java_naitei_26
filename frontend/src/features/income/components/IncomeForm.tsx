@@ -28,8 +28,10 @@ export default function IncomeForm({
 }: IncomeFormProps) {
   const [source, setSource] = useState(initialData?.source || "");
   const [amount, setAmount] = useState(initialData?.amount?.toString() || "");
-  const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(initialData?.date || new Date().toISOString().split("T")[0]);
   const [note, setNote] = useState(initialData?.note || "");
+
+  const today = new Date().toISOString().split("T")[0];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,20 +86,20 @@ export default function IncomeForm({
           </label>
           <div className="relative">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-semibold text-gray-500 text-sm">
-              $
+              ₫
             </span>
             <input
               type="number"
-              step="0.01"
+              step="1"
               id="amount"
               required
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="0.00"
+              placeholder="0"
               className="w-full pl-8 pr-14 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono font-semibold text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all"
             />
             <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">
-              USD
+              VNĐ
             </span>
           </div>
           {serverErrors.amount && (
@@ -117,6 +119,7 @@ export default function IncomeForm({
             type="date"
             id="date"
             required
+            max={today}
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all"
