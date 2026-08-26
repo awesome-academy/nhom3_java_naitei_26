@@ -97,6 +97,14 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
             @Param("from") LocalDate from,
             @Param("to") LocalDate to);
 
+    @Query("SELECT FUNCTION('YEAR', e.expenseDate), FUNCTION('MONTH', e.expenseDate), FUNCTION('DAY', e.expenseDate), SUM(e.amount) " +
+            "FROM Expense e WHERE e.user.id = :userId AND e.expenseDate BETWEEN :from AND :to " +
+            "GROUP BY FUNCTION('YEAR', e.expenseDate), FUNCTION('MONTH', e.expenseDate), FUNCTION('DAY', e.expenseDate)")
+    List<Object[]> sumDailyAmountByUserIdAndExpenseDateBetween(
+            @Param("userId") Long userId,
+            @Param("from") LocalDate from,
+            @Param("to") LocalDate to);
+
     @Modifying
     @Query("UPDATE Expense e SET e.category.id = :newId WHERE e.category.id = :oldId")
     void updateCategoryByOldCategory(@Param("oldId") Long oldId, @Param("newId") Long newId);

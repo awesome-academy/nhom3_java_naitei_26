@@ -65,4 +65,12 @@ public interface IncomeRepository extends JpaRepository<Income, Long>, JpaSpecif
 
     @Query("SELECT COALESCE(SUM(i.amount), 0) FROM Income i")
     BigDecimal sumTotalIncomeAcrossAllUsers();
+
+    @Query("SELECT FUNCTION('YEAR', i.incomeDate), FUNCTION('MONTH', i.incomeDate), FUNCTION('DAY', i.incomeDate), SUM(i.amount) " +
+            "FROM Income i WHERE i.user.id = :userId AND i.incomeDate BETWEEN :from AND :to " +
+            "GROUP BY FUNCTION('YEAR', i.incomeDate), FUNCTION('MONTH', i.incomeDate), FUNCTION('DAY', i.incomeDate)")
+    List<Object[]> sumDailyAmountByUserIdAndIncomeDateBetween(
+            @Param("userId") Long userId,
+            @Param("from") LocalDate from,
+            @Param("to") LocalDate to);
 }
