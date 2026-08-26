@@ -30,6 +30,7 @@ public class IncomeAdminServiceImpl implements IncomeAdminService {
             "amount", "amount");
 
     private final IncomeRepository incomeRepository;
+    private final jakarta.persistence.EntityManager entityManager;
 
     @Override
     @Transactional(readOnly = true)
@@ -80,8 +81,19 @@ public class IncomeAdminServiceImpl implements IncomeAdminService {
 
     @Override
     @Transactional(readOnly = true)
-    public java.math.BigDecimal getTotalIncomeAcrossAllUsers() {
-        return incomeRepository.sumTotalIncomeAcrossAllUsers();
+    public java.math.BigDecimal getTotalIncomeAcrossAllUsers(AdminIncomeFilterRequest filter) {
+        var spec = IncomeSpecification.filterByAdmin(filter);
+        var cb = entityManager.getCriteriaBuilder();
+        var query = cb.createQuery(java.math.BigDecimal.class);
+        var root = query.from(Income.class);
+        query.select(cb.coalesce(cb.sum(root.get("amount")), java.math.BigDecimal.ZERO));
+        if (spec != null) {
+            var predicate = spec.toPredicate(root, query, cb);
+            if (predicate != null) {
+                query.where(predicate);
+            }
+        }
+        return entityManager.createQuery(query).getSingleResult();
     }
 
     private AdminIncomeResponse toAdminResponse(Income income) {

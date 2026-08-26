@@ -120,7 +120,7 @@ class ImportServiceImplTest {
         User user = user(1L, "bob@test.com");
         Category category = category(10L, CategoryType.EXPENSE);
         when(userRepository.findByEmail("bob@test.com")).thenReturn(Optional.of(user));
-        when(categoryRepository.findByUserIdAndNameAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
+        when(categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
                 .thenReturn(Optional.of(category));
 
         String content = "userEmail,title,category,amount,date,note\n"
@@ -170,7 +170,7 @@ class ImportServiceImplTest {
         User user = user(1L, "bob@test.com");
         Category category = category(20L, CategoryType.INCOME);
         when(userRepository.findByEmail("bob@test.com")).thenReturn(Optional.of(user));
-        when(categoryRepository.findByUserIdAndNameAndTypeAndDeletedAtIsNull(1L, "Salary", CategoryType.INCOME))
+        when(categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(1L, "Salary", CategoryType.INCOME))
                 .thenReturn(Optional.of(category));
 
         String content = "userEmail,source,category,amount,date,note\n"
@@ -187,7 +187,7 @@ class ImportServiceImplTest {
         User user = user(1L, "bob@test.com");
         Category category = category(10L, CategoryType.EXPENSE);
         when(userRepository.findByEmail("bob@test.com")).thenReturn(Optional.of(user));
-        when(categoryRepository.findByUserIdAndNameAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
+        when(categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
                 .thenReturn(Optional.of(category));
         when(budgetRepository.findByUserIdAndCategoryIdAndYearAndMonth(1L, 10L, (short) 2026, (byte) 1))
                 .thenReturn(Optional.empty());
@@ -209,7 +209,7 @@ class ImportServiceImplTest {
         Category category = category(10L, CategoryType.EXPENSE);
         Budget existing = new Budget();
         when(userRepository.findByEmail("bob@test.com")).thenReturn(Optional.of(user));
-        when(categoryRepository.findByUserIdAndNameAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
+        when(categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
                 .thenReturn(Optional.of(category));
         when(budgetRepository.findByUserIdAndCategoryIdAndYearAndMonth(1L, 10L, (short) 2026, (byte) 1))
                 .thenReturn(Optional.of(existing));
@@ -245,7 +245,7 @@ class ImportServiceImplTest {
         Category ownCategory = category(10L, CategoryType.EXPENSE);
         Category globalCategory = category(20L, CategoryType.EXPENSE);
         when(userRepository.findByEmail("bob@test.com")).thenReturn(Optional.of(user));
-        when(categoryRepository.findByUserIdAndNameAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
+        when(categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
                 .thenReturn(Optional.of(ownCategory));
 
         String content = "userEmail,title,category,amount,date,note\n"
@@ -257,7 +257,7 @@ class ImportServiceImplTest {
         verify(expenseRepository).save(captor.capture());
         assertEquals(10L, captor.getValue().getCategory().getId());
         verify(categoryRepository, never())
-                .findByUserIsNullAndNameAndTypeAndDeletedAtIsNull(anyString(), any());
+                .findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(anyString(), any());
     }
 
     @Test
@@ -265,9 +265,9 @@ class ImportServiceImplTest {
         User user = user(1L, "bob@test.com");
         Category globalCategory = category(20L, CategoryType.EXPENSE);
         when(userRepository.findByEmail("bob@test.com")).thenReturn(Optional.of(user));
-        when(categoryRepository.findByUserIdAndNameAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
+        when(categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(1L, "Food", CategoryType.EXPENSE))
                 .thenReturn(Optional.empty());
-        when(categoryRepository.findByUserIsNullAndNameAndTypeAndDeletedAtIsNull("Food", CategoryType.EXPENSE))
+        when(categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull("Food", CategoryType.EXPENSE))
                 .thenReturn(Optional.of(globalCategory));
 
         String content = "userEmail,title,category,amount,date,note\n"

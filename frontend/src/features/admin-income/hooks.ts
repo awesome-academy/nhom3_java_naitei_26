@@ -16,7 +16,8 @@ export const adminIncomeKeys = {
     [...adminIncomeKeys.lists(), filters] as const,
   details: () => [...adminIncomeKeys.all, "detail"] as const,
   detail: (id: number) => [...adminIncomeKeys.details(), id] as const,
-  total: () => [...adminIncomeKeys.all, "total"] as const,
+  totals: () => [...adminIncomeKeys.all, "total"] as const,
+  total: (filters?: AdminIncomeFilterRequest) => [...adminIncomeKeys.totals(), filters] as const,
 };
 
 export const useAdminIncomes = (filters: AdminIncomeFilterRequest) => {
@@ -42,7 +43,7 @@ export const useUpdateAdminIncome = () => {
     onSuccess: (data) => {
       toast.success("Income record updated successfully");
       queryClient.invalidateQueries({ queryKey: adminIncomeKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: adminIncomeKeys.total() });
+      queryClient.invalidateQueries({ queryKey: adminIncomeKeys.totals() });
       queryClient.invalidateQueries({
         queryKey: adminIncomeKeys.detail(data.id),
       });
@@ -66,7 +67,7 @@ export const useDeleteAdminIncome = () => {
     onSuccess: () => {
       toast.success("Income record deleted successfully");
       queryClient.invalidateQueries({ queryKey: adminIncomeKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: adminIncomeKeys.total() });
+      queryClient.invalidateQueries({ queryKey: adminIncomeKeys.totals() });
       queryClient.invalidateQueries({ queryKey: ["incomes"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
       queryClient.invalidateQueries({ queryKey: ["report"] });
@@ -79,9 +80,9 @@ export const useDeleteAdminIncome = () => {
   });
 };
 
-export const useAdminIncomeTotal = () => {
+export const useAdminIncomeTotal = (filters?: AdminIncomeFilterRequest) => {
   return useQuery({
-    queryKey: adminIncomeKeys.total(),
-    queryFn: getAdminIncomeTotal,
+    queryKey: adminIncomeKeys.total(filters),
+    queryFn: () => getAdminIncomeTotal(filters),
   });
 };

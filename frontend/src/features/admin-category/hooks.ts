@@ -28,7 +28,7 @@ export const useCreateAdminCategory = () => {
       toast.success("Global category created successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to create category");
+      toast.error(error?.message || "Failed to create category");
     },
   });
 };
@@ -43,7 +43,7 @@ export const useUpdateAdminCategory = () => {
       toast.success("Global category updated successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update category");
+      toast.error(error?.message || "Failed to update category");
     },
   });
 };
@@ -57,7 +57,7 @@ export const useDeleteAdminCategory = () => {
       toast.success("Global category deleted successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to delete category");
+      toast.error(error?.message || "Failed to delete category");
     },
   });
 };

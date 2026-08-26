@@ -25,6 +25,7 @@ export default function AdminCategoryForm({ initialData, isEdit }: Props) {
     icon: "category",
     description: "",
   });
+  const [serverError, setServerError] = useState<string>("");
 
   useEffect(() => {
     if (initialData) {
@@ -39,13 +40,24 @@ export default function AdminCategoryForm({ initialData, isEdit }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setServerError("");
     if (isEdit && initialData) {
       updateMutation.mutate({ id: initialData.id, data: formData }, {
-        onSuccess: () => router.push("/admin/categories")
+        onSuccess: () => router.push("/admin/categories"),
+        onError: (error: any) => {
+          if (error?.status === 409) {
+            setServerError(error.message || "Global category already exists");
+          }
+        }
       });
     } else {
       createMutation.mutate(formData, {
-        onSuccess: () => router.push("/admin/categories")
+        onSuccess: () => router.push("/admin/categories"),
+        onError: (error: any) => {
+          if (error?.status === 409) {
+            setServerError(error.message || "Global category already exists");
+          }
+        }
       });
     }
   };
@@ -80,10 +92,20 @@ export default function AdminCategoryForm({ initialData, isEdit }: Props) {
               type="text"
               required
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-900"
+              onChange={(e) => {
+                setFormData({ ...formData, name: e.target.value });
+                if (serverError) setServerError("");
+              }}
+              className={`w-full px-4 py-3 rounded-xl border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 transition-all font-medium text-slate-900 ${
+                serverError 
+                  ? "border-red-300 focus:ring-red-500/20 focus:border-red-500" 
+                  : "border-slate-200 focus:ring-blue-500/20 focus:border-blue-500"
+              }`}
               placeholder="e.g., Food & Dining"
             />
+            {serverError && (
+              <p className="text-red-500 text-sm mt-1">{serverError}</p>
+            )}
           </div>
 
           {/* Classification Type */}

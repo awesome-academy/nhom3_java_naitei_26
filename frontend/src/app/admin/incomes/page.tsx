@@ -35,7 +35,7 @@ export default function AdminIncomesPage() {
   const effectiveFilters = { ...filters, search: debouncedSearch, page, size: PAGE_SIZE, sort };
   
   const query = useAdminIncomes(effectiveFilters);
-  const totalIncomeQuery = useAdminIncomeTotal();
+  const totalIncomeQuery = useAdminIncomeTotal(effectiveFilters);
   const usersQuery = useUsers({ page: 0, size: 100 }, false);
   const userOptions = Array.isArray(usersQuery.data?.content) ? usersQuery.data.content : [];
 

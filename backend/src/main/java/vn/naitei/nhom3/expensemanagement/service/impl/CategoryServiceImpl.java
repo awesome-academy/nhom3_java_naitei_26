@@ -97,6 +97,14 @@ public class CategoryServiceImpl implements CategoryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> ResourceNotFoundException.of("Người dùng", userId));
 
+        // BR: Prevent duplicate category name for the same user and type (case-insensitive)
+        categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(userId, request.getName().trim(), request.getType())
+                .ifPresent(c -> { throw new ConflictException("Danh mục này đã tồn tại trong hệ thống của bạn."); });
+
+        // BR: Prevent user from creating a category with the same name as a SYSTEM category (case-insensitive)
+        categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(request.getName().trim(), request.getType())
+                .ifPresent(c -> { throw new ConflictException("Tên danh mục này trùng với danh mục mặc định của hệ thống."); });
+
         Category category = new Category();
         category.setUser(user);  // Danh mục riêng — gán userId từ token
         applyRequestToEntity(category, request);
@@ -124,6 +132,15 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ConflictException(
                     "Không thể đổi loại danh mục đã phát sinh dữ liệu");
         }
+
+        // BR: Prevent renaming to an existing category name for this user (case-insensitive)
+        categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(userId, request.getName().trim(), request.getType())
+                .filter(existing -> !existing.getId().equals(id))
+                .ifPresent(c -> { throw new ConflictException("Danh mục này đã tồn tại trong hệ thống của bạn."); });
+
+        // BR: Prevent renaming to a SYSTEM category name (case-insensitive)
+        categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(request.getName().trim(), request.getType())
+                .ifPresent(c -> { throw new ConflictException("Tên danh mục này trùng với danh mục mặc định của hệ thống."); });
 
         applyRequestToEntity(category, request);
         return CategoryMapper.toResponse(categoryRepository.save(category));
@@ -215,8 +232,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public vn.naitei.nhom3.expensemanagement.dto.category.CategoryAdminResponse createSystemCategory(vn.naitei.nhom3.expensemanagement.dto.category.CategoryRequest request) {
+        // Prevent duplicate system category (case-insensitive)
+        categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(request.getName().trim(), request.getType())
+                .ifPresent(c -> { throw new ConflictException("Danh mục hệ thống này đã tồn tại."); });
+
         vn.naitei.nhom3.expensemanagement.entity.Category cat = new vn.naitei.nhom3.expensemanagement.entity.Category();
-        cat.setName(request.getName());
+        cat.setName(request.getName().trim());
         cat.setDescription(request.getDescription());
         cat.setIcon(request.getIcon());
         cat.setType(request.getType());
@@ -233,7 +254,12 @@ public class CategoryServiceImpl implements CategoryService {
             .orElseThrow(() -> new vn.naitei.nhom3.expensemanagement.exception.ResourceNotFoundException("Không tìm thấy danh mục chung với ID: " + id));
         if (cat.getUser() != null) throw new vn.naitei.nhom3.expensemanagement.exception.ForbiddenException("Chỉ được sửa danh mục chung");
         
-        cat.setName(request.getName());
+        // Prevent renaming to an existing system category (case-insensitive)
+        categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(request.getName().trim(), request.getType())
+                .filter(existing -> !existing.getId().equals(id))
+                .ifPresent(c -> { throw new ConflictException("Danh mục hệ thống này đã tồn tại."); });
+
+        cat.setName(request.getName().trim());
         cat.setDescription(request.getDescription());
         cat.setIcon(request.getIcon());
         cat.setType(request.getType());
@@ -256,7 +282,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (cat.getUser() != null) throw new vn.naitei.nhom3.expensemanagement.exception.ForbiddenException("Chỉ được xoá danh mục chung");
         
         // Find or create "Uncategorized" category for fallback
-        vn.naitei.nhom3.expensemanagement.entity.Category fallback = categoryRepository.findByUserIsNullAndNameAndTypeAndDeletedAtIsNull("Uncategorized", cat.getType())
+        vn.naitei.nhom3.expensemanagement.entity.Category fallback = categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull("Uncategorized", cat.getType())
             .orElseGet(() -> {
                 vn.naitei.nhom3.expensemanagement.entity.Category uncategorized = new vn.naitei.nhom3.expensemanagement.entity.Category();
                 uncategorized.setName("Uncategorized");

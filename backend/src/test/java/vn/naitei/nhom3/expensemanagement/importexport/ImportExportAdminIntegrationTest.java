@@ -77,9 +77,9 @@ class ImportExportAdminIntegrationTest {
 
     @AfterEach
     void tearDown() {
-        categoryRepository.findByUserIsNullAndNameAndTypeAndDeletedAtIsNull(
+        categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(
                 "Cat-" + uniqueSuffix, CategoryType.EXPENSE).ifPresent(categoryRepository::delete);
-        categoryRepository.findByUserIsNullAndNameAndTypeAndDeletedAtIsNull(
+        categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(
                 "Cat-" + uniqueSuffix + "-2", CategoryType.EXPENSE).ifPresent(categoryRepository::delete);
         userRepository.deleteById(admin.getId());
         userRepository.deleteById(regularUser.getId());
@@ -173,9 +173,9 @@ class ImportExportAdminIntegrationTest {
         assertThat(response.at("/data/failedCount").asInt()).isEqualTo(1);
         assertThat(response.at("/data/errors/0").asText()).contains("Dòng 3");
 
-        assertThat(categoryRepository.findByUserIsNullAndNameAndTypeAndDeletedAtIsNull(
+        assertThat(categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(
                 "Cat-" + uniqueSuffix, CategoryType.EXPENSE)).isPresent();
-        assertThat(categoryRepository.findByUserIsNullAndNameAndTypeAndDeletedAtIsNull(
+        assertThat(categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(
                 "Cat-" + uniqueSuffix + "-2", CategoryType.EXPENSE)).isEmpty();
     }
 

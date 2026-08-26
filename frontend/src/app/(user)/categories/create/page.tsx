@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { CategoryForm } from "@/features/category/components";
+import { toast } from "sonner";
 import { useCreateCategory } from "@/features/category/hooks";
 import type { CreateCategoryDto } from "@/features/category/types";
 import { ROUTES } from "@/lib/constants";
@@ -36,6 +37,11 @@ export default function CreateCategoryPage() {
       // 400 Bad Request — hiển thị lỗi validate theo field
       if (error?.status === 400 && error?.details?.data) {
         setServerErrors(error.details.data as Record<string, string>);
+      } else if (error?.status === 409) {
+        // 409 Conflict - Tên danh mục trùng lặp
+        setServerErrors({ name: error.message || "Danh mục này đã tồn tại" });
+      } else {
+        toast.error(error?.message || "Failed to create category");
       }
     } finally {
       setIsSubmitting(false);

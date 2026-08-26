@@ -110,7 +110,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
     void updateCategoryByOldCategory(@Param("oldId") Long oldId, @Param("newId") Long newId);
 
     // ==================== PROJECTIONS ====================
-    interface CategoryExpenseSummaryProjection {
+    public interface CategoryExpenseSummaryProjection {
         Long getCategoryId();
         String getCategoryName();
         String getCategoryIcon();
