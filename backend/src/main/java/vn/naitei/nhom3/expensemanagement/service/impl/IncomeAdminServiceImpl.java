@@ -78,6 +78,12 @@ public class IncomeAdminServiceImpl implements IncomeAdminService {
         incomeRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public java.math.BigDecimal getTotalIncomeAcrossAllUsers() {
+        return incomeRepository.sumTotalIncomeAcrossAllUsers();
+    }
+
     private AdminIncomeResponse toAdminResponse(Income income) {
         return new AdminIncomeResponse(
                 income.getId(),

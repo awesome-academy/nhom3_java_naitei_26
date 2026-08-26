@@ -4,6 +4,7 @@ import {
   getAdminIncome,
   getAdminIncomes,
   updateAdminIncome,
+  getAdminIncomeTotal,
 } from "./api";
 import { AdminIncomeFilterRequest } from "./types";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ export const adminIncomeKeys = {
     [...adminIncomeKeys.lists(), filters] as const,
   details: () => [...adminIncomeKeys.all, "detail"] as const,
   detail: (id: number) => [...adminIncomeKeys.details(), id] as const,
+  total: () => [...adminIncomeKeys.all, "total"] as const,
 };
 
 export const useAdminIncomes = (filters: AdminIncomeFilterRequest) => {
@@ -66,5 +68,12 @@ export const useDeleteAdminIncome = () => {
         error.response?.data?.message || "Failed to delete income record"
       );
     },
+  });
+};
+
+export const useAdminIncomeTotal = () => {
+  return useQuery({
+    queryKey: adminIncomeKeys.total(),
+    queryFn: getAdminIncomeTotal,
   });
 };
