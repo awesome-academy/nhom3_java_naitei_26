@@ -10,4 +10,5 @@ public interface IncomeAdminService {
     AdminIncomeResponse getById(Long id);
     AdminIncomeResponse update(Long id, IncomeRequest request);
     void delete(Long id);
+    java.math.BigDecimal getTotalIncomeAcrossAllUsers();
 }

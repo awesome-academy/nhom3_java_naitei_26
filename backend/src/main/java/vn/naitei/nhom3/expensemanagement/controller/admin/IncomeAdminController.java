@@ -53,4 +53,9 @@ public class IncomeAdminController {
         incomeAdminService.delete(id);
         return ResponseEntity.ok(ApiResponse.<Void>success("Income deleted successfully", null));
     }
+
+    @GetMapping("/total")
+    public ResponseEntity<ApiResponse<java.math.BigDecimal>> getTotalAcrossAllUsers() {
+        return ResponseEntity.ok(ApiResponse.success(incomeAdminService.getTotalIncomeAcrossAllUsers()));
+    }
 }

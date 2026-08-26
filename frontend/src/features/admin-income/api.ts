@@ -41,3 +41,8 @@ export const updateAdminIncome = async ({
 export const deleteAdminIncome = async (id: number): Promise<void> => {
   await axiosInstance.delete(`/admin/incomes/${id}`);
 };
+
+export const getAdminIncomeTotal = async (): Promise<number> => {
+  const { data } = await axiosInstance.get<number>("/admin/incomes/total");
+  return data;
+};

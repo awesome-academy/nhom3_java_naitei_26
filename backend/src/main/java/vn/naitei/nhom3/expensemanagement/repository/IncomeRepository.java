@@ -62,4 +62,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>, JpaSpecif
         @Param("userId") Long userId,
         @Param("from") LocalDate from,
         @Param("to") LocalDate to);
+
+    @Query("SELECT COALESCE(SUM(i.amount), 0) FROM Income i")
+    BigDecimal sumTotalIncomeAcrossAllUsers();
 }

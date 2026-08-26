@@ -9,7 +9,7 @@ import Select from "@/components/ui/Select";
 import { useDebounce } from "@/hooks/useDebounce";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useUsers } from "@/features/user/hooks";
-import { useAdminIncomes } from "@/features/admin-income/hooks";
+import { useAdminIncomes, useAdminIncomeTotal } from "@/features/admin-income/hooks";
 import type { AdminIncomeFilterRequest, AdminIncome } from "@/features/admin-income/types";
 import { DeleteGlobalIncomeModal } from "@/features/admin-income/components/DeleteGlobalIncomeModal";
 import Link from "next/link";
@@ -35,6 +35,7 @@ export default function AdminIncomesPage() {
   const effectiveFilters = { ...filters, search: debouncedSearch, page, size: PAGE_SIZE, sort };
   
   const query = useAdminIncomes(effectiveFilters);
+  const totalIncomeQuery = useAdminIncomeTotal();
   const usersQuery = useUsers({ page: 0, size: 100 }, false);
   const userOptions = Array.isArray(usersQuery.data?.content) ? usersQuery.data.content : [];
 
@@ -72,9 +73,15 @@ export default function AdminIncomesPage() {
             Audit, inspect, and moderate all user income and earning records across the platform
           </p>
         </div>
-        <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-right text-xs text-blue-800">
-          <span className="block font-semibold">Total Incomes</span>
-          <strong className="text-lg">{data?.totalItems ?? "-"}</strong>
+        <div className="flex gap-3">
+          <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-right text-xs text-blue-800">
+            <span className="block font-semibold">Total Records</span>
+            <strong className="text-lg">{data?.totalItems ?? "-"}</strong>
+          </div>
+          <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-right text-xs text-blue-800">
+            <span className="block font-semibold">Total Incomes</span>
+            <strong className="text-lg">{totalIncomeQuery.isLoading ? "-" : formatCurrency(totalIncomeQuery.data ?? 0)}</strong>
+          </div>
         </div>
       </div>
 
