@@ -13,6 +13,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import vn.naitei.nhom3.expensemanagement.dto.importexport.ExportEntityType;
@@ -47,6 +48,7 @@ public class ExportServiceImpl implements ExportService {
     private final BudgetRepository budgetRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public byte[] exportCsv(ExportEntityType entityType) {
         StringWriter writer = new StringWriter();
         try (CSVPrinter printer = new CSVPrinter(writer, formatFor(entityType))) {
