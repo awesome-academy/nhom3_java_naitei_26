@@ -42,9 +42,13 @@ export const useUpdateAdminIncome = () => {
     onSuccess: (data) => {
       toast.success("Income record updated successfully");
       queryClient.invalidateQueries({ queryKey: adminIncomeKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: adminIncomeKeys.total() });
       queryClient.invalidateQueries({
         queryKey: adminIncomeKeys.detail(data.id),
       });
+      queryClient.invalidateQueries({ queryKey: ["incomes"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["report"] });
     },
     onError: (error: any) => {
       toast.error(
@@ -62,6 +66,10 @@ export const useDeleteAdminIncome = () => {
     onSuccess: () => {
       toast.success("Income record deleted successfully");
       queryClient.invalidateQueries({ queryKey: adminIncomeKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: adminIncomeKeys.total() });
+      queryClient.invalidateQueries({ queryKey: ["incomes"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["report"] });
     },
     onError: (error: any) => {
       toast.error(
