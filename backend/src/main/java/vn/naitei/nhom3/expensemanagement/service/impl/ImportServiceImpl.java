@@ -266,8 +266,8 @@ public class ImportServiceImpl implements ImportService {
             throw new BadRequestException("category không được để trống");
         }
         String trimmed = name.trim();
-        return categoryRepository.findByUserIdAndNameAndTypeAndDeletedAtIsNull(userId, trimmed, type)
-                .or(() -> categoryRepository.findByUserIsNullAndNameAndTypeAndDeletedAtIsNull(trimmed, type))
+        return categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(userId, trimmed, type)
+                .or(() -> categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(trimmed, type))
                 .orElseThrow(() -> new BadRequestException(
                         "không tìm thấy category \"" + trimmed + "\" (type " + type + ")"));
     }

@@ -55,7 +55,8 @@ public class IncomeAdminController {
     }
 
     @GetMapping("/total")
-    public ResponseEntity<ApiResponse<java.math.BigDecimal>> getTotalAcrossAllUsers() {
-        return ResponseEntity.ok(ApiResponse.success(incomeAdminService.getTotalIncomeAcrossAllUsers()));
+    public ResponseEntity<ApiResponse<java.math.BigDecimal>> getTotalAcrossAllUsers(
+            @Valid @ModelAttribute AdminIncomeFilterRequest filter) {
+        return ResponseEntity.ok(ApiResponse.success(incomeAdminService.getTotalIncomeAcrossAllUsers(filter)));
     }
 }

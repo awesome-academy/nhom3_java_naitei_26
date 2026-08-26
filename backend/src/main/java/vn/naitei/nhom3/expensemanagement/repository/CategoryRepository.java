@@ -27,10 +27,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByUserId(Long userId);
 
-    Optional<Category> findByUserIdAndNameAndTypeAndDeletedAtIsNull(
+    Optional<Category> findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(
             Long userId, String name, CategoryType type);
 
-    Optional<Category> findByUserIsNullAndNameAndTypeAndDeletedAtIsNull(
+    Optional<Category> findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(
             String name, CategoryType type);
 
     List<Category> findByDeletedAtIsNullOrderByIdAsc();
