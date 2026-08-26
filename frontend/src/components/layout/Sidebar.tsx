@@ -89,29 +89,48 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     acknowledgedIds = [];
   }
 
-  // 3. Lọc danh sách cảnh báo thực tế
+  // 3. Lọc danh sách cảnh báo thực tế theo đúng schema budget
   const activeAlertBudgets = currentBudgets.filter((b) => {
-    const isExceeded = b.alertStatus === "EXCEEDED" || (b.spendingPercentage != null && b.spendingPercentage > 100);
-    const isWarning = b.alertStatus === "WARNING" || (b.spendingPercentage != null && b.spendingPercentage >= 80 && b.spendingPercentage <= 100);
+    // Ưu tiên spendingPercentage, nếu không có thì tính từ actualSpending / amount
+    const percent =
+      b.spendingPercentage != null
+        ? b.spendingPercentage
+        : b.amount > 0
+        ? ((b.actualSpending ?? 0) / b.amount) * 100
+        : 0;
+
+    const isExceeded = b.alertStatus === "EXCEEDED" || percent > 100;
+    const isWarning = b.alertStatus === "WARNING" || (percent >= 80 && percent <= 100);
+
     return isExceeded || isWarning;
   });
 
   const currentAlertIds = activeAlertBudgets.map((b) => b.id);
 
-  // 4. Kiểm tra xem có cảnh báo nào CHƯA được acknowledge không
+  // 4. Kiểm tra cảnh báo chưa acknowledge
   const unacknowledgedBudgets = activeAlertBudgets.filter(
     (b) => !acknowledgedIds.includes(b.id)
   );
 
-  const exceededCount = unacknowledgedBudgets.filter(
-    (b) => b.alertStatus === "EXCEEDED" || (b.spendingPercentage != null && b.spendingPercentage > 100)
-  ).length;
+  const exceededCount = unacknowledgedBudgets.filter((b) => {
+    const percent =
+      b.spendingPercentage != null
+        ? b.spendingPercentage
+        : b.amount > 0
+        ? ((b.actualSpending ?? 0) / b.amount) * 100
+        : 0;
+    return b.alertStatus === "EXCEEDED" || percent > 100;
+  }).length;
 
-  const warningCount = unacknowledgedBudgets.filter(
-    (b) =>
-      b.alertStatus === "WARNING" ||
-      (b.spendingPercentage != null && b.spendingPercentage >= 80 && b.spendingPercentage <= 100)
-  ).length;
+  const warningCount = unacknowledgedBudgets.filter((b) => {
+    const percent =
+      b.spendingPercentage != null
+        ? b.spendingPercentage
+        : b.amount > 0
+        ? ((b.actualSpending ?? 0) / b.amount) * 100
+        : 0;
+    return b.alertStatus === "WARNING" || (percent >= 80 && percent <= 100);
+  }).length;
 
   const hasAlerts = unacknowledgedBudgets.length > 0;
 
