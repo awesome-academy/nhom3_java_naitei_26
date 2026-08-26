@@ -1,6 +1,6 @@
 import apiClient from "@/lib/axios";
 import type { ApiResponse } from "@/types/api";
-import type { Budget, BudgetRequest } from "./types";
+import type { Budget, BudgetRequest, BudgetTemplateResponse } from "./types";
 
 export const budgetApi = {
   getBudgets: (year?: number, month?: number) =>
@@ -22,4 +22,7 @@ export const budgetApi = {
 
   deleteBudget: (id: number) =>
     apiClient.delete<ApiResponse<null>>(`/budgets/${id}`),
+
+  getBudgetTemplates: () =>
+    apiClient.get<ApiResponse<BudgetTemplateResponse[]>>("/budget-templates"),
 };

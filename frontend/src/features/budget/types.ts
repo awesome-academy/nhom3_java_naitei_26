@@ -1,3 +1,5 @@
+import { BudgetTemplateDetailDto } from "../budget-template/types";
+
 export interface Budget {
   id: number;
   userId: number;
@@ -19,4 +21,14 @@ export interface BudgetRequest {
   amount: number;
   month: number;
   year: number;
+}
+
+export interface BudgetTemplateResponse {
+  id: number;
+  name: string;
+  month: number;
+  warningPercentage: number;
+  details: BudgetTemplateDetailDto[];
+  createdAt: string;
+  updatedAt: string;
 }

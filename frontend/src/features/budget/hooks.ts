@@ -55,3 +55,13 @@ export function useDeleteBudget() {
     },
   });
 }
+
+export function useBudgetTemplates() {
+  return useQuery({
+    queryKey: ["budget-templates"],
+    queryFn: async () => {
+      const res = await budgetApi.getBudgetTemplates();
+      return res.data?.data ?? res.data ?? [];
+    },
+  });
+}
