@@ -13,45 +13,82 @@ import type { NextRequest } from "next/server";
  * Hiện tại chỉ kiểm tra sự tồn tại của token trong cookie (chưa verify signature).
  */
 
-// Các route cần đăng nhập
-const protectedPaths = [
+// Route dành riêng cho Admin
+const adminPaths = ["/admin"];
+
+// Route dành cho User thông thường
+const userPaths = [
   "/dashboard",
   "/expenses",
   "/incomes",
   "/categories",
   "/budgets",
   "/reports",
-  "/admin",
+  "/profile",
 ];
 
 // Các route chỉ dành cho khách (chưa login)
 const authPaths = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
+// Hàm helper giải mã role từ payload của JWT token
+function getRoleFromToken(token?: string): string | null {
+  if (!token) return null;
+  try {
+    const parts = token.split(".");
+    if (parts.length < 2) return null;
+    const payloadJson = Buffer.from(parts[1], "base64").toString("utf-8");
+    const payload = JSON.parse(payloadJson);
+    
+    // Tự động map theo các định dạng Spring Security JWT thông dụng (role, roles, authorities, scope)
+    if (payload.role) return String(payload.role).replace("ROLE_", "");
+    if (Array.isArray(payload.roles) && payload.roles.length > 0) {
+      return String(payload.roles[0]).replace("ROLE_", "");
+    }
+    if (Array.isArray(payload.authorities) && payload.authorities.length > 0) {
+      return String(payload.authorities[0].authority || payload.authorities[0]).replace("ROLE_", "");
+    }
+    if (typeof payload.scope === "string") {
+      return payload.scope.replace("ROLE_", "");
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // TODO: Thay bằng logic verify token thực tế khi backend sẵn sàng
-  // Hiện tại đọc token từ cookie hoặc bỏ qua middleware để dev dễ hơn
   const token = request.cookies.get("access_token")?.value;
+  // Đọc role từ cookie riêng (nếu có) hoặc parse trực tiếp từ JWT
+  const userRole = request.cookies.get("user_role")?.value || getRoleFromToken(token) || "USER";
 
-  const isProtected = protectedPaths.some((path) =>
-    pathname.startsWith(path)
-  );
-  const isAuthPage = authPaths.some((path) => pathname.startsWith(path));
+  const isAdminRoute = adminPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  const isUserRoute = userPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  const isProtected = isAdminRoute || isUserRoute;
+  const isAuthPage = authPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 
-  // Chưa login mà vào route protected → redirect /login
-  // TODO: Bỏ comment dòng dưới khi muốn bật auth check
-  
-  // Nếu auth check lỗi hãy cmt cụm if dưới đây để dev dễ hơn
+  // 1. Chưa login mà truy cập route được bảo vệ -> Redirect về /login
   if (isProtected && !token) {
-     const loginUrl = new URL("/login", request.url);
-     loginUrl.searchParams.set("redirect", pathname);
-     return NextResponse.redirect(loginUrl);
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // Đã login mà vào /login → redirect /dashboard
+  // 2. Đã login mà vào trang auth (/login, /signup) -> Chuyển hướng đúng dashboard theo role
   if (isAuthPage && token) {
+    const redirectTarget = userRole === "ADMIN" ? "/admin/users" : "/dashboard";
+    return NextResponse.redirect(new URL(redirectTarget, request.url));
+  }
+
+  // 3. User thường cố truy cập route của Admin -> Đá về /dashboard
+  if (isAdminRoute && token && userRole !== "ADMIN") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  // 4. Admin cố truy cập route của User thường -> Đá về /admin/users
+  if (isUserRoute && token && userRole === "ADMIN") {
+    return NextResponse.redirect(new URL("/admin/users", request.url));
   }
 
   return NextResponse.next();
@@ -60,13 +97,13 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
+     * Khớp toàn bộ request ngoại trừ:
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public assets
+     * - public assets (.svg, .png, .jpg, ...)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.svg$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
