@@ -41,7 +41,10 @@ export function useCreateExpense() {
     mutationFn: (input: ExpenseMutationInput) => expenseApi.create(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["budget"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["reports"] });
       queryClient.invalidateQueries({ queryKey: ["report"] });
     },
   });

@@ -13,43 +13,31 @@ const periodLabels: Record<ReportPeriod, string> = {
   year: "Year",
 };
 
-const categoryColors = ["bg-blue-600", "bg-indigo-600", "bg-emerald-600", "bg-amber-500"];
+// Mở rộng bảng màu để mỗi category có 1 màu riêng biệt, không bị trùng lặp
+const categoryColors = [
+  "bg-blue-600",
+  "bg-indigo-600",
+  "bg-emerald-600",
+  "bg-amber-500",
+  "bg-rose-500",
+  "bg-purple-600",
+  "bg-teal-500",
+  "bg-cyan-600",
+];
 
 function formatDate(date: Date) {
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function getPeriodValue(period: ReportPeriod, date: Date) {
-  if (period === "month") return date.toISOString().slice(0, 7);
-  if (period === "year") return String(date.getFullYear());
-  return `${date.getFullYear()}-Q${Math.floor(date.getMonth() / 3) + 1}`;
-}
-
-function getSelectedPeriodRange(period: ReportPeriod, value: string) {
-  const selectedDate = getDateForPeriod(period, value);
-
-  if (period === "month") {
-    const from = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-    const to = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
-    return { from: formatDate(from), to: formatDate(to) };
-  }
-
-  if (period === "quarter") {
-    const from = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-    const to = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 3, 0);
-    return { from: formatDate(from), to: formatDate(to) };
-  }
-
-  const from = new Date(selectedDate.getFullYear(), 0, 1);
-  const to = new Date(selectedDate.getFullYear(), 12, 0);
-  return { from: formatDate(from), to: formatDate(to) };
-}
-
-function getDaysInSelectedPeriod(period: ReportPeriod, value: string) {
-  const range = getSelectedPeriodRange(period, value);
-  const from = new Date(`${range.from}T00:00:00Z`);
-  const to = new Date(`${range.to}T00:00:00Z`);
-  return Math.floor((to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  if (period === "month") return `${year}-${month}`;
+  if (period === "year") return String(year);
+  return `${year}-Q${Math.floor(date.getMonth() / 3) + 1}`;
 }
 
 function getDateForPeriod(period: ReportPeriod, value: string) {
@@ -64,17 +52,57 @@ function getDateForPeriod(period: ReportPeriod, value: string) {
   return new Date(Number(value), 0, 1);
 }
 
+function getSelectedPeriodRange(period: ReportPeriod, value: string) {
+  const selectedDate = getDateForPeriod(period, value);
+  const year = selectedDate.getFullYear();
+
+  if (period === "month") {
+    const month = selectedDate.getMonth();
+    const from = new Date(year, month, 1);
+    const to = new Date(year, month + 1, 0);
+    return { from: formatDate(from), to: formatDate(to) };
+  }
+
+  if (period === "quarter") {
+    const quarterIndex = Math.floor(selectedDate.getMonth() / 3);
+    const from = new Date(year, quarterIndex * 3, 1);
+    const to = new Date(year, (quarterIndex + 1) * 3, 0);
+    return { from: formatDate(from), to: formatDate(to) };
+  }
+
+  // Chế độ Year: Chuẩn xác 12 tháng từ 01-01 đến 31-12
+  const from = new Date(year, 0, 1);
+  const to = new Date(year, 11, 31);
+  return { from: formatDate(from), to: formatDate(to) };
+}
+
+function getDaysInSelectedPeriod(period: ReportPeriod, value: string) {
+  const range = getSelectedPeriodRange(period, value);
+  const [fY, fM, fD] = range.from.split("-").map(Number);
+  const [tY, tM, tD] = range.to.split("-").map(Number);
+  const from = new Date(fY, fM - 1, fD);
+  const to = new Date(tY, tM - 1, tD);
+  return Math.round((to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+}
+
 function getPeriodOptions(period: ReportPeriod, date: Date) {
   if (period === "month") {
     return Array.from({ length: 12 }, (_, index) => {
       const optionDate = new Date(date.getFullYear(), date.getMonth() - index, 1);
-      return { value: getPeriodValue(period, optionDate), label: new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(optionDate) };
+      return {
+        value: getPeriodValue(period, optionDate),
+        label: new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(optionDate),
+      };
     });
   }
   if (period === "quarter") {
     return Array.from({ length: 8 }, (_, index) => {
-      const optionDate = new Date(date.getFullYear(), date.getMonth() - index * 3, 1);
-      return { value: getPeriodValue(period, optionDate), label: `Q${Math.floor(optionDate.getMonth() / 3) + 1} ${optionDate.getFullYear()}` };
+      const currentQuarterMonth = Math.floor(date.getMonth() / 3) * 3;
+      const optionDate = new Date(date.getFullYear(), currentQuarterMonth - index * 3, 1);
+      return {
+        value: getPeriodValue(period, optionDate),
+        label: `Q${Math.floor(optionDate.getMonth() / 3) + 1} ${optionDate.getFullYear()}`,
+      };
     });
   }
   return Array.from({ length: 5 }, (_, index) => {
@@ -83,46 +111,135 @@ function getPeriodOptions(period: ReportPeriod, date: Date) {
   });
 }
 
-function formatTrendLabel(period: string) {
-  const [year, month] = period.split("-").map(Number);
-  return new Intl.DateTimeFormat("en-US", { month: "short" }).format(new Date(year, month - 1, 1));
+function formatTrendLabel(periodStr: string) {
+  if (!periodStr) return "";
+
+  // Nếu là dạng tuần: YYYY-MM-W1 -> hiển thị W1
+  if (periodStr.includes("-W")) {
+    const parts = periodStr.split("-W");
+    return `Week ${parts[1]}`;
+  }
+
+  // Nếu là dạng tháng: YYYY-MM -> hiển thị Jan, Feb...
+  if (periodStr.includes("-")) {
+    const parts = periodStr.split("-").map(Number);
+    if (parts.length === 2) {
+      return new Intl.DateTimeFormat("en-US", { month: "short" }).format(
+        new Date(parts[0], parts[1] - 1, 1)
+      );
+    }
+  }
+
+  return periodStr;
 }
 
 export default function ReportsPage() {
   const [period, setPeriod] = useState<ReportPeriod>("month");
   const referenceDate = useMemo(() => new Date(), []);
   const [periodValue, setPeriodValue] = useState(getPeriodValue("month", referenceDate));
+
   const periodParams = useMemo(
     () => ({ period, value: periodValue }),
     [period, periodValue]
   );
+
   const trendRange = useMemo(() => getSelectedPeriodRange(period, periodValue), [period, periodValue]);
   const daysInSelectedPeriod = useMemo(() => getDaysInSelectedPeriod(period, periodValue), [period, periodValue]);
   const periodOptions = useMemo(() => getPeriodOptions(period, referenceDate), [period, referenceDate]);
+
   const summaryQuery = useReportSummary(periodParams);
   const comparisonQuery = useReportComparison(periodParams);
   const trendQuery = useReportTrend(trendRange);
+
   const isLoading = summaryQuery.isLoading || comparisonQuery.isLoading || trendQuery.isLoading;
   const hasError = summaryQuery.isError || comparisonQuery.isError || trendQuery.isError;
-  const trendPoints = trendQuery.data ?? [];
   const categories = summaryQuery.data?.byCategory ?? [];
-  const trendDescription = `Income and expense trend for the selected ${periodLabels[period].toLowerCase()}`;
+  const totalExpense = summaryQuery.data?.totalExpense ?? 0;
+
+  // Gom nhóm dữ liệu trend thành 4 tuần khi ở chế độ Month
+  const trendPoints = useMemo(() => {
+    const rawTrendPoints = trendQuery.data ?? [];
+
+    // 1. Chế độ Month: Chia thành 4 tuần (W1 -> W4)
+    if (period === "month") {
+      const weeks: ReportTrendPoint[] = [
+        { period: `${periodValue}-W1`, income: 0, expense: 0 },
+        { period: `${periodValue}-W2`, income: 0, expense: 0 },
+        { period: `${periodValue}-W3`, income: 0, expense: 0 },
+        { period: `${periodValue}-W4`, income: 0, expense: 0 },
+      ];
+
+      // Nếu Backend đã hỗ trợ trả về sẵn W1, W2, W3, W4
+      const weekMap = new Map(rawTrendPoints.map((p) => [p.period, p]));
+      if (rawTrendPoints.some((p) => p.period.includes("-W"))) {
+        return weeks.map((w) => weekMap.get(w.period) || w);
+      }
+
+      // Fallback: nếu Backend trả về chi tiết theo từng ngày (YYYY-MM-DD)
+      rawTrendPoints.forEach((point) => {
+        if (point.period.length === 10) {
+          const day = Number(point.period.split("-")[2]);
+          let weekIdx = 0;
+          if (day <= 7) weekIdx = 0;
+          else if (day <= 14) weekIdx = 1;
+          else if (day <= 21) weekIdx = 2;
+          else weekIdx = 3;
+
+          weeks[weekIdx].income += point.income;
+          weeks[weekIdx].expense += point.expense;
+        } else {
+          weeks[0].income = point.income;
+          weeks[0].expense = point.expense;
+        }
+      });
+
+      return weeks;
+    }
+
+    // 2. Chế độ Quarter: 3 tháng
+    if (period === "quarter") {
+      const [year, qStr] = periodValue.split("-Q");
+      const q = Number(qStr);
+      const startMonth = (q - 1) * 3 + 1;
+      const monthMap = new Map(rawTrendPoints.map((p) => [p.period, p]));
+
+      return Array.from({ length: 3 }, (_, i) => {
+        const monthKey = `${year}-${String(startMonth + i).padStart(2, "0")}`;
+        return monthMap.get(monthKey) || { period: monthKey, income: 0, expense: 0 };
+      });
+    }
+
+    // 3. Chế độ Year: 12 tháng
+    if (period === "year") {
+      const year = periodValue;
+      const monthMap = new Map(rawTrendPoints.map((p) => [p.period, p]));
+
+      return Array.from({ length: 12 }, (_, i) => {
+        const monthKey = `${year}-${String(i + 1).padStart(2, "0")}`;
+        return monthMap.get(monthKey) || { period: monthKey, income: 0, expense: 0 };
+      });
+    }
+
+    return rawTrendPoints;
+  }, [trendQuery.data, period, periodValue]);
+
   const maxTrendValue = Math.max(
     1,
     ...trendPoints.flatMap((point) => [point.income, point.expense])
   );
-  const totalExpense = summaryQuery.data?.totalExpense ?? 0;
+
   const topCategory = categories.reduce(
     (top, category) => (category.amount > (top?.amount ?? 0) ? category : top),
     categories[0]
   );
 
   const renderState = (message: string) => (
-    <div className="flex h-48 items-center justify-center text-sm text-gray-400">{message}</div>
+    <div className="flex h-64 items-center justify-center text-sm text-gray-400">{message}</div>
   );
 
   return (
     <div className="mx-auto w-full max-w-7xl space-y-8">
+      {/* Header */}
       <header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
@@ -154,9 +271,9 @@ export default function ReportsPage() {
         </div>
       </header>
 
+      {/* Filter Select */}
       <div className="flex flex-wrap items-center gap-3">
-        <label className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:border-blue-300 hover:text-blue-700"
-        >
+        <label className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:border-blue-300 hover:text-blue-700">
           <CalendarDays className="h-4 w-4 text-blue-600" aria-hidden="true" />
           <span className="sr-only">Select report period</span>
           <select
@@ -166,7 +283,9 @@ export default function ReportsPage() {
             className="cursor-pointer appearance-none bg-transparent pr-1 text-sm font-medium text-gray-700 outline-none"
           >
             {periodOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             ))}
           </select>
           <ChevronDown className="h-4 w-4 text-gray-400" aria-hidden="true" />
@@ -174,6 +293,7 @@ export default function ReportsPage() {
         <span className="text-xs text-gray-400">Data for selected period</span>
       </div>
 
+      {/* Top 3 Summary Metric Cards */}
       <section className="grid grid-cols-1 gap-5 md:grid-cols-3">
         <Card className="border-emerald-100 bg-white p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Total Net Savings</p>
@@ -187,11 +307,15 @@ export default function ReportsPage() {
               : "No savings data available"}
           </div>
         </Card>
+
         <Card className="p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Daily Average Spending</p>
-          <p className="mt-2 text-2xl font-bold tabular-nums text-gray-900">{formatCurrency((summaryQuery.data?.totalExpense ?? 0) / daysInSelectedPeriod)}</p>
+          <p className="mt-2 text-2xl font-bold tabular-nums text-gray-900">
+            {formatCurrency((summaryQuery.data?.totalExpense ?? 0) / (daysInSelectedPeriod || 1))}
+          </p>
           <p className="mt-2 text-xs text-gray-500">Average expense per day in the selected period</p>
         </Card>
+
         <Card className="border-blue-100 p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Top Expense Category</p>
           <p className="mt-2 text-2xl font-bold text-blue-700">{topCategory?.name ?? "-"}</p>
@@ -209,43 +333,61 @@ export default function ReportsPage() {
         </div>
       )}
 
+      {/* Main Charts Section */}
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* Trend Bar Chart */}
         <Card className="p-5 md:p-7">
           <div className="mb-6 flex flex-col justify-between gap-3 border-b border-gray-100 pb-4 sm:flex-row sm:items-start">
             <div>
               <h2 className="text-base font-bold text-gray-900">Income vs. Expense Trend</h2>
-              <p className="mt-0.5 text-xs text-gray-500">{trendDescription}</p>
+              <p className="mt-0.5 text-xs text-gray-500">
+                Income and expense trend for the selected {periodLabels[period].toLowerCase()}
+              </p>
             </div>
             <div className="flex items-center gap-3 text-xs font-medium text-gray-600">
-              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />Income</span>
-              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-rose-500" />Expense</span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                Income
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-rose-500" />
+                Expense
+              </span>
             </div>
           </div>
-          {isLoading ? renderState("Loading trend data...") : trendPoints.length === 0 ? renderState("No trend data available") : (
-            <div className="flex h-64 items-end justify-between gap-2 px-1 sm:gap-4">
-            {trendPoints.map((point: ReportTrendPoint) => (
-              <div key={point.period} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-                <div className="flex h-48 w-full items-end justify-center gap-1 sm:gap-1.5">
-                  <div
-                    className="w-1/2 rounded-t-md bg-emerald-500 transition-all"
-                    style={{ height: `${(point.income / maxTrendValue) * 100}%` }}
-                    title={`Income: ${formatCurrency(point.income)}`}
-                  />
-                  <div
-                    className="w-1/2 rounded-t-md bg-rose-500 transition-all"
-                    style={{ height: `${(point.expense / maxTrendValue) * 100}%` }}
-                    title={`Expense: ${formatCurrency(point.expense)}`}
-                  />
+
+          {isLoading ? (
+            renderState("Loading trend data...")
+          ) : trendPoints.length === 0 ? (
+            renderState("No trend data available")
+          ) : (
+            <div className="flex h-64 items-end justify-center gap-3 sm:gap-6 px-2">
+              {trendPoints.map((point: ReportTrendPoint) => (
+                <div key={point.period} className="flex max-w-16 flex-1 flex-col items-center gap-2">
+                  <div className="flex h-48 w-full items-end justify-center gap-1 sm:gap-1.5">
+                    {/* Income Bar */}
+                    <div
+                      className="w-1/2 min-h-1 rounded-t-md bg-emerald-500 transition-all hover:opacity-90"
+                      style={{ height: `${point.income > 0 ? (point.income / maxTrendValue) * 100 : 2}%` }}
+                      title={`Income: ${formatCurrency(point.income)}`}
+                    />
+                    {/* Expense Bar */}
+                    <div
+                      className="w-1/2 min-h-1 rounded-t-md bg-rose-500 transition-all hover:opacity-90"
+                      style={{ height: `${point.expense > 0 ? (point.expense / maxTrendValue) * 100 : 2}%` }}
+                      title={`Expense: ${formatCurrency(point.expense)}`}
+                    />
+                  </div>
+                  <span className="text-[11px] font-semibold text-gray-500">
+                    {formatTrendLabel(point.period)}
+                  </span>
                 </div>
-                <span className="text-[11px] font-semibold text-gray-500">
-                  {formatTrendLabel(point.period)}
-                </span>
-              </div>
-            ))}
+              ))}
             </div>
           )}
         </Card>
 
+        {/* Category Distribution Progress List */}
         <Card className="p-5 md:p-7">
           <div className="mb-6 flex flex-col justify-between gap-3 border-b border-gray-100 pb-4 sm:flex-row sm:items-start">
             <div>
@@ -256,22 +398,30 @@ export default function ReportsPage() {
               Total: {formatCurrency(totalExpense)}
             </span>
           </div>
-          {isLoading ? renderState("Loading category distribution...") : categories.length === 0 ? renderState("No category data available") : (
-          <div className="space-y-5 pt-1">
-            {categories.map((category, index) => (
-              <div key={category.name}>
-                <div className="mb-1.5 flex justify-between gap-3 text-xs font-semibold">
-                  <span className="text-gray-900">{category.name}</span>
-                  <span className="shrink-0 tabular-nums text-gray-500">
-                    {formatCurrency(category.amount)} ({totalExpense > 0 ? ((category.amount / totalExpense) * 100).toFixed(1) : "0.0"}%)
-                  </span>
+
+          {isLoading ? (
+            renderState("Loading category distribution...")
+          ) : categories.length === 0 ? (
+            renderState("No category data available")
+          ) : (
+            <div className="space-y-5 pt-1">
+              {categories.map((category, index) => (
+                <div key={category.name}>
+                  <div className="mb-1.5 flex justify-between gap-3 text-xs font-semibold">
+                    <span className="text-gray-900">{category.name}</span>
+                    <span className="shrink-0 tabular-nums text-gray-500">
+                      {formatCurrency(category.amount)} ({totalExpense > 0 ? ((category.amount / totalExpense) * 100).toFixed(1) : "0.0"}%)
+                    </span>
+                  </div>
+                  <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${categoryColors[index % categoryColors.length]}`}
+                      style={{ width: `${totalExpense > 0 ? (category.amount / totalExpense) * 100 : 0}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">
-                  <div className={`h-full rounded-full ${categoryColors[index % categoryColors.length]}`} style={{ width: `${totalExpense > 0 ? (category.amount / totalExpense) * 100 : 0}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           )}
         </Card>
       </section>
