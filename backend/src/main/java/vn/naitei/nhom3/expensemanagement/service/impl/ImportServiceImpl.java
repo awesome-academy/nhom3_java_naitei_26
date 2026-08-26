@@ -78,7 +78,7 @@ public class ImportServiceImpl implements ImportService {
             } catch (RuntimeException ex) {
                 // getRecordNumber() không tính dòng header (bắt đầu từ 1 cho dòng dữ liệu đầu tiên);
                 // +1 để khớp số dòng thật trong file (header = dòng 1).
-                errors.add("Dòng " + (record.getRecordNumber() + 1) + ": " + ex.getMessage());
+                errors.add("Row " + (record.getRecordNumber() + 1) + ": " + ex.getMessage());
             }
         }
 
@@ -87,12 +87,12 @@ public class ImportServiceImpl implements ImportService {
 
     private List<CSVRecord> parse(ImportEntityType entityType, MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            throw new BadRequestException("File CSV trống");
+            throw new BadRequestException("CSV File is empty or not provided");
         }
 
         String content = readAsUtf8(file);
         if (content.isBlank()) {
-            throw new BadRequestException("File CSV trống");
+            throw new BadRequestException("CSV File is empty or not provided");
         }
 
         CSVFormat format = CSVFormat.DEFAULT.builder()
@@ -108,7 +108,7 @@ public class ImportServiceImpl implements ImportService {
             headerNames = new HashSet<>(parser.getHeaderNames());
             records = parser.getRecords();
         } catch (IOException ex) {
-            throw new BadRequestException("Không đọc được file CSV: " + ex.getMessage());
+            throw new BadRequestException("Can not read CSV file: " + ex.getMessage());
         }
 
         List<String> missingColumns = REQUIRED_COLUMNS.get(entityType).stream()
@@ -116,13 +116,13 @@ public class ImportServiceImpl implements ImportService {
                 .toList();
         if (!missingColumns.isEmpty()) {
             throw new BadRequestException(
-                    "File CSV thiếu cột bắt buộc: " + String.join(", ", missingColumns));
+                    "CSV File is missing required columns: " + String.join(", ", missingColumns));
         }
 
         if (records.size() > MAX_ROWS) {
             throw new BadRequestException(
-                    "File CSV vượt quá giới hạn " + MAX_ROWS + " dòng dữ liệu (hiện có "
-                            + records.size() + " dòng)");
+                    "CSV File exceeds the limit of " + MAX_ROWS + " data rows (currently has "
+                            + records.size() + " rows)");
         }
 
         return records;
@@ -133,7 +133,7 @@ public class ImportServiceImpl implements ImportService {
         try {
             bytes = file.getBytes();
         } catch (IOException ex) {
-            throw new BadRequestException("Không đọc được file CSV");
+            throw new BadRequestException("Can not read CSV file: " + ex.getMessage());
         }
         int offset = hasUtf8Bom(bytes) ? 3 : 0;
         return new String(bytes, offset, bytes.length - offset, StandardCharsets.UTF_8);
@@ -157,15 +157,15 @@ public class ImportServiceImpl implements ImportService {
     }
 
     private void processUserRow(CSVRecord record) {
-        String name = requireText(record, "name", "name không được để trống");
-        String email = requireText(record, "email", "email không được để trống");
+        String name = requireText(record, "name", "name can not be empty");
+        String email = requireText(record, "email", "email can not be empty");
         if (!email.contains("@")) {
-            throw new BadRequestException("email không hợp lệ: " + email);
+            throw new BadRequestException("email is invalid: " + email);
         }
         if (userRepository.existsByEmail(email)) {
-            throw new BadRequestException("email đã tồn tại: " + email);
+            throw new BadRequestException("email already exists: " + email);
         }
-        String password = requireText(record, "password", "password không được để trống");
+        String password = requireText(record, "password", "password can not be empty");
         Role role = parseEnum(Role.class, record.get("role"), "role");
         UserStatus status = parseActive(record.get("active"));
 
@@ -179,7 +179,7 @@ public class ImportServiceImpl implements ImportService {
     }
 
     private void processCategoryRow(CSVRecord record) {
-        String name = requireText(record, "name", "name không được để trống");
+        String name = requireText(record, "name", "name can not be empty");
         CategoryType type = parseEnum(CategoryType.class, record.get("type"), "type");
         String description = record.isSet("description") ? record.get("description") : null;
 
@@ -192,11 +192,11 @@ public class ImportServiceImpl implements ImportService {
 
     private void processExpenseRow(CSVRecord record) {
         User user = resolveUserByEmail(record.get("userEmail"));
-        String title = requireText(record, "title", "title không được để trống");
+        String title = requireText(record, "title", "title can not be empty");
         BigDecimal amount = parseAmount(record.get("amount"));
         LocalDate date = parseDate(record.get("date"));
         if (date.isAfter(LocalDate.now())) {
-            throw new BadRequestException("date không được là ngày tương lai: " + date);
+            throw new BadRequestException("date can not be a future date: " + date);
         }
         Category category = resolveCategoryByName(user.getId(), record.get("category"), CategoryType.EXPENSE);
         String note = record.isSet("note") ? record.get("note") : null;
@@ -213,7 +213,7 @@ public class ImportServiceImpl implements ImportService {
 
     private void processIncomeRow(CSVRecord record) {
         User user = resolveUserByEmail(record.get("userEmail"));
-        String source = requireText(record, "source", "source không được để trống");
+        String source = requireText(record, "source", "source can not be empty");
         BigDecimal amount = parseAmount(record.get("amount"));
         LocalDate date = parseDate(record.get("date"));
         // Category category = resolveCategoryByName(user.getId(), record.get("category"), CategoryType.INCOME);
@@ -241,7 +241,7 @@ public class ImportServiceImpl implements ImportService {
         budgetRepository.findByUserIdAndCategoryIdAndYearAndMonth(user.getId(), category.getId(), year, month)
                 .ifPresent(existing -> {
                     throw new BadRequestException(
-                            "budget đã tồn tại cho user/category/tháng " + yearMonth);
+                            "budget already exists for user/category/month " + yearMonth);
                 });
 
         Budget budget = new Budget();
@@ -255,21 +255,21 @@ public class ImportServiceImpl implements ImportService {
 
     private User resolveUserByEmail(String email) {
         if (email == null || email.isBlank()) {
-            throw new BadRequestException("userEmail không được để trống");
+            throw new BadRequestException("userEmail can not be empty");
         }
         return userRepository.findByEmail(email.trim())
-                .orElseThrow(() -> new BadRequestException("không tìm thấy user với email: " + email));
+                .orElseThrow(() -> new BadRequestException("user not found with email: " + email));
     }
 
     private Category resolveCategoryByName(Long userId, String name, CategoryType type) {
         if (name == null || name.isBlank()) {
-            throw new BadRequestException("category không được để trống");
+            throw new BadRequestException("category can not be empty");
         }
         String trimmed = name.trim();
         return categoryRepository.findByUserIdAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(userId, trimmed, type)
                 .or(() -> categoryRepository.findByUserIsNullAndNameIgnoreCaseAndTypeAndDeletedAtIsNull(trimmed, type))
                 .orElseThrow(() -> new BadRequestException(
-                        "không tìm thấy category \"" + trimmed + "\" (type " + type + ")"));
+                        "category not found: \"" + trimmed + "\" (type " + type + ")"));
     }
 
     private String requireText(CSVRecord record, String column, String errorMessage) {
@@ -282,18 +282,18 @@ public class ImportServiceImpl implements ImportService {
 
     private <E extends Enum<E>> E parseEnum(Class<E> type, String raw, String fieldName) {
         if (raw == null || raw.isBlank()) {
-            throw new BadRequestException(fieldName + " không được để trống");
+            throw new BadRequestException(fieldName + " can not be empty");
         }
         try {
             return Enum.valueOf(type, raw.trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException ex) {
-            throw new BadRequestException(fieldName + " không hợp lệ: " + raw);
+            throw new BadRequestException(fieldName + " is invalid: " + raw);
         }
     }
 
     private UserStatus parseActive(String raw) {
         if (raw == null || raw.isBlank()) {
-            throw new BadRequestException("active không được để trống");
+            throw new BadRequestException("active can not be empty");
         }
         String normalized = raw.trim().toLowerCase(Locale.ROOT);
         if ("true".equals(normalized)) {
@@ -302,44 +302,44 @@ public class ImportServiceImpl implements ImportService {
         if ("false".equals(normalized)) {
             return UserStatus.INACTIVE;
         }
-        throw new BadRequestException("active không hợp lệ (chỉ nhận true/false): " + raw);
+        throw new BadRequestException("active is invalid (only accepts true/false): " + raw);
     }
 
     private BigDecimal parseAmount(String raw) {
         if (raw == null || raw.isBlank()) {
-            throw new BadRequestException("amount không được để trống");
+            throw new BadRequestException("amount can not be empty");
         }
         BigDecimal amount;
         try {
             amount = new BigDecimal(raw.trim());
         } catch (NumberFormatException ex) {
-            throw new BadRequestException("amount không hợp lệ: " + raw);
+            throw new BadRequestException("amount is invalid: " + raw);
         }
         if (amount.signum() <= 0) {
-            throw new BadRequestException("amount phải lớn hơn 0: " + raw);
+            throw new BadRequestException("amount must be greater than 0: " + raw);
         }
         return amount;
     }
 
     private LocalDate parseDate(String raw) {
         if (raw == null || raw.isBlank()) {
-            throw new BadRequestException("date không được để trống");
+            throw new BadRequestException("date can not be empty");
         }
         try {
             return LocalDate.parse(raw.trim());
         } catch (DateTimeParseException ex) {
-            throw new BadRequestException("date không hợp lệ (định dạng yyyy-MM-dd): " + raw);
+            throw new BadRequestException("date is invalid (format: yyyy-MM-dd): " + raw);
         }
     }
 
     private YearMonth parseYearMonth(String raw) {
         if (raw == null || raw.isBlank()) {
-            throw new BadRequestException("month không được để trống");
+            throw new BadRequestException("month can not be empty");
         }
         try {
             return YearMonth.parse(raw.trim());
         } catch (DateTimeParseException ex) {
-            throw new BadRequestException("month không hợp lệ (định dạng yyyy-MM): " + raw);
+            throw new BadRequestException("month is invalid (format: yyyy-MM): " + raw);
         }
     }
 }

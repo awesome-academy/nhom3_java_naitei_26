@@ -42,7 +42,7 @@ public class AdminCategoryController {
             @Valid @RequestBody CategoryRequest request) {
         CategoryAdminResponse response = categoryService.createSystemCategory(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(HttpStatus.CREATED, "Tạo danh mục chung thành công", response));
+                .body(ApiResponse.success(HttpStatus.CREATED, "Create global category successfully", response));
     }
 
     @PutMapping("/{id}")
@@ -50,12 +50,12 @@ public class AdminCategoryController {
             @PathVariable Long id,
             @Valid @RequestBody CategoryRequest request) {
         CategoryAdminResponse response = categoryService.updateSystemCategory(id, request);
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật danh mục chung thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Update global category successfully", response));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteSystemCategory(@PathVariable Long id) {
         categoryService.deleteSystemCategory(id);
-        return ResponseEntity.ok(ApiResponse.success("Xoá danh mục chung thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Delete global category successfully", null));
     }
 }

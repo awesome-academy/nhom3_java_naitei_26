@@ -42,7 +42,7 @@ public class ActivityLogServiceImpl implements ActivityLogService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ActivityLog log(Long userId, String action, String entityType, Long entityId, String description) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> ResourceNotFoundException.of("Người dùng", userId));
+                .orElseThrow(() -> ResourceNotFoundException.of("User", userId));
 
         ActivityLog activityLog = new ActivityLog();
         activityLog.setUser(user);
@@ -73,7 +73,7 @@ public class ActivityLogServiceImpl implements ActivityLogService {
     @Transactional
     public void delete(Long id) {
         ActivityLog activityLog = activityLogRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.of("Nhật ký hoạt động", id));
+                .orElseThrow(() -> ResourceNotFoundException.of("Activity log", id));
         activityLogRepository.delete(activityLog);
     }
 

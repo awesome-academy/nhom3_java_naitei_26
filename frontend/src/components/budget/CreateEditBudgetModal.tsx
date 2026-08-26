@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import axios from "axios";
 import { toast } from "sonner";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
@@ -31,26 +30,27 @@ const budgetSchema = z.object({
 type BudgetFormValues = z.infer<typeof budgetSchema>;
 
 function getErrorMessage(error: unknown, fallback: string): string {
-  if (axios.isAxiosError(error)) {
-    const resData = error.response?.data;
-    
-    // 1. Trường hợp Backend trả về ApiResponse chuẩn: { message: "...", error: "...", data: null }
-    if (resData?.message) return resData.message;
-    if (resData?.error) return resData.error;
-    
-    // 2. Trường hợp lỗi validation fields: { errors: { categoryId: "..." } } hoặc { errors: ["..."] }
-    if (resData?.errors) {
-      if (Array.isArray(resData.errors)) return resData.errors.join(", ");
-      if (typeof resData.errors === "object") {
-        return Object.values(resData.errors).join(", ");
-      }
+  if (error && typeof error === "object") {
+    const err = error as { message?: string; details?: { message?: string; error?: string } };
+
+    // 1. Lấy message từ cấu trúc object { message } mà interceptor trả về
+    if (typeof err.message === "string" && err.message.trim()) {
+      return err.message;
     }
 
-    // 3. Fallback theo mã HTTP Status
-    if (error.response?.status === 409 || error.response?.status === 400) {
-      return "Ngân sách cho danh mục này đã tồn tại trong tháng được chọn. Vui lòng chỉnh sửa ngân sách hiện có hoặc chọn danh mục khác.";
+    // 2. Lấy message từ trường details
+    if (err.details?.message && typeof err.details.message === "string") {
+      return err.details.message;
+    }
+    if (err.details?.error && typeof err.details.error === "string") {
+      return err.details.error;
     }
   }
+
+  if (typeof error === "string" && error.trim()) {
+    return error;
+  }
+
   return fallback;
 }
 

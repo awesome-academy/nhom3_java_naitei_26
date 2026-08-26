@@ -31,7 +31,7 @@ public class BudgetController {
             @RequestParam(required = false) Integer year,
             @RequestParam(required = false) Integer month) {
         List<BudgetResponse> data = budgetService.getBudgets(userPrincipal.getId(), year, month);
-        return ResponseEntity.ok(ApiResponse.success("Thành công", data));
+        return ResponseEntity.ok(ApiResponse.success("Success", data));
     }
 
     @GetMapping("/alerts")
@@ -39,7 +39,7 @@ public class BudgetController {
     public ResponseEntity<ApiResponse<List<BudgetResponse>>> getBudgetAlerts(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         List<BudgetResponse> data = budgetService.getBudgetAlerts(userPrincipal.getId());
-        return ResponseEntity.ok(ApiResponse.success("Thành công", data));
+        return ResponseEntity.ok(ApiResponse.success("Success", data));
     }
 
     @GetMapping("/{id}")
@@ -48,7 +48,7 @@ public class BudgetController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable Long id) {
         BudgetResponse data = budgetService.getBudgetById(userPrincipal.getId(), id);
-        return ResponseEntity.ok(ApiResponse.success("Thành công", data));
+        return ResponseEntity.ok(ApiResponse.success("Success", data));
     }
 
     @PostMapping
@@ -58,7 +58,7 @@ public class BudgetController {
             @Valid @RequestBody BudgetRequest request) {
         BudgetResponse data = budgetService.createBudget(userPrincipal.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(HttpStatus.CREATED, "Tạo ngân sách thành công", data));
+                .body(ApiResponse.success(HttpStatus.CREATED, "Budget created successfully", data));
     }
 
     @PutMapping("/{id}")
@@ -68,7 +68,7 @@ public class BudgetController {
             @PathVariable Long id,
             @Valid @RequestBody BudgetRequest request) {
         BudgetResponse data = budgetService.updateBudget(userPrincipal.getId(), id, request);
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật ngân sách thành công", data));
+        return ResponseEntity.ok(ApiResponse.success("Budget updated successfully", data));
     }
 
     @DeleteMapping("/{id}")
@@ -77,6 +77,6 @@ public class BudgetController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable Long id) {
         budgetService.deleteBudget(userPrincipal.getId(), id);
-        return ResponseEntity.ok(ApiResponse.success("Xóa ngân sách thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Budget deleted successfully", null));
     }
 }

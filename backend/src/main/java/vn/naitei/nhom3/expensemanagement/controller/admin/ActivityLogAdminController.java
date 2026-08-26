@@ -34,6 +34,6 @@ public class ActivityLogAdminController {
     @Transactional
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         activityLogService.delete(id);
-        return ResponseEntity.ok(ApiResponse.success("Xóa nhật ký hoạt động thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Delete activity log successfully", null));
     }
 }

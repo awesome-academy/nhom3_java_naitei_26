@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User getById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.of("Người dùng", id));
+                .orElseThrow(() -> ResourceNotFoundException.of("User", id));
     }
 
     @Override
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User updateStatus(Long id, UserStatus status, Long currentAdminId) {
         if (id.equals(currentAdminId) && status == UserStatus.INACTIVE) {
-            throw new ForbiddenException("Không thể tự khoá chính tài khoản của mình");
+            throw new ForbiddenException("Can not lock your own account");
         }
         User user = getById(id);
         user.setStatus(status);

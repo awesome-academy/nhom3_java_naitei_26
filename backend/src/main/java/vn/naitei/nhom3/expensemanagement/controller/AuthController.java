@@ -25,24 +25,24 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest request) {
         AuthResponse response = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(HttpStatus.CREATED, "Đăng ký tài khoản thành công", response));
+                .body(ApiResponse.success(HttpStatus.CREATED, "Account registered successfully", response));
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);
-        return ResponseEntity.ok(ApiResponse.success("Đăng nhập thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(@AuthenticationPrincipal UserPrincipal principal) {
         authService.logout(principal);
-        return ResponseEntity.ok(ApiResponse.success("Đăng xuất thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Logout successful", null));
     }
 
     @PostMapping("/refresh-token")
     public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
         RefreshTokenResponse response = authService.refreshToken(request);
-        return ResponseEntity.ok(ApiResponse.success("Làm mới token thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Token refreshed successfully", response));
     }
 }

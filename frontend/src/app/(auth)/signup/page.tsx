@@ -30,7 +30,7 @@ export default function SignUpPage() {
       router.push("/dashboard");
     } catch (err: unknown) {
       setErrorMessage(
-        (err as Error).message || "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin."
+        (err as Error).message || "Signup failed. Please try again later."
       );
     } finally {
       setLoading(false);
@@ -149,7 +149,7 @@ export default function SignUpPage() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Tối thiểu 6 ký tự"
+                placeholder="At least 6 characters"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-3.5 pl-10.5 text-sm text-slate-800 outline-none transition-colors focus:border-blue-600 focus:bg-white"
               />
             </div>

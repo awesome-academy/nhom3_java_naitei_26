@@ -60,7 +60,7 @@ public class ExportServiceImpl implements ExportService {
                 case BUDGET -> writeBudgets(printer);
             }
         } catch (IOException ex) {
-            throw new BadRequestException("Không tạo được file CSV: " + ex.getMessage());
+            throw new BadRequestException("Can not export CSV: " + ex.getMessage());
         }
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();

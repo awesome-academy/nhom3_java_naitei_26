@@ -62,7 +62,7 @@ public class BudgetServiceImpl implements BudgetService {
 
         if (budgetRepository.existsByUserIdAndCategoryIdAndYearAndMonth(
                 userId, request.getCategoryId(), year, month)) {
-            throw new BadRequestException("Ngân sách cho danh mục này trong tháng đã tồn tại.");
+            throw new BadRequestException("Budget for this category in the specified month already exists.");
         }
 
         User user = userRepository.findById(userId)
@@ -96,7 +96,7 @@ public class BudgetServiceImpl implements BudgetService {
 
         if (isCategoryOrTimeChanged && budgetRepository.existsByUserIdAndCategoryIdAndYearAndMonth(
                 userId, request.getCategoryId(), year, month)) {
-            throw new BadRequestException("Ngân sách cho danh mục này trong tháng đã tồn tại.");
+            throw new BadRequestException("Budget for this category in the specified month already exists.");
         }
 
         if (!budget.getCategory().getId().equals(request.getCategoryId())) {
@@ -138,10 +138,10 @@ public class BudgetServiceImpl implements BudgetService {
 
     private Budget findUserBudget(Long userId, Long budgetId) {
         Budget budget = budgetRepository.findById(budgetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Ngân sách không tồn tại."));
+                .orElseThrow(() -> new ResourceNotFoundException("Budget not found."));
 
         if (!budget.getUser().getId().equals(userId)) {
-            throw new ResourceNotFoundException("Ngân sách không tồn tại.");
+            throw new ResourceNotFoundException("Budget not found.");
         }
 
         return budget;

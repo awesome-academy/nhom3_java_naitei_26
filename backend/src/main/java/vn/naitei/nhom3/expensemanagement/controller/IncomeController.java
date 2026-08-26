@@ -78,7 +78,7 @@ public class IncomeController {
             @Valid @RequestBody IncomeRequest request) {
         IncomeResponse response = incomeService.create(principal.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(HttpStatus.CREATED, "Tạo thu nhập thành công", response));
+                .body(ApiResponse.success(HttpStatus.CREATED, "Create income successfully", response));
     }
 
     /**
@@ -91,7 +91,7 @@ public class IncomeController {
             @PathVariable Long id,
             @Valid @RequestBody IncomeRequest request) {
         IncomeResponse response = incomeService.update(principal.getId(), id, request);
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật thu nhập thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Update income successfully", response));
     }
 
     /**
@@ -103,6 +103,6 @@ public class IncomeController {
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long id) {
         incomeService.delete(principal.getId(), id);
-        return ResponseEntity.ok(ApiResponse.success("Xoá thu nhập thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Delete income successfully", null));
     }
 }

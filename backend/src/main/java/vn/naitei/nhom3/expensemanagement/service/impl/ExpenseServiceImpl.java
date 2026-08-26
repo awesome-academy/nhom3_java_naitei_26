@@ -81,7 +81,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     private Expense createExpense(Long userId, ExpenseRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> ResourceNotFoundException.of("Người dùng", userId));
+                .orElseThrow(() -> ResourceNotFoundException.of("User", userId));
         Category category = validateCategory(userId, request.getCategoryId());
 
         Expense expense = new Expense();
@@ -129,14 +129,14 @@ public class ExpenseServiceImpl implements ExpenseService {
     private Expense findOwnedExpense(Long userId, Long id) {
         return expenseRepository.findById(id)
                 .filter(expense -> expense.getUser().getId().equals(userId))
-                .orElseThrow(() -> ResourceNotFoundException.of("Khoản chi", id));
+                .orElseThrow(() -> ResourceNotFoundException.of("Expense", id));
     }
 
     private Category validateCategory(Long userId, Long categoryId) {
         return categoryRepository.findVisibleToUserAndType(userId, CategoryType.EXPENSE).stream()
                 .filter(category -> category.getId().equals(categoryId))
                 .findFirst()
-                .orElseThrow(() -> new BadRequestException("Danh mục khoản chi không hợp lệ"));
+                .orElseThrow(() -> new BadRequestException("Invalid expense category"));
     }
 
     private void updateExpense(Expense expense, ExpenseRequest request) {

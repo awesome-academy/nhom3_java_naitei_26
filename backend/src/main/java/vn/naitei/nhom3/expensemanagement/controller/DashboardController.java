@@ -29,7 +29,7 @@ public class DashboardController {
     public ResponseEntity<ApiResponse<List<CategoryExpenseResponse>>> getExpenseByCategory(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         List<CategoryExpenseResponse> data = dashboardService.getExpenseStatisticsByCategory(userPrincipal.getId());
-        return ResponseEntity.ok(ApiResponse.success("Thành công", data));
+        return ResponseEntity.ok(ApiResponse.success("Success", data));
     }
 
     @GetMapping("/summary")
@@ -37,6 +37,6 @@ public class DashboardController {
     public ResponseEntity<ApiResponse<DashboardSummaryResponse>> getDashboardSummary(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         DashboardSummaryResponse data = dashboardService.getDashboardSummary(userPrincipal.getId());
-        return ResponseEntity.ok(ApiResponse.success("Thành công", data));
+        return ResponseEntity.ok(ApiResponse.success("Success", data));
     }
 }
