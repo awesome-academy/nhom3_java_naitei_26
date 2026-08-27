@@ -51,24 +51,24 @@ public class UserAdminController {
     @PutMapping("/{id}/role")
     @Transactional
     @LogActivity(action = "UPDATE_USER_ROLE", entityType = "USER", entityId = "#id",
-            description = "'Cập nhật vai trò người dùng #' + #id + ' thành ' + #result.body.data.role")
+            description = "'Update user role #' + #id + ' to ' + #result.body.data.role")
     public ResponseEntity<ApiResponse<UserResponse>> updateRole(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRoleRequest request) {
         User user = userService.updateRole(id, request.getRole());
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật vai trò thành công", toResponse(user)));
+        return ResponseEntity.ok(ApiResponse.success("Update user role successfully", toResponse(user)));
     }
 
     @PutMapping("/{id}/status")
     @Transactional
     @LogActivity(action = "UPDATE_USER_STATUS", entityType = "USER", entityId = "#id",
-            description = "'Cập nhật trạng thái người dùng #' + #id + ' thành ' + #result.body.data.status")
+            description = "'Update user status #' + #id + ' to ' + #result.body.data.status")
     public ResponseEntity<ApiResponse<UserResponse>> updateStatus(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserStatusRequest request) {
         User user = userService.updateStatus(id, request.getStatus(), principal.getId());
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật trạng thái thành công", toResponse(user)));
+        return ResponseEntity.ok(ApiResponse.success("Update user status successfully", toResponse(user)));
     }
 
     private UserResponse toResponse(User user) {

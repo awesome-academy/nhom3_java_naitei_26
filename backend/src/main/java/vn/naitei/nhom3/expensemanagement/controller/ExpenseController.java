@@ -53,18 +53,18 @@ public class ExpenseController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @LogActivity(action = "CREATE_EXPENSE", entityType = "EXPENSE",
-            entityId = "#result.body.data.id", description = "'Tạo chi tiêu: ' + #result.body.data.title")
+            entityId = "#result.body.data.id", description = "'Create expense: ' + #result.body.data.title")
     public ResponseEntity<ApiResponse<ExpenseResponse>> create(
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody ExpenseRequest request) {
         ExpenseResponse response = expenseService.create(principal.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(HttpStatus.CREATED, "Tạo chi tiêu thành công", response));
+                .body(ApiResponse.success(HttpStatus.CREATED, "Create expense successfully", response));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @LogActivity(action = "CREATE_EXPENSE", entityType = "EXPENSE",
-            entityId = "#result.body.data.id", description = "'Tạo chi tiêu: ' + #result.body.data.title")
+            entityId = "#result.body.data.id", description = "'Create expense: ' + #result.body.data.title")
     public ResponseEntity<ApiResponse<ExpenseResponse>> createWithAttachments(
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestPart("data") ExpenseRequest request,
@@ -72,7 +72,7 @@ public class ExpenseController {
         List<MultipartFile> attachments = files == null ? List.of() : Arrays.asList(files);
         ExpenseResponse response = expenseService.create(principal.getId(), request, attachments);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(HttpStatus.CREATED, "Tạo chi tiêu thành công", response));
+                .body(ApiResponse.success(HttpStatus.CREATED, "Create expense successfully", response));
     }
 
     @GetMapping("/{id}")
@@ -85,18 +85,18 @@ public class ExpenseController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @LogActivity(action = "UPDATE_EXPENSE", entityType = "EXPENSE",
-            entityId = "#id", description = "'Cập nhật chi tiêu #' + #id")
+            entityId = "#id", description = "'Update expense #' + #id")
     public ResponseEntity<ApiResponse<ExpenseResponse>> update(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long id,
             @Valid @RequestBody ExpenseRequest request) {
         ExpenseResponse response = expenseService.update(principal.getId(), id, request);
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Update successfully", response));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @LogActivity(action = "UPDATE_EXPENSE", entityType = "EXPENSE",
-            entityId = "#id", description = "'Cập nhật chi tiêu #' + #id")
+            entityId = "#id", description = "'Update expense #' + #id")
     public ResponseEntity<ApiResponse<ExpenseResponse>> updateWithAttachments(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long id,
@@ -104,7 +104,7 @@ public class ExpenseController {
             @RequestPart(value = "files", required = false) MultipartFile[] files) {
         List<MultipartFile> attachments = files == null ? List.of() : Arrays.asList(files);
         ExpenseResponse response = expenseService.update(principal.getId(), id, request, attachments);
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Update successfully", response));
     }
 
     @DeleteMapping("/{id}")
@@ -114,18 +114,18 @@ public class ExpenseController {
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long id) {
         expenseService.delete(principal.getId(), id);
-        return ResponseEntity.ok(ApiResponse.success("Xoá thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Delete successfully", null));
     }
 
     @DeleteMapping("/{expenseId}/attachments/{attachmentId}")
     @LogActivity(action = "DELETE_EXPENSE_ATTACHMENT", entityType = "EXPENSE_ATTACHMENT",
-            entityId = "#attachmentId", description = "'Xoá file đính kèm #' + #attachmentId + ' của chi tiêu #' + #expenseId")
+            entityId = "#attachmentId", description = "'Delete attachment #' + #attachmentId + ' of expense #' + #expenseId")
     public ResponseEntity<ApiResponse<Void>> deleteAttachment(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long expenseId,
             @PathVariable Long attachmentId) {
         attachmentService.delete(principal.getId(), expenseId, attachmentId);
-        return ResponseEntity.ok(ApiResponse.success("Xoá file đính kèm thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Delete attachment successfully", null));
     }
 
     @GetMapping("/{expenseId}/attachments/{attachmentId}/download")

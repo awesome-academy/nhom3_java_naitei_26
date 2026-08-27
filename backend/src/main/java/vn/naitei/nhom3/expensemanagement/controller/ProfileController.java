@@ -21,7 +21,7 @@ public class ProfileController {
     public ResponseEntity<ApiResponse<UserProfileResponse>> getProfile(Authentication authentication) {
         String email = authentication.getName();
         UserProfileResponse response = profileService.getCurrentUserProfile(email);
-        return ResponseEntity.ok(ApiResponse.success("Lấy thông tin thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Fetch profile successfully", response));
     }
 
     @PutMapping
@@ -31,6 +31,6 @@ public class ProfileController {
 
         String email = authentication.getName();
         UserProfileResponse response = profileService.updateCurrentUserName(email, request);
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật tên thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Update profile successfully", response));
     }
 }

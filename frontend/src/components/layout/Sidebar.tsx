@@ -86,12 +86,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   try {
     acknowledgedIds = JSON.parse(acknowledgedIdsStr);
   } catch {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     acknowledgedIds = [];
   }
 
-  // 3. Lọc danh sách cảnh báo thực tế theo đúng schema budget
+  // 3. Lọc danh sách cảnh báo thực tế
   const activeAlertBudgets = currentBudgets.filter((b) => {
-    // Ưu tiên spendingPercentage, nếu không có thì tính từ actualSpending / amount
     const percent =
       b.spendingPercentage != null
         ? b.spendingPercentage
@@ -105,11 +105,31 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     return isExceeded || isWarning;
   });
 
-  const currentAlertIds = activeAlertBudgets.map((b) => b.id);
+  // Tạo signature dựa trên ID và Số tiền đã chi: nếu số tiền chi thay đổi -> coi như cảnh báo mới
+  const currentAlertSignatures = activeAlertBudgets.map(
+    (b) => `${b.id}_${b.actualSpending ?? 0}_${b.alertStatus}`
+  );
 
-  // 4. Kiểm tra cảnh báo chưa acknowledge
+  // 4. Lấy danh sách signature đã acknowledge từ localStorage
+  const acknowledgedSignaturesStr = useSyncExternalStore(
+    (callback) => {
+      window.addEventListener("storage", callback);
+      return () => window.removeEventListener("storage", callback);
+    },
+    () => localStorage.getItem(ackKey) || "[]",
+    () => "[]"
+  );
+
+  let acknowledgedSignatures: string[] = [];
+  try {
+    acknowledgedSignatures = JSON.parse(acknowledgedSignaturesStr);
+  } catch {
+    acknowledgedSignatures = [];
+  }
+
+  // 5. Kiểm tra cảnh báo CHƯA được acknowledge với số tiền/trạng thái hiện tại
   const unacknowledgedBudgets = activeAlertBudgets.filter(
-    (b) => !acknowledgedIds.includes(b.id)
+    (b) => !acknowledgedSignatures.includes(`${b.id}_${b.actualSpending ?? 0}_${b.alertStatus}`)
   );
 
   const exceededCount = unacknowledgedBudgets.filter((b) => {
@@ -134,9 +154,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const hasAlerts = unacknowledgedBudgets.length > 0;
 
-  // 5. Lưu toàn bộ ID cảnh báo hiện tại khi bấm Acknowledge
+  // 6. Lưu signature hiện tại khi bấm Acknowledge
   const handleAcknowledge = () => {
-    localStorage.setItem(ackKey, JSON.stringify(currentAlertIds));
+    localStorage.setItem(ackKey, JSON.stringify(currentAlertSignatures));
     window.dispatchEvent(new Event("storage"));
   };
 

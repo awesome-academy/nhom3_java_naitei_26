@@ -38,7 +38,7 @@ public class ImportExportAdminController {
             @RequestPart("file") MultipartFile file) {
         ImportEntityType entityType = parseEntityType(ImportEntityType.class, entity);
         ImportResultResponse response = importService.importCsv(entityType, file);
-        return ResponseEntity.ok(ApiResponse.success("Import CSV hoàn tất", response));
+        return ResponseEntity.ok(ApiResponse.success("Import CSV completed", response));
     }
 
     @GetMapping("/export/{entity}")
@@ -46,7 +46,7 @@ public class ImportExportAdminController {
             @PathVariable("entity") String entity,
             @RequestParam(value = "format", defaultValue = "csv") String format) {
         if (!"csv".equalsIgnoreCase(format)) {
-            throw new BadRequestException("Chỉ hỗ trợ format=csv");
+            throw new BadRequestException("Only CSV format is supported for export");
         }
         ExportEntityType entityType = parseEntityType(ExportEntityType.class, entity);
         byte[] content = exportService.exportCsv(entityType);
@@ -65,7 +65,7 @@ public class ImportExportAdminController {
         try {
             return Enum.valueOf(type, raw.trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException ex) {
-            throw new BadRequestException("entity không hợp lệ: " + raw);
+            throw new BadRequestException("Invalid entity: " + raw);
         }
     }
 }

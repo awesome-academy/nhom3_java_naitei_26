@@ -58,21 +58,21 @@ public class BudgetTemplateAdminController {
     @PostMapping
         @Transactional
         @LogActivity(action = "CREATE_BUDGET_TEMPLATE", entityType = "BUDGET_TEMPLATE",
-                entityId = "#result.body.data.id", description = "'Tạo mẫu ngân sách: ' + #result.body.data.name")
+                entityId = "#result.body.data.id", description = "'Create budget template: ' + #result.body.data.name")
     public ResponseEntity<ApiResponse<BudgetTemplateResponse>> create(
             @Valid @RequestBody BudgetTemplateCreateRequest request) {
         BudgetTemplate template = budgetTemplateService.create(toEntity(request.getName(),
                 request.getMonth(), request.getWarningPercentage()));
         List<BudgetTemplateDetail> details = createDetails(template.getId(), request.getDetails());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(HttpStatus.CREATED, "Tạo mẫu ngân sách thành công",
+                .body(ApiResponse.success(HttpStatus.CREATED, "Create budget template successfully",
                         toResponse(template, details)));
     }
 
     @PutMapping("/{id}")
         @Transactional
         @LogActivity(action = "UPDATE_BUDGET_TEMPLATE", entityType = "BUDGET_TEMPLATE",
-                entityId = "#id", description = "'Cập nhật mẫu ngân sách #' + #id")
+                entityId = "#id", description = "'Update budget template #' + #id")
     public ResponseEntity<ApiResponse<BudgetTemplateResponse>> update(
             @PathVariable Long id, @Valid @RequestBody BudgetTemplateUpdateRequest request) {
         BudgetTemplate existingTemplate = budgetTemplateService.getById(id);
@@ -84,17 +84,17 @@ public class BudgetTemplateAdminController {
         existingDetails.forEach(detail -> budgetTemplateDetailService.delete(detail.getId()));
         List<BudgetTemplateDetail> details = createDetails(id, request.getDetails());
 
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật mẫu ngân sách thành công",
+        return ResponseEntity.ok(ApiResponse.success("Update budget template successfully",
                 toResponse(updatedTemplate, details)));
     }
 
     @DeleteMapping("/{id}")
         @Transactional
         @LogActivity(action = "DELETE_BUDGET_TEMPLATE", entityType = "BUDGET_TEMPLATE",
-                entityId = "#id", description = "'Xoá mẫu ngân sách #' + #id")
+                entityId = "#id", description = "'Delete budget template #' + #id")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         budgetTemplateService.delete(id);
-        return ResponseEntity.ok(ApiResponse.success("Xóa mẫu ngân sách thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Delete budget template successfully", null));
     }
 
     private BudgetTemplate toEntity(String name, Integer month, Integer warningPercentage) {

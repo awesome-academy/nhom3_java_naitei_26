@@ -92,20 +92,20 @@ public class ExpenseAttachmentServiceImpl implements ExpenseAttachmentService {
     private void validateFiles(Long expenseId, List<MultipartFile> files) {
         long currentCount = attachmentRepository.countByExpenseId(expenseId);
         if (currentCount + files.size() > MAX_FILES) {
-            throw new BadRequestException("Mỗi khoản chi chỉ được có tối đa 5 file đính kèm");
+            throw new BadRequestException("Each expense can have a maximum of 5 attachments");
         }
         files.forEach(this::validateFile);
     }
 
     private void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            throw new BadRequestException("File đính kèm không được để trống");
+            throw new BadRequestException("File attachment cannot be empty");
         }
         if (file.getSize() > MAX_FILE_SIZE) {
-            throw new BadRequestException("Dung lượng mỗi file không được vượt quá 5MB");
+            throw new BadRequestException("Each file cannot exceed 5MB");
         }
         if (!ALLOWED_CONTENT_TYPES.contains(file.getContentType())) {
-            throw new BadRequestException("File đính kèm chỉ hỗ trợ JPEG, PNG hoặc PDF");
+            throw new BadRequestException("File attachment only supports JPEG, PNG or PDF");
         }
     }
 
@@ -133,12 +133,12 @@ public class ExpenseAttachmentServiceImpl implements ExpenseAttachmentService {
     private Expense findOwnedExpense(Long userId, Long expenseId) {
         return expenseRepository.findById(expenseId)
                 .filter(expense -> expense.getUser().getId().equals(userId))
-                .orElseThrow(() -> ResourceNotFoundException.of("Khoản chi", expenseId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Expense", expenseId));
     }
 
     private ExpenseAttachment findAttachment(Long expenseId, Long attachmentId) {
         return attachmentRepository.findByIdAndExpenseId(attachmentId, expenseId)
-                .orElseThrow(() -> ResourceNotFoundException.of("File đính kèm", attachmentId));
+                .orElseThrow(() -> ResourceNotFoundException.of("File attachment", attachmentId));
     }
 
     private AttachmentResponse toResponse(ExpenseAttachment attachment) {

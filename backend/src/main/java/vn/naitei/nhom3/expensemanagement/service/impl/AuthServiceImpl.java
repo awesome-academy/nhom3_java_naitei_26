@@ -87,23 +87,23 @@ public class AuthServiceImpl implements AuthService {
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
         } catch (DisabledException | LockedException ex) {
-            throw new BadCredentialsException("Tài khoản đã bị khóa hoặc chưa được kích hoạt");
+            throw new BadCredentialsException("Your account is disabled or not activated");
         } catch (Exception ex) {
-            throw new BadCredentialsException("Email hoặc mật khẩu không chính xác");
+            throw new BadCredentialsException("Email or password is incorrect");
         }
 
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
         User user = userRepository.findById(principal.getId())
-                .orElseThrow(() -> new BadCredentialsException("Không tìm thấy thông tin tài khoản"));
+                .orElseThrow(() -> new BadCredentialsException("User not found"));
 
 
         // Activity Log (Change here when ActivityLogService is available)
         if (activityLogService != null) {
             try {
-                activityLogService.log(user.getId(), "LOGIN", "USER", user.getId(), "Đăng nhập hệ thống");
+                activityLogService.log(user.getId(), "LOGIN", "USER", user.getId(), "System login");
             } catch (Exception e) {
-                log.warn("Không thể ghi log login: {}", e.getMessage());
+                log.warn("Cannot log login: {}", e.getMessage());
             }
         }
 
@@ -126,9 +126,9 @@ public class AuthServiceImpl implements AuthService {
     public void logout(UserPrincipal principal) {
         if (principal != null && activityLogService != null) {
             try {
-                activityLogService.log(principal.getId(), "LOGOUT", "USER", principal.getId(), "Đăng xuất hệ thống");
+                activityLogService.log(principal.getId(), "LOGOUT", "USER", principal.getId(), "System logout");
             } catch (Exception e) {
-                log.warn("Không thể ghi log logout: {}", e.getMessage());
+                log.warn("Cannot log logout: {}", e.getMessage());
             }
         }
     }
@@ -138,20 +138,20 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = request.getRefreshToken();
 
         if (!jwtTokenProvider.validateToken(refreshToken)) {
-            throw new IllegalArgumentException("Refresh token không hợp lệ hoặc đã hết hạn");
+            throw new IllegalArgumentException("Refresh token is invalid or has expired");
         }
 
         String tokenType = jwtTokenProvider.getTokenType(refreshToken);
         if (!"REFRESH".equals(tokenType)) {
-            throw new IllegalArgumentException("Token cung cấp không phải là Refresh Token");
+            throw new IllegalArgumentException("Provided token is not a Refresh Token");
         }
 
         String email = jwtTokenProvider.getEmailFromToken(refreshToken);
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (user.getStatus() != UserStatus.ACTIVE) {
-            throw new IllegalArgumentException("Tài khoản đã bị khóa hoặc chưa kích hoạt");
+            throw new IllegalArgumentException("User account is locked or not activated");
         }
 
         UserPrincipal principal = new UserPrincipal(user);

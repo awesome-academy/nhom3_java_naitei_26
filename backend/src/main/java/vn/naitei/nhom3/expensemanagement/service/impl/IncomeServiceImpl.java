@@ -61,7 +61,7 @@ public class IncomeServiceImpl implements IncomeService {
     @Transactional
     public IncomeResponse create(Long userId, IncomeRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> ResourceNotFoundException.of("Người dùng", userId));
+                .orElseThrow(() -> ResourceNotFoundException.of("User", userId));
 
         Income income = new Income();
         income.setUser(user);
@@ -99,7 +99,7 @@ public class IncomeServiceImpl implements IncomeService {
     private Income findOwnedIncome(Long userId, Long id) {
         return incomeRepository.findById(id)
                 .filter(income -> income.getUser().getId().equals(userId))
-                .orElseThrow(() -> ResourceNotFoundException.of("Thu nhập", id));
+                .orElseThrow(() -> ResourceNotFoundException.of("Income", id));
     }
 
     /**

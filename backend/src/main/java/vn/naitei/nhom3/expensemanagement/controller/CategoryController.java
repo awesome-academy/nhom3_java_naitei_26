@@ -81,7 +81,7 @@ public class CategoryController {
             @Valid @RequestBody CategoryRequest request) {
         CategoryResponse response = categoryService.createForUser(principal.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(HttpStatus.CREATED, "Tạo danh mục thành công", response));
+                .body(ApiResponse.success(HttpStatus.CREATED, "Category created successfully", response));
     }
 
     /**
@@ -96,7 +96,7 @@ public class CategoryController {
             @PathVariable Long id,
             @Valid @RequestBody CategoryRequest request) {
         CategoryResponse response = categoryService.updateForUser(principal.getId(), id, request);
-        return ResponseEntity.ok(ApiResponse.success("Cập nhật danh mục thành công", response));
+        return ResponseEntity.ok(ApiResponse.success("Category updated successfully", response));
     }
 
     /**
@@ -110,6 +110,6 @@ public class CategoryController {
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long id) {
         categoryService.deleteForUser(principal.getId(), id);
-        return ResponseEntity.ok(ApiResponse.success("Xoá danh mục thành công", null));
+        return ResponseEntity.ok(ApiResponse.success("Category deleted successfully", null));
     }
 }

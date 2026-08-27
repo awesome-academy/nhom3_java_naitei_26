@@ -105,11 +105,11 @@ export default function ProfilePage() {
       localStorage.setItem("user", JSON.stringify(updatedUser));
       window.dispatchEvent(new Event("storage"));
 
-      setMessage({ type: "success", text: "Cập nhật hồ sơ thành công!" });
+      setMessage({ type: "success", text: "Profile updated successfully!" });
     } catch (err: unknown) {
       setMessage({
         type: "error",
-        text: (err as Error).message || "Không thể cập nhật hồ sơ lúc này.",
+        text: (err as Error).message || "Failed to update profile at this time.",
       });
     } finally {
       setLoadingProfile(false);
